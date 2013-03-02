@@ -8,7 +8,14 @@
 
 #import <UIKit/UIKit.h>
 #import <GLKit/GLKit.h>
+#include "SWMModel.h"
 
-@interface SWMViewController : GLKViewController
+@interface SWMViewController : GLKViewController {
+    GLKMatrix4 _projectionMatrix;
+    float _aspect;
+    GLuint _vertexArray, _vertexBuffer;
+    
+    SWMModel *_model;
+}
 
 @end
