@@ -21,10 +21,10 @@
         _program = 0;
         
         // Create reference vertex shader path
-        [self setVertShaderPathname:[[NSBundle mainBundle] pathForResource:@"Shader" ofType:@"vsh"]];
+        [self setVertShaderPathname:[[NSBundle mainBundle] pathForResource:@"Shader" ofType:@"vsh" inDirectory:@"Shaders"]];
         
         // Create reference fragment shader path
-        [self setFragShaderPathname:[[NSBundle mainBundle] pathForResource:@"Shader" ofType:@"fsh"]];
+        [self setFragShaderPathname:[[NSBundle mainBundle] pathForResource:@"Shader" ofType:@"fsh" inDirectory:@"Shaders"]];
         
         [self loadShaders];
     }
@@ -59,6 +59,8 @@
     // This needs to be done prior to linking.
     glBindAttribLocation(_program, GLKVertexAttribPosition, "position");
     glBindAttribLocation(_program, GLKVertexAttribNormal, "normal");
+    glBindAttribLocation(_program, GLKVertexAttribColor, "diffuseColor");
+    glBindAttribLocation(_program, GLKVertexAttribTexCoord0, "vertexUV");
     
     // Link program.
     if (![self linkProgram:_program]) {

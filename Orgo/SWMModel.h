@@ -10,11 +10,14 @@
 #import <GLKit/GLKit.h>
 #include "SWMVertexArray.h"
 #include "SWMShader.h"
+#include "SWMBitmapLoader.h"
 
 @interface SWMModel : NSObject
 {
     GLKMatrix4 _modelViewMatrix, _modelViewProjectionMatrix;
     GLKMatrix3 _normalMatrix;
+    GLKVector4 _diffuseLightColour;
+    GLuint _floorTexture, _fishTexture, _colourIndex;
     
     SWMVertexArray *_vertexArray;
     SWMShader *_shader;
@@ -24,6 +27,7 @@
     {
         UNIFORM_MODELVIEWPROJECTION_MATRIX,
         UNIFORM_NORMAL_MATRIX,
+        UNIFORM_SAMPLER2D,
         NUM_UNIFORMS
     };
     GLint uniforms[NUM_UNIFORMS];
@@ -33,10 +37,10 @@
     {
         ATTRIB_VERTEX,
         ATTRIB_NORMAL,
+        ATTRIB_VERTEX_UV,
         NUM_ATTRIBUTES
     };
-    
-    
+    GLint attributes[NUM_ATTRIBUTES];
 }
 
 @property GLKMatrix4 modelViewMatrix, modelViewProjectionMatrix;
@@ -47,10 +51,8 @@
 - (id)initWithShader:(SWMShader *)shader;
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect;
 - (BOOL)loadShaders;
-- (unsigned long)numberOfFloatsInVertices;
 - (int)numberOfVertices;
 - (BOOL)releaseShaders;
-- (unsigned long)sizeOfVertices;
 - (void)tearDownGL;
 - (NSMutableData *)vertexData;
 

@@ -22,11 +22,12 @@
 		01B5AD6E16879EE5009216E0 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 01B5AD6D16879EE5009216E0 /* Default.png */; };
 		01B5AD7016879EE5009216E0 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01B5AD6F16879EE5009216E0 /* Default@2x.png */; };
 		01B5AD7216879EE5009216E0 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01B5AD7116879EE5009216E0 /* Default-568h@2x.png */; };
-		01B5AD7416879EE5009216E0 /* Shader.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 01B5AD7316879EE5009216E0 /* Shader.fsh */; };
-		01B5AD7616879EE5009216E0 /* Shader.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 01B5AD7516879EE5009216E0 /* Shader.vsh */; };
 		01B5AD7916879EE5009216E0 /* SWMViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 01B5AD7816879EE5009216E0 /* SWMViewController.m */; };
 		01B5AD7C16879EE5009216E0 /* SWMViewController_iPhone.xib in Resources */ = {isa = PBXBuildFile; fileRef = 01B5AD7A16879EE5009216E0 /* SWMViewController_iPhone.xib */; };
 		01B5AD7F16879EE5009216E0 /* SWMViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 01B5AD7D16879EE5009216E0 /* SWMViewController_iPad.xib */; };
+		01F03ABB16E2C7EB0045C13C /* SWMBitmapLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 01F03ABA16E2C7EB0045C13C /* SWMBitmapLoader.m */; };
+		01F03AC716E3EDBF0045C13C /* Shaders in Resources */ = {isa = PBXBuildFile; fileRef = 01F03AC616E3EDBF0045C13C /* Shaders */; };
+		01F03AC916E3EE5A0045C13C /* Art in Resources */ = {isa = PBXBuildFile; fileRef = 01F03AC816E3EE5A0045C13C /* Art */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -53,12 +54,14 @@
 		01B5AD6D16879EE5009216E0 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		01B5AD6F16879EE5009216E0 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		01B5AD7116879EE5009216E0 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
-		01B5AD7316879EE5009216E0 /* Shader.fsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; name = Shader.fsh; path = Shaders/Shader.fsh; sourceTree = "<group>"; };
-		01B5AD7516879EE5009216E0 /* Shader.vsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; name = Shader.vsh; path = Shaders/Shader.vsh; sourceTree = "<group>"; };
 		01B5AD7716879EE5009216E0 /* SWMViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SWMViewController.h; sourceTree = "<group>"; };
 		01B5AD7816879EE5009216E0 /* SWMViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SWMViewController.m; sourceTree = "<group>"; };
 		01B5AD7B16879EE5009216E0 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/SWMViewController_iPhone.xib; sourceTree = "<group>"; };
 		01B5AD7E16879EE5009216E0 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/SWMViewController_iPad.xib; sourceTree = "<group>"; };
+		01F03AB916E2C7EB0045C13C /* SWMBitmapLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWMBitmapLoader.h; sourceTree = "<group>"; };
+		01F03ABA16E2C7EB0045C13C /* SWMBitmapLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWMBitmapLoader.m; sourceTree = "<group>"; };
+		01F03AC616E3EDBF0045C13C /* Shaders */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Shaders; sourceTree = "<group>"; };
+		01F03AC816E3EE5A0045C13C /* Art */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Art; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,6 +112,8 @@
 		01B5AD6116879EE5009216E0 /* Orgo */ = {
 			isa = PBXGroup;
 			children = (
+				01F03AC816E3EE5A0045C13C /* Art */,
+				01F03AC616E3EDBF0045C13C /* Shaders */,
 				0151713616DC8E450082DEEC /* SWMModel.h */,
 				0151713716DC8E450082DEEC /* SWMModel.m */,
 				0151713816DC8E450082DEEC /* SWMShader.h */,
@@ -117,8 +122,6 @@
 				0151713B16DC8E450082DEEC /* SWMVertexArray.m */,
 				01B5AD6A16879EE5009216E0 /* SWMAppDelegate.h */,
 				01B5AD6B16879EE5009216E0 /* SWMAppDelegate.m */,
-				01B5AD7316879EE5009216E0 /* Shader.fsh */,
-				01B5AD7516879EE5009216E0 /* Shader.vsh */,
 				01B5AD7716879EE5009216E0 /* SWMViewController.h */,
 				01B5AD7816879EE5009216E0 /* SWMViewController.m */,
 				01B5AD7A16879EE5009216E0 /* SWMViewController_iPhone.xib */,
@@ -126,6 +129,8 @@
 				01B5AD6216879EE5009216E0 /* Supporting Files */,
 				0151714416DC92B60082DEEC /* SWMVertex.h */,
 				0151714516DC92B60082DEEC /* SWMVertex.m */,
+				01F03AB916E2C7EB0045C13C /* SWMBitmapLoader.h */,
+				01F03ABA16E2C7EB0045C13C /* SWMBitmapLoader.m */,
 			);
 			path = Orgo;
 			sourceTree = "<group>";
@@ -200,10 +205,10 @@
 				01B5AD6E16879EE5009216E0 /* Default.png in Resources */,
 				01B5AD7016879EE5009216E0 /* Default@2x.png in Resources */,
 				01B5AD7216879EE5009216E0 /* Default-568h@2x.png in Resources */,
-				01B5AD7416879EE5009216E0 /* Shader.fsh in Resources */,
-				01B5AD7616879EE5009216E0 /* Shader.vsh in Resources */,
 				01B5AD7C16879EE5009216E0 /* SWMViewController_iPhone.xib in Resources */,
 				01B5AD7F16879EE5009216E0 /* SWMViewController_iPad.xib in Resources */,
+				01F03AC716E3EDBF0045C13C /* Shaders in Resources */,
+				01F03AC916E3EE5A0045C13C /* Art in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -221,6 +226,7 @@
 				0151713D16DC8E450082DEEC /* SWMShader.m in Sources */,
 				0151713E16DC8E450082DEEC /* SWMVertexArray.m in Sources */,
 				0151714616DC92B60082DEEC /* SWMVertex.m in Sources */,
+				01F03ABB16E2C7EB0045C13C /* SWMBitmapLoader.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

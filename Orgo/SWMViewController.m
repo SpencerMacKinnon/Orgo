@@ -71,13 +71,10 @@
 {
     [EAGLContext setCurrentContext:self.context];
     
+//    glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+//    glEnable(GL_BLEND);
+    
     glEnable(GL_DEPTH_TEST);
-    
-    glGenVertexArraysOES(1, &_vertexArray);
-    glBindVertexArrayOES(_vertexArray);
-    
-    glGenBuffers(1, &_vertexBuffer);
-    glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
     
     SWMShader *_shader = [[SWMShader alloc] init];
     _model = [[SWMModel alloc] initWithShader:_shader];
@@ -85,16 +82,28 @@
     unsigned int totalDataSize = 0;
     NSMutableData *vertexData = [[NSMutableData alloc] init];
     
-    totalDataSize += [_model sizeOfVertices];
-    [vertexData appendBytes:[[_model vertexData] mutableBytes] length:[_model sizeOfVertices]];
+    totalDataSize += [[_model vertexData] length];
+    [vertexData appendBytes:[[_model vertexData] mutableBytes] length:[[_model vertexData] length]];
     
+    glGenVertexArraysOES(1, &_vertexArray);
+    glBindVertexArrayOES(_vertexArray);
     
+    glGenBuffers(1, &_vertexBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
     glBufferData(GL_ARRAY_BUFFER, totalDataSize, [vertexData mutableBytes], GL_STATIC_DRAW);
     
+    glGenBuffers(1, &_indexBuffer);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, [[[_model vertexArray] indexData] length], [[[_model vertexArray] indexData] mutableBytes], GL_STATIC_DRAW);
+    
     glEnableVertexAttribArray(GLKVertexAttribPosition);
-    glVertexAttribPointer(GLKVertexAttribPosition, 3, GL_FLOAT, GL_FALSE, 24, BUFFER_OFFSET(0));
+    glVertexAttribPointer(GLKVertexAttribPosition, 3, GL_FLOAT, GL_FALSE, sizeof(SWMVertex1P1D1UV), BUFFER_OFFSET(0));
     glEnableVertexAttribArray(GLKVertexAttribNormal);
-    glVertexAttribPointer(GLKVertexAttribNormal, 3, GL_FLOAT, GL_FALSE, 24, BUFFER_OFFSET(12));
+    glVertexAttribPointer(GLKVertexAttribNormal, 3, GL_FLOAT, GL_FALSE, sizeof(SWMVertex1P1D1UV), BUFFER_OFFSET(12));
+    glEnableVertexAttribArray(GLKVertexAttribColor);
+    glVertexAttribPointer(GLKVertexAttribColor, 4, GL_FLOAT, GL_FALSE, sizeof(SWMVertex1P1D1UV), BUFFER_OFFSET(24));
+    glEnableVertexAttribArray(GLKVertexAttribTexCoord0);
+    glVertexAttribPointer(GLKVertexAttribTexCoord0, 2, GL_FLOAT, GL_FALSE, sizeof(SWMVertex1P1D1UV), BUFFER_OFFSET(40));
     
     glBindVertexArrayOES(0);
 }
@@ -129,10 +138,14 @@
     glClearColor(0.65f, 0.65f, 0.65f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
+    glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
+    
     GLint offset = 0;
     int numberOfVertices = [_model numberOfVertices];
     [_model glkView:view drawInRect:rect];
-    glDrawArrays(GL_TRIANGLES, offset, numberOfVertices);
+    glDrawElements(GL_TRIANGLES, [[_model vertexArray] numberOfIndices], GL_UNSIGNED_BYTE, 0);
+    //glDrawArrays(GL_TRIANGLES, offset, numberOfVertices);
     offset += numberOfVertices;
     
     glBindVertexArrayOES(_vertexArray);
