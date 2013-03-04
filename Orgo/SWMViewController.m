@@ -36,8 +36,10 @@
     
     _aspect = fabsf(self.view.bounds.size.width / self.view.bounds.size.height);
     _projectionMatrix = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(65.0f), _aspect, 0.1f, 100.0f);
+    _worldPosition = GLKMatrix4MakeTranslation(0.0f, 0.0f, -0.0f);
     
     [self setupGL];
+    [self setupGestureRecognizers];
 }
 
 - (void)dealloc
@@ -71,13 +73,14 @@
 {
     [EAGLContext setCurrentContext:self.context];
     
-//    glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-//    glEnable(GL_BLEND);
+    glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_BLEND);
     
     glEnable(GL_DEPTH_TEST);
     
     SWMShader *_shader = [[SWMShader alloc] init];
     _model = [[SWMModel alloc] initWithShader:_shader];
+    [_model setModelViewMatrix:GLKMatrix4MakeTranslation(0, 0, -10.0f)];
     
     unsigned int totalDataSize = 0;
     NSMutableData *vertexData = [[NSMutableData alloc] init];
@@ -125,9 +128,12 @@
     _projectionMatrix = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(65.0f), _aspect, 0.1f, 100.0f);
     
     GLKMatrix4 modelViewMatrix = [_model modelViewMatrix];
-    
+    GLKMatrix4 OhInvertedWorldMatrix = GLKMatrix4Invert(_worldPosition, NULL);
+    modelViewMatrix = GLKMatrix4Multiply(OhInvertedWorldMatrix, modelViewMatrix);
     GLKMatrix3 normalMatrix = GLKMatrix3InvertAndTranspose(GLKMatrix4GetMatrix3(modelViewMatrix), NULL);
     GLKMatrix4 modelViewProjectionMatrix = GLKMatrix4Multiply(_projectionMatrix, modelViewMatrix);
+    
+    
     
     [_model setNormalMatrix:normalMatrix];
     [_model setModelViewProjectionMatrix:modelViewProjectionMatrix];
@@ -145,11 +151,31 @@
     int numberOfVertices = [_model numberOfVertices];
     [_model glkView:view drawInRect:rect];
     glDrawElements(GL_TRIANGLES, [[_model vertexArray] numberOfIndices], GL_UNSIGNED_BYTE, 0);
-    //glDrawArrays(GL_TRIANGLES, offset, numberOfVertices);
     offset += numberOfVertices;
     
     glBindVertexArrayOES(_vertexArray);
     
+}
+
+- (void)setupGestureRecognizers
+{
+    UILongPressGestureRecognizer *_lgpr = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
+    _lgpr.minimumPressDuration = 1.0;
+    [self.view addGestureRecognizer:_lgpr];
+    
+    UITapGestureRecognizer *_tgr = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
+    _tgr.numberOfTapsRequired = 1;
+    _tgr.numberOfTouchesRequired = 1;
+    [_tgr requireGestureRecognizerToFail:_lgpr];
+    [self.view addGestureRecognizer:_tgr];
+}
+
+- (void)handleLongPress:(UILongPressGestureRecognizer *)gestureRecognizer{
+    NSLog(@"Long press detected");
+}
+
+- (void)handleTap:(UITapGestureRecognizer *)gestureRecognizer{
+    NSLog(@"Tap detected");
 }
 
 @end
