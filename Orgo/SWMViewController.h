@@ -11,7 +11,9 @@
 #include "SWMModel.h"
 
 @interface SWMViewController : GLKViewController {
-    GLKMatrix4 _projectionMatrix, _worldPosition;
+    GLKMatrix4 _projectionMatrix;
+    
+    CGFloat _lastScale;
     float _aspect;
     GLuint _indexBuffer, _vertexArray, _vertexBuffer;
     

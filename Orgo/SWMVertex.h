@@ -16,7 +16,7 @@ typedef struct  {
     float _normal[3];
     float _diffuseColour[4];
     float _uv0[2];
-} SWMVertex1P1D1UV;
+} SWMVertex1P1N1D1UV;
 
 typedef struct  {
     float _position[3];

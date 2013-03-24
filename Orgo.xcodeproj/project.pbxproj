@@ -11,6 +11,7 @@
 		0151713D16DC8E450082DEEC /* SWMShader.m in Sources */ = {isa = PBXBuildFile; fileRef = 0151713916DC8E450082DEEC /* SWMShader.m */; };
 		0151713E16DC8E450082DEEC /* SWMVertexArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 0151713B16DC8E450082DEEC /* SWMVertexArray.m */; };
 		0151714616DC92B60082DEEC /* SWMVertex.m in Sources */ = {isa = PBXBuildFile; fileRef = 0151714516DC92B60082DEEC /* SWMVertex.m */; };
+		017ECEA916FE77A80086E0E4 /* SWMMatrix.m in Sources */ = {isa = PBXBuildFile; fileRef = 017ECEA816FE77A80086E0E4 /* SWMMatrix.m */; };
 		01B5AD5816879EE5009216E0 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01B5AD5716879EE5009216E0 /* UIKit.framework */; };
 		01B5AD5A16879EE5009216E0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01B5AD5916879EE5009216E0 /* Foundation.framework */; };
 		01B5AD5C16879EE5009216E0 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01B5AD5B16879EE5009216E0 /* CoreGraphics.framework */; };
@@ -39,6 +40,8 @@
 		0151713B16DC8E450082DEEC /* SWMVertexArray.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWMVertexArray.m; sourceTree = "<group>"; };
 		0151714416DC92B60082DEEC /* SWMVertex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWMVertex.h; sourceTree = "<group>"; };
 		0151714516DC92B60082DEEC /* SWMVertex.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWMVertex.m; sourceTree = "<group>"; };
+		017ECEA716FE77A80086E0E4 /* SWMMatrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWMMatrix.h; sourceTree = "<group>"; };
+		017ECEA816FE77A80086E0E4 /* SWMMatrix.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWMMatrix.m; sourceTree = "<group>"; };
 		01B5AD5316879EE5009216E0 /* Orgo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Orgo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		01B5AD5716879EE5009216E0 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		01B5AD5916879EE5009216E0 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -131,6 +134,8 @@
 				0151714516DC92B60082DEEC /* SWMVertex.m */,
 				01F03AB916E2C7EB0045C13C /* SWMBitmapLoader.h */,
 				01F03ABA16E2C7EB0045C13C /* SWMBitmapLoader.m */,
+				017ECEA716FE77A80086E0E4 /* SWMMatrix.h */,
+				017ECEA816FE77A80086E0E4 /* SWMMatrix.m */,
 			);
 			path = Orgo;
 			sourceTree = "<group>";
@@ -227,6 +232,7 @@
 				0151713E16DC8E450082DEEC /* SWMVertexArray.m in Sources */,
 				0151714616DC92B60082DEEC /* SWMVertex.m in Sources */,
 				01F03ABB16E2C7EB0045C13C /* SWMBitmapLoader.m in Sources */,
+				017ECEA916FE77A80086E0E4 /* SWMMatrix.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -315,6 +321,7 @@
 		01B5AD8316879EE5009216E0 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Orgo/Orgo-Prefix.pch";
 				INFOPLIST_FILE = "Orgo/Orgo-Info.plist";
@@ -326,6 +333,7 @@
 		01B5AD8416879EE5009216E0 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Orgo/Orgo-Prefix.pch";
 				INFOPLIST_FILE = "Orgo/Orgo-Info.plist";

@@ -11,12 +11,16 @@
 #include "SWMVertexArray.h"
 #include "SWMShader.h"
 #include "SWMBitmapLoader.h"
+#include "SWMMatrix.h"
 
 @interface SWMModel : NSObject
 {
-    GLKMatrix4 _modelViewMatrix, _modelViewProjectionMatrix;
     GLKMatrix3 _normalMatrix;
+    GLKMatrix4 _modelViewProjectionMatrix;
+    
+    GLKVector3 _rotationVector, _translationVector;
     GLKVector4 _diffuseLightColour;
+    
     GLuint _floorTexture, _fishTexture, _colourIndex;
     
     SWMVertexArray *_vertexArray;
@@ -47,13 +51,21 @@
 @property GLKMatrix3 normalMatrix;
 @property SWMVertexArray *vertexArray;
 @property SWMShader *shader;
+@property GLKVector3 rotationVector, translationVector;
 
 - (id)initWithShader:(SWMShader *)shader;
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect;
 - (BOOL)loadShaders;
 - (int)numberOfVertices;
+- (GLKMatrix4)objectTransform;
 - (BOOL)releaseShaders;
 - (void)tearDownGL;
 - (NSMutableData *)vertexData;
+- (void)setTranslationVectorX:(float)transX;
+- (void)setTranslationVectorY:(float)transY;
+- (void)setTranslationVectorZ:(float)transZ;
+- (void)rotateX:(float)rotX;
+- (void)rotateY:(float)rotY;
+- (void)rotateZ:(float)rotZ;
 
 @end

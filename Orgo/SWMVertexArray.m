@@ -7,6 +7,7 @@
 //
 
 #import "SWMVertexArray.h"
+#define TEX_COORD_MAX   1
 
 @implementation SWMVertexArray
 
@@ -19,18 +20,41 @@
     self = [super init];
     if (self) {
         
-        const SWMVertex1P1D1UV Vertices[] = {
-            {{1, -1, 0.5}, {0, 0, 1}, {1, 0, 0, 1}, {1, 0}},
-            {{1, 1, 0.5}, {0, 0, 1}, {1, 0, 0, 1}, {1, 1}},
-            {{-1, 1, 0.5}, {0, 0, 1}, {0, 1, 0, 1}, {0, 1}},
-            {{-1, -1, 0.5}, {0, 0, 1}, {0, 1, 0, 1}, {0, 0}},
-            {{1, -1, -0.5}, {0, 0, 1}, {1, 0, 0, 1}, {1, 0}},
-            {{1, 1, -0.5}, {0, 0, 1}, {1, 0, 0, 1}, {1, 1}},
-            {{-1, 1, -0.5}, {0, 0, 1}, {0, 1, 0, 1}, {0, 1}},
-            {{-1, -1, -0.5}, {0, 0, 1}, {0, 1, 0, 1}, {0, 0}}
+        const SWMVertex1P1N1D1UV Vertices[] = {
+            // Front
+            {{1, -1, 1}, {0, 0, 1}, {1, 0, 0, 1}, {TEX_COORD_MAX, 0}},
+            {{1, 1, 1}, {0, 0, 1}, {0, 1, 0, 1}, {TEX_COORD_MAX, TEX_COORD_MAX}},
+            {{-1, 1, 1}, {0, 0, 1}, {0, 0, 1, 1}, {0, TEX_COORD_MAX}},
+            {{-1, -1, 1}, {0, 0, 1}, {0, 0, 0, 1}, {0, 0}},
+            // Back
+            {{1, 1, -1}, {0, 0, -1}, {1, 0, 0, 1}, {TEX_COORD_MAX, 0}},
+            {{-1, -1, -1}, {0, 0, -1}, {0, 1, 0, 1}, {TEX_COORD_MAX, TEX_COORD_MAX}},
+            {{1, -1, -1}, {0, 0, -1}, {0, 0, 1, 1}, {0, TEX_COORD_MAX}},
+            {{-1, 1, -1}, {0, 0, -1}, {0, 0, 0, 1}, {0, 0}},
+            // Left
+            {{-1, -1, 1}, {-1, 0, 0}, {1, 0, 0, 1}, {TEX_COORD_MAX, 0}},
+            {{-1, 1, 1}, {-1, 0, 0}, {0, 1, 0, 1}, {TEX_COORD_MAX, TEX_COORD_MAX}},
+            {{-1, 1, -1}, {-1, 0, 0}, {0, 0, 1, 1}, {0, TEX_COORD_MAX}},
+            {{-1, -1, -1}, {-1, 0, 0}, {0, 0, 0, 1}, {0, 0}},
+            // Right
+            {{1, -1, -1}, {1, 0, 0}, {1, 0, 0, 1}, {TEX_COORD_MAX, 0}},
+            {{1, 1, -1}, {1, 0, 0}, {0, 1, 0, 1}, {TEX_COORD_MAX, TEX_COORD_MAX}},
+            {{1, 1, 1}, {1, 0, 0}, {0, 0, 1, 1}, {0, TEX_COORD_MAX}},
+            {{1, -1, 1}, {1, 0, 0}, {0, 0, 0, 1}, {0, 0}},
+            // Top
+            {{1, 1, 1}, {0, 1, 0}, {1, 0, 0, 1}, {TEX_COORD_MAX, 0}},
+            {{1, 1, -1}, {0, 1, 0}, {0, 1, 0, 1}, {TEX_COORD_MAX, TEX_COORD_MAX}},
+            {{-1, 1, -1}, {0, 1, 0}, {0, 0, 1, 1}, {0, TEX_COORD_MAX}},
+            {{-1, 1, 1}, {0, 1, 0}, {0, 0, 0, 1}, {0, 0}},
+            // Bottom
+            {{1, -1, -1}, {0, -1, 0}, {1, 0, 0, 1}, {TEX_COORD_MAX, 0}},
+            {{1, -1, 1}, {0, -1, 0}, {0, 1, 0, 1}, {TEX_COORD_MAX, TEX_COORD_MAX}},
+            {{-1, -1, 1}, {0, -1, 0}, {0, 0, 1, 1}, {0, TEX_COORD_MAX}},
+            {{-1, -1, -1}, {0, -1, 0}, {0, 0, 0, 1}, {0, 0}}
         };
+        
         _vertexData = [[NSMutableData alloc] initWithBytes:Vertices length:sizeof(Vertices)];
-        _numberOfVertices = sizeof(Vertices) / sizeof(SWMVertex1P1D1UV);
+        _numberOfVertices = sizeof(Vertices) / sizeof(SWMVertex1P1N1D1UV);
         
         const GLubyte Indices[] = {
             // Front
@@ -38,7 +62,7 @@
             2, 3, 0,
             // Back
             4, 5, 6,
-            6, 7, 4,
+            4, 5, 7,
             // Left
             8, 9, 10,
             10, 11, 8,

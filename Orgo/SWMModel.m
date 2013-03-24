@@ -15,14 +15,17 @@
 @synthesize normalMatrix = _normalMatrix;
 @synthesize vertexArray = _vertexArray;
 @synthesize shader = _shader;
+@synthesize rotationVector = _rotationVector;
+@synthesize translationVector = _translationVector;
 
 - (id)initWithShader:(SWMShader *)shader{
     self = [super init];
     if (self){
         _shader = shader;
         _vertexArray = [[SWMVertexArray alloc] init];
-        _modelViewMatrix = GLKMatrix4MakeTranslation(0, 0, 0);
         _diffuseLightColour = GLKVector4Make(1.0, 1.0, 1.0, 1.0);
+        _translationVector = GLKVector3Make(0, 0, -6.0);
+        _rotationVector = GLKVector3Make(0.0, 0.0, 0.0);
         [self loadShaders];
     }
     
@@ -52,6 +55,10 @@
     return YES;
 }
 
+- (GLKMatrix4)objectTransform {
+    return [SWMMatrix objectTransformWithTranslationVector:_translationVector andWithRotationVector:_rotationVector];
+}
+
 - (BOOL)releaseShaders{
     return [_shader releaseShaders];
 }
@@ -69,6 +76,25 @@
 
 - (void)tearDownGL{
     [_shader tearDownGL];
+}
+
+- (void)setTranslationVectorX:(float)transX {
+    _translationVector.x = transX;
+}
+- (void)setTranslationVectorY:(float)transY {
+    _translationVector.y = transY;
+}
+- (void)setTranslationVectorZ:(float)transZ {
+    _translationVector.z = transZ;
+}
+- (void)rotateX:(float)rotX {
+    _rotationVector.x += rotX;
+}
+- (void)rotateY:(float)rotY {
+    _rotationVector.y += rotY;
+}
+- (void)rotateZ:(float)rotZ {
+    _rotationVector.z += rotZ;
 }
 
 @end
