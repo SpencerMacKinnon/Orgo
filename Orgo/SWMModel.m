@@ -78,6 +78,11 @@
     [_shader tearDownGL];
 }
 
+- (void)resetOrientation {
+    [self setTranslationVector:GLKVector3Make(0.0f, 0.0f, -6.0f)];
+    [self setRotationVector:GLKVector3Make(0.0f, 0.0f, 0.0f)];
+}
+
 - (void)setTranslationVectorX:(float)transX {
     _translationVector.x = transX;
 }

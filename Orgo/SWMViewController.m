@@ -173,6 +173,32 @@ const float MAX_ZOOM_OUT = -9.0;
     
     UIPinchGestureRecognizer *_tfpgr = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(handlePinchGesture:)];
     [self.view addGestureRecognizer:_tfpgr];
+    
+//    UISwipeGestureRecognizer *_sgrl = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipeLeft:)];
+//    [_sgrl setDirection:UISwipeGestureRecognizerDirectionLeft];
+//    [self.view addGestureRecognizer:_sgrl];
+//    
+//    UISwipeGestureRecognizer *_sgrr = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipeRight:)];
+//    [_sgrr setDirection:UISwipeGestureRecognizerDirectionRight];
+//    [self.view addGestureRecognizer:_sgrr];
+//    
+//    UISwipeGestureRecognizer *_sgru = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipeUp:)];
+//    [_sgrr setDirection:UISwipeGestureRecognizerDirectionUp];
+//    [self.view addGestureRecognizer:_sgru];
+//    
+//    UISwipeGestureRecognizer *_sgrd = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipeDown:)];
+//    [_sgrd setDirection:UISwipeGestureRecognizerDirectionDown];
+//    [self.view addGestureRecognizer:_sgrd];
+    
+    UIPanGestureRecognizer *_ofpangr = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePanGesture:)];
+    [_ofpangr setMinimumNumberOfTouches:1];
+    [_ofpangr setMaximumNumberOfTouches:1];
+    [self.view addGestureRecognizer:_ofpangr];
+    
+    UIPanGestureRecognizer *_tfpangr = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handleTwoFingerPanGesture:)];
+    [_tfpangr setMinimumNumberOfTouches:2];
+    [_tfpangr setMaximumNumberOfTouches:2];
+    [self.view addGestureRecognizer:_tfpangr];
 }
 
 - (void)handleLongPress:(UILongPressGestureRecognizer *)gestureRecognizer{
@@ -180,12 +206,87 @@ const float MAX_ZOOM_OUT = -9.0;
 }
 
 - (void)handleDoubleTap:(UITapGestureRecognizer *)gestureRecognizer{
-    [_model setTranslationVector:GLKVector3Make(0, 0, -6.0)];
+    [_model resetOrientation];
 }
 
 - (void)handleTap:(UITapGestureRecognizer *)gestureRecognizer{
     NSLog(@"Tap detected");
-    [_model rotateY:M_PI_2 / 10.0];
+}
+
+- (void)handleSwipeLeft:(UISwipeGestureRecognizer *)gestureRecognizer{
+    [_model rotateX: -(M_PI_4)];
+}
+
+- (void)handleSwipeRight:(UISwipeGestureRecognizer *)gestureRecognizer{
+    [_model rotateX: (M_PI_4)];
+}
+
+- (void)handleSwipeUp:(UISwipeGestureRecognizer *)gestureRecognizer{
+    [_model rotateY: (M_PI_4)];
+}
+
+- (void)handleSwipeDown:(UISwipeGestureRecognizer *)gestureRecognizer{
+    [_model rotateY: -(M_PI_4)];
+}
+
+- (void)handlePanGesture:(UIPanGestureRecognizer *)gestureRecognizer {
+    CGPoint translatedPoint = [gestureRecognizer translationInView:self.view];
+    NSLog(@"Translated X: %f Translated Y: %f", translatedPoint.x, translatedPoint.y);
+    
+    CGFloat xMagnitude = sqrtf(translatedPoint.x * translatedPoint.x);
+    CGFloat yMagnitude = sqrtf(translatedPoint.y * translatedPoint.y);
+    CGFloat xyDiff = xMagnitude - yMagnitude;
+    xyDiff = sqrtf(xyDiff * xyDiff);
+    NSLog(@"xMag: %f yMag: %f xyDiff: %f", xMagnitude, yMagnitude, xyDiff);
+
+    const float ROTATION_RATE = M_PI_4 * 0.05f;
+    
+    if ((xMagnitude > yMagnitude) || (xyDiff < 20.0f)) {
+        if (translatedPoint.x > 0) {
+            [_model rotateY:ROTATION_RATE];
+        } else {
+            [_model rotateY:-ROTATION_RATE];
+        }
+    }
+    if ((yMagnitude > xMagnitude) || (xyDiff < 20.0f))  {
+        if (translatedPoint.y > 0) {
+            [_model rotateX: ROTATION_RATE];
+        } else {
+            [_model rotateX:-ROTATION_RATE];
+        }
+    }
+}
+
+- (void)handleTwoFingerPanGesture:(UIPanGestureRecognizer *)gestureRecognizer{
+   
+    CGPoint translatedPoint = [gestureRecognizer translationInView:self.view];
+    NSLog(@"Translated X: %f Translated Y: %f", translatedPoint.x, translatedPoint.y);
+    
+    CGFloat xMagnitude = sqrtf(translatedPoint.x * translatedPoint.x);
+    CGFloat yMagnitude = sqrtf(translatedPoint.y * translatedPoint.y);
+    CGFloat xyDiff = xMagnitude - yMagnitude;
+    xyDiff = sqrtf(xyDiff * xyDiff);
+    NSLog(@"xMag: %f yMag: %f xyDiff: %f", xMagnitude, yMagnitude, xyDiff);
+    
+    const float TRANSLATION_RATE = 0.03;
+    
+    float currentXTrans = [_model translationVector].x;
+    float currentYTrans = [_model translationVector].y;
+    
+    if ((xMagnitude > yMagnitude) || (xyDiff < 20.0f)) {
+        if (translatedPoint.x > 0) {
+            [_model setTranslationVectorX:currentXTrans + TRANSLATION_RATE];
+        } else {
+            [_model setTranslationVectorX:currentXTrans - TRANSLATION_RATE];
+        }
+    }
+    if ((yMagnitude > xMagnitude) || (xyDiff < 20.0f)) {
+        if (translatedPoint.y > 0) {
+            [_model setTranslationVectorY:currentYTrans - TRANSLATION_RATE];
+        } else {
+            [_model setTranslationVectorY:currentYTrans + TRANSLATION_RATE];
+        }
+    }
 }
 
 - (void)handlePinchGesture:(UIPinchGestureRecognizer *)gestureRecognizer{

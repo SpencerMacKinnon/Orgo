@@ -61,6 +61,7 @@
 - (BOOL)releaseShaders;
 - (void)tearDownGL;
 - (NSMutableData *)vertexData;
+- (void)resetOrientation;
 - (void)setTranslationVectorX:(float)transX;
 - (void)setTranslationVectorY:(float)transY;
 - (void)setTranslationVectorZ:(float)transZ;
