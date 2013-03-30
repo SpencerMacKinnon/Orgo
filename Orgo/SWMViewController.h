@@ -13,7 +13,7 @@
 @interface SWMViewController : GLKViewController {
     GLKMatrix4 _projectionMatrix;
     
-    CGFloat _lastScale;
+    CGFloat _lastScale,_lastTransX, _lastTransY;
     float _aspect;
     GLuint _indexBuffer, _vertexArray, _vertexBuffer;
     

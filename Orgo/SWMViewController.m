@@ -156,6 +156,10 @@ const float MAX_ZOOM_OUT = -9.0;
 
 - (void)setupGestureRecognizers
 {
+    _lastScale = 1.0f;
+    _lastTransX = 0.0f;
+    _lastTransY = 0.0f;
+    
     UILongPressGestureRecognizer *_lgpr = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
     _lgpr.minimumPressDuration = 1.0;
     [self.view addGestureRecognizer:_lgpr];
@@ -230,6 +234,13 @@ const float MAX_ZOOM_OUT = -9.0;
 }
 
 - (void)handlePanGesture:(UIPanGestureRecognizer *)gestureRecognizer {
+    
+    if([gestureRecognizer state] == UIGestureRecognizerStateBegan) {
+        _lastTransX = 0.0f;
+        _lastTransY = 0.0f;
+    }
+    
+    
     CGPoint translatedPoint = [gestureRecognizer translationInView:self.view];
     NSLog(@"Translated X: %f Translated Y: %f", translatedPoint.x, translatedPoint.y);
     
@@ -239,21 +250,24 @@ const float MAX_ZOOM_OUT = -9.0;
     xyDiff = sqrtf(xyDiff * xyDiff);
     NSLog(@"xMag: %f yMag: %f xyDiff: %f", xMagnitude, yMagnitude, xyDiff);
 
-    const float ROTATION_RATE = M_PI_4 * 0.05f;
+    const float ROTATION_RATE = M_PI_4 * 0.1f;
+    const float DIAGONAL_PAN_DIFFERENCE = 5.0f;
     
-    if ((xMagnitude > yMagnitude) || (xyDiff < 20.0f)) {
-        if (translatedPoint.x > 0) {
+    if ((xMagnitude > yMagnitude) || (xyDiff < DIAGONAL_PAN_DIFFERENCE)) {
+        if (translatedPoint.x > _lastTransX) {
             [_model rotateY:ROTATION_RATE];
         } else {
             [_model rotateY:-ROTATION_RATE];
         }
+        _lastTransX = translatedPoint.x;
     }
-    if ((yMagnitude > xMagnitude) || (xyDiff < 20.0f))  {
-        if (translatedPoint.y > 0) {
+    if ((yMagnitude > xMagnitude) || (xyDiff < DIAGONAL_PAN_DIFFERENCE))  {
+        if (translatedPoint.y > _lastTransY) {
             [_model rotateX: ROTATION_RATE];
         } else {
             [_model rotateX:-ROTATION_RATE];
         }
+        _lastTransY = translatedPoint.y;
     }
 }
 
