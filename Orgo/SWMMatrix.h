@@ -9,13 +9,17 @@
 #import <Foundation/Foundation.h>
 #import <GLKit/GLKit.h>
 
-@interface SWMMatrix : NSObject
-
-+(GLKMatrix4)translation:(GLKVector3)vector;
-+(GLKMatrix4)rotationX:(float)angle;
-+(GLKMatrix4)rotationY:(float)angle;
-+(GLKMatrix4)rotationZ:(float)angle;
-+(GLKMatrix4)objectTransformWithTranslationVector:(GLKVector3)translationVector andWithRotationVector:(GLKVector3)rotationVector;
-+(GLKMatrix4)objectTransformWithTranslationMatrix:(GLKMatrix4)translationMatrix withRotationMatrixX:(GLKMatrix4)rotationMatrixX withRotationMatrixY:(GLKMatrix4)rotationMatrixY withRotationMatrixZ:(GLKMatrix4)rotationMatrixZ;
+@interface SWMMatrix : NSObject {
+    GLKVector3 _rotationAxes, _rotationVector, _translationVector;
+    GLKVector3 _xRotationAxes, _yRotationAxes, _zRotationAxes;
+}
+- (void)resetOrientation;
+- (void)setTranslationVectorX:(float)transX;
+- (void)setTranslationVectorY:(float)transY;
+- (void)setTranslationVectorZ:(float)transZ;
+- (void)rotateX:(float)rotX;
+- (void)rotateY:(float)rotY;
+- (void)rotateZ:(float)rotZ;
+- (GLKMatrix4)objectTransform;
 
 @end

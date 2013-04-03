@@ -24,8 +24,7 @@
         _shader = shader;
         _vertexArray = [[SWMVertexArray alloc] init];
         _diffuseLightColour = GLKVector4Make(1.0, 1.0, 1.0, 1.0);
-        _translationVector = GLKVector3Make(0, 0, -6.0);
-        _rotationVector = GLKVector3Make(0.0, 0.0, 0.0);
+        _matrix = [[SWMMatrix alloc] init];
         [self loadShaders];
     }
     
@@ -56,7 +55,7 @@
 }
 
 - (GLKMatrix4)objectTransform {
-    return [SWMMatrix objectTransformWithTranslationVector:_translationVector andWithRotationVector:_rotationVector];
+    return [_matrix objectTransform];
 }
 
 - (BOOL)releaseShaders{
@@ -79,27 +78,26 @@
 }
 
 - (void)resetOrientation {
-    [self setTranslationVector:GLKVector3Make(0.0f, 0.0f, -6.0f)];
-    [self setRotationVector:GLKVector3Make(0.0f, 0.0f, 0.0f)];
+    [_matrix resetOrientation];
 }
 
 - (void)setTranslationVectorX:(float)transX {
-    _translationVector.x = transX;
+    [_matrix setTranslationVectorX:transX];
 }
 - (void)setTranslationVectorY:(float)transY {
-    _translationVector.y = transY;
+    [_matrix setTranslationVectorY:transY];
 }
 - (void)setTranslationVectorZ:(float)transZ {
-    _translationVector.z = transZ;
+    [_matrix setTranslationVectorZ:transZ];
 }
 - (void)rotateX:(float)rotX {
-    _rotationVector.x += rotX;
+    [_matrix rotateX:rotX];
 }
 - (void)rotateY:(float)rotY {
-    _rotationVector.y += rotY;
+    [_matrix rotateY:rotY];
 }
 - (void)rotateZ:(float)rotZ {
-    _rotationVector.z += rotZ;
+    [_matrix rotateZ:rotZ];
 }
 
 @end

@@ -240,20 +240,17 @@ const float MAX_ZOOM_OUT = -9.0;
         _lastTransY = 0.0f;
     }
     
-    
     CGPoint translatedPoint = [gestureRecognizer translationInView:self.view];
-    NSLog(@"Translated X: %f Translated Y: %f", translatedPoint.x, translatedPoint.y);
     
     CGFloat xMagnitude = sqrtf(translatedPoint.x * translatedPoint.x);
     CGFloat yMagnitude = sqrtf(translatedPoint.y * translatedPoint.y);
     CGFloat xyDiff = xMagnitude - yMagnitude;
     xyDiff = sqrtf(xyDiff * xyDiff);
-    NSLog(@"xMag: %f yMag: %f xyDiff: %f", xMagnitude, yMagnitude, xyDiff);
 
     const float ROTATION_RATE = M_PI_4 * 0.1f;
-    const float DIAGONAL_PAN_DIFFERENCE = 5.0f;
+    const float DIAGONAL_PAN_DIFFERENCE = 1.0f;
     
-    if ((xMagnitude > yMagnitude) || (xyDiff < DIAGONAL_PAN_DIFFERENCE)) {
+    if ((xMagnitude > yMagnitude) /*|| (xyDiff < DIAGONAL_PAN_DIFFERENCE)*/) {
         if (translatedPoint.x > _lastTransX) {
             [_model rotateY:ROTATION_RATE];
         } else {
@@ -261,7 +258,7 @@ const float MAX_ZOOM_OUT = -9.0;
         }
         _lastTransX = translatedPoint.x;
     }
-    if ((yMagnitude > xMagnitude) || (xyDiff < DIAGONAL_PAN_DIFFERENCE))  {
+    if ((yMagnitude > xMagnitude) /*|| (xyDiff < DIAGONAL_PAN_DIFFERENCE)*/)  {
         if (translatedPoint.y > _lastTransY) {
             [_model rotateX: ROTATION_RATE];
         } else {

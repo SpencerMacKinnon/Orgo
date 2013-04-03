@@ -17,14 +17,13 @@
 {
     GLKMatrix3 _normalMatrix;
     GLKMatrix4 _modelViewProjectionMatrix;
-    
-    GLKVector3 _rotationVector, _translationVector;
     GLKVector4 _diffuseLightColour;
     
     GLuint _floorTexture, _fishTexture, _colourIndex;
     
     SWMVertexArray *_vertexArray;
     SWMShader *_shader;
+    SWMMatrix *_matrix;
     
     // Uniform index.
     enum
