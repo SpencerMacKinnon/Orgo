@@ -11,6 +11,11 @@
 
 @interface SWMVertex : NSObject
 
+typedef struct {
+    float _position[3];
+    float _diffuseColour[4];
+} SWMVertex1P1D;
+
 typedef struct  {
     float _position[3];
     float _normal[3];
@@ -28,5 +33,17 @@ typedef struct  {
     unsigned short _jointIndices[4];
     float _jointWeights[3];
 } SWMVertex1P1N1D1S2UV4J;
+
+typedef enum {
+    GLU_BYTE,
+    GLU_SHORT,
+    GLU_INT
+} GLU_INDEX_TYPE;
+
+typedef enum {
+    SWM_1P1D,
+    SWM_P1N1D1UV,
+    SWM_1P1N1D1S2UV4J
+} SWM_VERTEX_TYPE;
 
 @end

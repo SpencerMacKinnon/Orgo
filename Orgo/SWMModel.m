@@ -22,8 +22,9 @@
     self = [super init];
     if (self){
         _shader = shader;
-        _vertexArray = [[SWMVertexArray alloc] init];
-        _diffuseLightColour = GLKVector4Make(1.0, 1.0, 1.0, 1.0);
+        _vertexArray = [[SWMModelGenerator alloc] initSphereWithRecursionLevel:1 andColour:GLKVector4Make(1.0f, 0.0f, 0.0f, 1.0f)];
+        //_vertexArray = [[SWMModelGenerator alloc] initCube];
+        _diffuseLightColour = GLKVector4Make(1.0, 1.0, 1.0, 0.5);
         _matrix = [[SWMMatrix alloc] init];
         [self loadShaders];
     }
@@ -42,14 +43,14 @@
 - (BOOL)loadShaders{
     uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX] = glGetUniformLocation([_shader program], "modelViewProjectionMatrix");
     uniforms[UNIFORM_NORMAL_MATRIX] = glGetUniformLocation([_shader program], "normalMatrix");
-    uniforms[UNIFORM_SAMPLER2D] = glGetUniformLocation([_shader program], "myTextureSampler");
+    //uniforms[UNIFORM_SAMPLER2D] = glGetUniformLocation([_shader program], "myTextureSampler");
     _colourIndex = glGetUniformLocation([_shader program], "diffuseColour");
     
-    NSString *floorPath = [[NSBundle mainBundle] pathForResource:@"tile_floor" ofType:@"png" inDirectory:@"Art"];
-    NSString *fishPath = [[NSBundle mainBundle] pathForResource:@"item_powerup_fish" ofType:@"png" inDirectory:@"Art"];
+    //NSString *floorPath = [[NSBundle mainBundle] pathForResource:@"tile_floor" ofType:@"png" inDirectory:@"Art"];
+    //NSString *fishPath = [[NSBundle mainBundle] pathForResource:@"item_powerup_fish" ofType:@"png" inDirectory:@"Art"];
     
-    _floorTexture = [SWMBitmapLoader loadTexture:floorPath];
-    _fishTexture = [SWMBitmapLoader loadTexture:fishPath];
+    //_floorTexture = [SWMBitmapLoader loadTexture:floorPath];
+    //_fishTexture = [SWMBitmapLoader loadTexture:fishPath];
     
     return YES;
 }
@@ -68,9 +69,9 @@
     glUniformMatrix3fv(uniforms[UNIFORM_NORMAL_MATRIX], 1, 0, _normalMatrix.m);
     glUniform4f(_colourIndex, _diffuseLightColour.x, _diffuseLightColour.y, _diffuseLightColour.z, _diffuseLightColour.w);
     
-    glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, _floorTexture);
-    glUniform1i(uniforms[UNIFORM_SAMPLER2D], 0);
+    //glActiveTexture(GL_TEXTURE0);
+    //glBindTexture(GL_TEXTURE_2D, _floorTexture);
+    //glUniform1i(uniforms[UNIFORM_SAMPLER2D], 0);
 }
 
 - (void)tearDownGL{

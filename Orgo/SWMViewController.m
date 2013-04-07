@@ -101,13 +101,18 @@ const float MAX_ZOOM_OUT = -9.0;
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, [[[_model vertexArray] indexData] length], [[[_model vertexArray] indexData] mutableBytes], GL_STATIC_DRAW);
     
     glEnableVertexAttribArray(GLKVertexAttribPosition);
-    glVertexAttribPointer(GLKVertexAttribPosition, 3, GL_FLOAT, GL_FALSE, sizeof(SWMVertex1P1N1D1UV), BUFFER_OFFSET(0));
-    glEnableVertexAttribArray(GLKVertexAttribNormal);
-    glVertexAttribPointer(GLKVertexAttribNormal, 3, GL_FLOAT, GL_FALSE, sizeof(SWMVertex1P1N1D1UV), BUFFER_OFFSET(12));
+    glVertexAttribPointer(GLKVertexAttribPosition, 3, GL_FLOAT, GL_FALSE, sizeof(SWMVertex1P1D), BUFFER_OFFSET(0));
+    //glVertexAttribPointer(GLKVertexAttribPosition, 3, GL_FLOAT, GL_FALSE, sizeof(SWMVertex1P1N1D1UV), BUFFER_OFFSET(0));
+    
+    //glEnableVertexAttribArray(GLKVertexAttribNormal);
+    //glVertexAttribPointer(GLKVertexAttribNormal, 3, GL_FLOAT, GL_FALSE, sizeof(SWMVertex1P1N1D1UV), BUFFER_OFFSET(12));
+    
     glEnableVertexAttribArray(GLKVertexAttribColor);
-    glVertexAttribPointer(GLKVertexAttribColor, 4, GL_FLOAT, GL_FALSE, sizeof(SWMVertex1P1N1D1UV), BUFFER_OFFSET(24));
-    glEnableVertexAttribArray(GLKVertexAttribTexCoord0);
-    glVertexAttribPointer(GLKVertexAttribTexCoord0, 2, GL_FLOAT, GL_FALSE, sizeof(SWMVertex1P1N1D1UV), BUFFER_OFFSET(40));
+    glVertexAttribPointer(GLKVertexAttribColor, 4, GL_FLOAT, GL_FALSE, sizeof(SWMVertex1P1D), BUFFER_OFFSET(12));
+    //glVertexAttribPointer(GLKVertexAttribColor, 4, GL_FLOAT, GL_FALSE, sizeof(SWMVertex1P1N1D1UV), BUFFER_OFFSET(24));
+    
+    //glEnableVertexAttribArray(GLKVertexAttribTexCoord0);
+    //glVertexAttribPointer(GLKVertexAttribTexCoord0, 2, GL_FLOAT, GL_FALSE, sizeof(SWMVertex1P1N1D1UV), BUFFER_OFFSET(40));
     
     glBindVertexArrayOES(0);
 }
@@ -147,12 +152,15 @@ const float MAX_ZOOM_OUT = -9.0;
     GLint offset = 0;
     int numberOfVertices = [_model numberOfVertices];
     [_model glkView:view drawInRect:rect];
-    glDrawElements(GL_TRIANGLES, [[_model vertexArray] numberOfIndices], GL_UNSIGNED_BYTE, 0);
+    //glDrawElements(GL_TRIANGLES, [[_model vertexArray] numberOfIndices], GL_UNSIGNED_BYTE, 0);
+    glDrawElements(GL_TRIANGLES, [[_model vertexArray] numberOfIndices], GL_UNSIGNED_SHORT, 0);
     offset += numberOfVertices;
     
     glBindVertexArrayOES(_vertexArray);
     
 }
+
+#pragma mark - Gesture Recognizers
 
 - (void)setupGestureRecognizers
 {

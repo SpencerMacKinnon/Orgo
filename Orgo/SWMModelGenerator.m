@@ -10,197 +10,323 @@
 
 @implementation SWMModelGenerator
 
-//+ (NSMutableData *)generateSphereWithRadius:(int)radius numberOfTriangleStrips:(int)triangleStrips numberOfTrianglesInTriangleStrip:(int)numTriangleInStrip diffuseColour:(GLKVector4)colour numberOfVertices:(out int *) numberOfVertices withIndices:(out NSMutableData *) indices{
-//    assert(radius > 0);
-//    assert(triangleStrips > 4);
-//    assert(numTriangleInStrip > 2);
-//    
-//    float circleCircumfrence = 2 * M_PI * radius;
-//    float radiansPerTriangleStrip = (2 * M_PI) / triangleStrips;
-//    
-//    // Each Triangle has two unique vertices
-//    // Each Triange Strip has numTriangleInStrip number of triangles, -2 vertices for the top most and bottom most points
-//    // Each sphere has triangleStrips number of triangle strips
-//    // The top and bottom points are shared across all triangle strips
-//    
-//    int *numVertices = 2 * triangleStrips * (numTriangleInStrip - 2) + 2;
-//    SWMVertex1P1D vertices[*numVertices];
-//    NSMutableData *vertexData = [[NSMutableData alloc] initWithCapacity:*numVertices * sizeof(SWMVertex1P1D)];
-//    return vertexData;
-//}
 
-- (id)initSphereWithRecursionLevel:(int) recursionLevel andColour:(GLKVector4)diffuseColour {
+
+- (id)initCube{
     self = [super init];
+    
     if (self) {
-        [self generateSphereWithRecursionLevel:recursionLevel withColour:diffuseColour];
-        _middlePointDictionary = [[NSMutableDictionary alloc] init];
-        _vertices = [[NSMutableArray alloc] init];
-        _vertexData = [[NSMutableData alloc] init];
-        _vertexIndices = [[NSMutableArray alloc] init];
-        index = 0;
+        
+        const SWMVertex1P1N1D1UV Vertices[] = {
+            // Front
+            {{1, -1, 1}, {0, 0, 1}, {1, 0, 0, 1}, {TEX_COORD_MAX, 0}},
+            {{1, 1, 1}, {0, 0, 1}, {0, 1, 0, 1}, {TEX_COORD_MAX, TEX_COORD_MAX}},
+            {{-1, 1, 1}, {0, 0, 1}, {0, 0, 1, 1}, {0, TEX_COORD_MAX}},
+            {{-1, -1, 1}, {0, 0, 1}, {0, 0, 0, 1}, {0, 0}},
+            // Back
+            {{1, 1, -1}, {0, 0, -1}, {1, 0, 0, 1}, {TEX_COORD_MAX, 0}},
+            {{-1, -1, -1}, {0, 0, -1}, {0, 1, 0, 1}, {TEX_COORD_MAX, TEX_COORD_MAX}},
+            {{1, -1, -1}, {0, 0, -1}, {0, 0, 1, 1}, {0, TEX_COORD_MAX}},
+            {{-1, 1, -1}, {0, 0, -1}, {0, 0, 0, 1}, {0, 0}},
+            // Left
+            {{-1, -1, 1}, {-1, 0, 0}, {1, 0, 0, 1}, {TEX_COORD_MAX, 0}},
+            {{-1, 1, 1}, {-1, 0, 0}, {0, 1, 0, 1}, {TEX_COORD_MAX, TEX_COORD_MAX}},
+            {{-1, 1, -1}, {-1, 0, 0}, {0, 0, 1, 1}, {0, TEX_COORD_MAX}},
+            {{-1, -1, -1}, {-1, 0, 0}, {0, 0, 0, 1}, {0, 0}},
+            // Right
+            {{1, -1, -1}, {1, 0, 0}, {1, 0, 0, 1}, {TEX_COORD_MAX, 0}},
+            {{1, 1, -1}, {1, 0, 0}, {0, 1, 0, 1}, {TEX_COORD_MAX, TEX_COORD_MAX}},
+            {{1, 1, 1}, {1, 0, 0}, {0, 0, 1, 1}, {0, TEX_COORD_MAX}},
+            {{1, -1, 1}, {1, 0, 0}, {0, 0, 0, 1}, {0, 0}},
+            // Top
+            {{1, 1, 1}, {0, 1, 0}, {1, 0, 0, 1}, {TEX_COORD_MAX, 0}},
+            {{1, 1, -1}, {0, 1, 0}, {0, 1, 0, 1}, {TEX_COORD_MAX, TEX_COORD_MAX}},
+            {{-1, 1, -1}, {0, 1, 0}, {0, 0, 1, 1}, {0, TEX_COORD_MAX}},
+            {{-1, 1, 1}, {0, 1, 0}, {0, 0, 0, 1}, {0, 0}},
+            // Bottom
+            {{1, -1, -1}, {0, -1, 0}, {1, 0, 0, 1}, {TEX_COORD_MAX, 0}},
+            {{1, -1, 1}, {0, -1, 0}, {0, 1, 0, 1}, {TEX_COORD_MAX, TEX_COORD_MAX}},
+            {{-1, -1, 1}, {0, -1, 0}, {0, 0, 1, 1}, {0, TEX_COORD_MAX}},
+            {{-1, -1, -1}, {0, -1, 0}, {0, 0, 0, 1}, {0, 0}}
+        };
+        
+        _vertexData = [[NSMutableData alloc] initWithBytes:Vertices length:sizeof(Vertices)];
+        _numberOfVertices = sizeof(Vertices) / sizeof(SWMVertex1P1N1D1UV);
+        
+        const GLubyte Indices[] = {
+            // Front
+            0, 1, 2,
+            2, 3, 0,
+            // Back
+            4, 5, 6,
+            4, 5, 7,
+            // Left
+            8, 9, 10,
+            10, 11, 8,
+            // Right
+            12, 13, 14,
+            14, 15, 12,
+            // Top
+            16, 17, 18,
+            18, 19, 16,
+            // Bottom
+            20, 21, 22,
+            22, 23, 20
+        };
+        
+        _indexData = [[NSMutableData alloc] initWithBytes:Indices length:sizeof(Indices)];
+        _numberOfIndices = sizeof(Indices) / sizeof(Indices[0]);
+        
+        _indexType = GLU_BYTE;
+        _vertexType = SWM_P1N1D1UV;
     }
     
     return self;
 }
 
+- (id)initSphereWithRecursionLevel:(int) recursionLevel andColour:(GLKVector4)diffuseColour {
+    self = [super init];
+    if (self) {
+        // golden ratio
+        t = (1.0 + sqrt(5.0)) / 2.0;
+        index = 0;
+        _indexType = GLU_SHORT;
+        _vertexType = SWM_1P1D;
+        _middlePointDictionary = [[NSMutableDictionary alloc] init];
+        _vertices = [[NSMutableArray alloc] init];
+        _vertexData = [[NSMutableData alloc] init];
+        _vertexIndices = [[NSMutableArray alloc] init];
+        _indexData = [[NSMutableData alloc] init];
+        [self generateSphereWithRecursionLevel:recursionLevel withColour:diffuseColour];
+        
+    }
+    return self;
+}
+
 - (void)generateSphereWithRecursionLevel:(int)recursionLevel withColour:(GLKVector4)diffuseColour{
-    // golden ratio
-    const int t = (1.0 + sqrt(5.0)) / 2.0;
-    
-    [self addVertex:GLKVector3Make(-1, t, 0) withColour:diffuseColour];
-    [self addVertex:GLKVector3Make(1, t, 0) withColour:diffuseColour];
-    [self addVertex:GLKVector3Make(-1, -t, 0) withColour:diffuseColour];
-    [self addVertex:GLKVector3Make(1, -t, 0) withColour:diffuseColour];
-    
-    [self addVertex:GLKVector3Make(0, -1, t) withColour:diffuseColour];
-    [self addVertex:GLKVector3Make(0, 1, t) withColour:diffuseColour];
-    [self addVertex:GLKVector3Make(0, -1, -t) withColour:diffuseColour];
-    [self addVertex:GLKVector3Make(0, 1, -t) withColour:diffuseColour];
-    
-    [self addVertex:GLKVector3Make(t, 0, -1) withColour:diffuseColour];
-    [self addVertex:GLKVector3Make(t, 0, 1) withColour:diffuseColour];
-    [self addVertex:GLKVector3Make(-t, 0, -1) withColour:diffuseColour];
-    [self addVertex:GLKVector3Make(-t, 0, 1) withColour:diffuseColour];
-    
-    [_vertexIndices addObject:[NSNumber numberWithInt:0]];
-    [_vertexIndices addObject:[NSNumber numberWithInt:11]];
-    [_vertexIndices addObject:[NSNumber numberWithInt:5]];
-    
-    [_vertexIndices addObject:[NSNumber numberWithInt:0]];
-    [_vertexIndices addObject:[NSNumber numberWithInt:5]];
-    [_vertexIndices addObject:[NSNumber numberWithInt:1]];
-    
-    [_vertexIndices addObject:[NSNumber numberWithInt:0]];
-    [_vertexIndices addObject:[NSNumber numberWithInt:1]];
-    [_vertexIndices addObject:[NSNumber numberWithInt:7]];
-    
-    [_vertexIndices addObject:[NSNumber numberWithInt:0]];
-    [_vertexIndices addObject:[NSNumber numberWithInt:7]];
-    [_vertexIndices addObject:[NSNumber numberWithInt:10]];
-    
-    [_vertexIndices addObject:[NSNumber numberWithInt:0]];
-    [_vertexIndices addObject:[NSNumber numberWithInt:10]];
-    [_vertexIndices addObject:[NSNumber numberWithInt:11]];
-    
-    
-    [_vertexIndices addObject:[NSNumber numberWithInt:1]];
-    [_vertexIndices addObject:[NSNumber numberWithInt:5]];
-    [_vertexIndices addObject:[NSNumber numberWithInt:9]];
-    
-    [_vertexIndices addObject:[NSNumber numberWithInt:5]];
-    [_vertexIndices addObject:[NSNumber numberWithInt:11]];
-    [_vertexIndices addObject:[NSNumber numberWithInt:4]];
-    
-    [_vertexIndices addObject:[NSNumber numberWithInt:11]];
-    [_vertexIndices addObject:[NSNumber numberWithInt:10]];
-    [_vertexIndices addObject:[NSNumber numberWithInt:2]];
-    
-    [_vertexIndices addObject:[NSNumber numberWithInt:10]];
-    [_vertexIndices addObject:[NSNumber numberWithInt:7]];
-    [_vertexIndices addObject:[NSNumber numberWithInt:6]];
-    
-    [_vertexIndices addObject:[NSNumber numberWithInt:7]];
-    [_vertexIndices addObject:[NSNumber numberWithInt:1]];
-    [_vertexIndices addObject:[NSNumber numberWithInt:8]];
-    
-    
-    [_vertexIndices addObject:[NSNumber numberWithInt:3]];
-    [_vertexIndices addObject:[NSNumber numberWithInt:9]];
-    [_vertexIndices addObject:[NSNumber numberWithInt:4]];
-    
-    [_vertexIndices addObject:[NSNumber numberWithInt:3]];
-    [_vertexIndices addObject:[NSNumber numberWithInt:4]];
-    [_vertexIndices addObject:[NSNumber numberWithInt:2]];
-    
-    [_vertexIndices addObject:[NSNumber numberWithInt:3]];
-    [_vertexIndices addObject:[NSNumber numberWithInt:2]];
-    [_vertexIndices addObject:[NSNumber numberWithInt:6]];
-    
-    [_vertexIndices addObject:[NSNumber numberWithInt:3]];
-    [_vertexIndices addObject:[NSNumber numberWithInt:6]];
-    [_vertexIndices addObject:[NSNumber numberWithInt:8]];
-    
-    [_vertexIndices addObject:[NSNumber numberWithInt:3]];
-    [_vertexIndices addObject:[NSNumber numberWithInt:8]];
-    [_vertexIndices addObject:[NSNumber numberWithInt:9]];
-    
-    
-    [_vertexIndices addObject:[NSNumber numberWithInt:4]];
-    [_vertexIndices addObject:[NSNumber numberWithInt:9]];
-    [_vertexIndices addObject:[NSNumber numberWithInt:5]];
-    
-    [_vertexIndices addObject:[NSNumber numberWithInt:2]];
-    [_vertexIndices addObject:[NSNumber numberWithInt:4]];
-    [_vertexIndices addObject:[NSNumber numberWithInt:11]];
-    
-    [_vertexIndices addObject:[NSNumber numberWithInt:6]];
-    [_vertexIndices addObject:[NSNumber numberWithInt:2]];
-    [_vertexIndices addObject:[NSNumber numberWithInt:10]];
-    
-    [_vertexIndices addObject:[NSNumber numberWithInt:8]];
-    [_vertexIndices addObject:[NSNumber numberWithInt:6]];
-    [_vertexIndices addObject:[NSNumber numberWithInt:7]];
-    
-    [_vertexIndices addObject:[NSNumber numberWithInt:9]];
-    [_vertexIndices addObject:[NSNumber numberWithInt:8]];
-    [_vertexIndices addObject:[NSNumber numberWithInt:1]];
+    [self populateInitialVerticesAndIndicesForIcosahedronWithDifuseColour:diffuseColour];
     
     for (int i = 0; i < recursionLevel; i++) {
         NSMutableArray *newVertexIndices = [[NSMutableArray alloc] init];
-        for (int j = 0; j < [_vertexIndices count]; j++) {
-            SWMVertex1P1D *tri = [_vertexIndices objectAtIndex:j];
-            GLKVector3 pos = [tri position];
-            int a = [self getMiddlePoint:pos.x withSecondPoint:pos.y];
-            int b = [self getMiddlePoint:pos.y withSecondPoint:pos.z];
-            int c = [self getMiddlePoint:pos.z withSecondPoint:pos.x];
+        for (int j = 0; j < [_vertexIndices count]; j+=3) {
+            GLushort x;
+            [[_vertexIndices objectAtIndex:j] getValue:&x];
             
-            [newVertexIndices addObject:[NSNumber numberWithInt:pos.x]];
-            [newVertexIndices addObject:[NSNumber numberWithInt:a]];
-            [newVertexIndices addObject:[NSNumber numberWithInt:c]];
+            GLushort y;
+            [[_vertexIndices objectAtIndex:j+1] getValue:&y];
             
-            [newVertexIndices addObject:[NSNumber numberWithInt:pos.y]];
-            [newVertexIndices addObject:[NSNumber numberWithInt:b]];
-            [newVertexIndices addObject:[NSNumber numberWithInt:a]];
+            GLushort z;
+            [[_vertexIndices objectAtIndex:j+2] getValue:&z];
             
-            [newVertexIndices addObject:[NSNumber numberWithInt:pos.z]];
-            [newVertexIndices addObject:[NSNumber numberWithInt:c]];
-            [newVertexIndices addObject:[NSNumber numberWithInt:b]];
+            GLushort a = [self getMiddlePoint:x withSecondPoint:y];
+            GLushort b = [self getMiddlePoint:y withSecondPoint:z];
+            GLushort c = [self getMiddlePoint:z withSecondPoint:x];
             
-            [newVertexIndices addObject:[NSNumber numberWithInt:a]];
-            [newVertexIndices addObject:[NSNumber numberWithInt:b]];
-            [newVertexIndices addObject:[NSNumber numberWithInt:c]];
+            [newVertexIndices addObject:[NSValue value:&x withObjCType:@encode(GLushort)]];
+            [newVertexIndices addObject:[NSValue value:&a withObjCType:@encode(GLushort)]];
+            [newVertexIndices addObject:[NSValue value:&c withObjCType:@encode(GLushort)]];
+            
+            [newVertexIndices addObject:[NSValue value:&y withObjCType:@encode(GLushort)]];
+            [newVertexIndices addObject:[NSValue value:&b withObjCType:@encode(GLushort)]];
+            [newVertexIndices addObject:[NSValue value:&a withObjCType:@encode(GLushort)]];
+            
+            [newVertexIndices addObject:[NSValue value:&z withObjCType:@encode(GLushort)]];
+            [newVertexIndices addObject:[NSValue value:&c withObjCType:@encode(GLushort)]];
+            [newVertexIndices addObject:[NSValue value:&b withObjCType:@encode(GLushort)]];
+            
+            [newVertexIndices addObject:[NSValue value:&a withObjCType:@encode(GLushort)]];
+            [newVertexIndices addObject:[NSValue value:&b withObjCType:@encode(GLushort)]];
+            [newVertexIndices addObject:[NSValue value:&c withObjCType:@encode(GLushort)]];
         }
-        _vertexIndices = newVertexIndices;
+        _vertexIndices = [[NSMutableArray alloc] initWithArray:newVertexIndices];
+    }
+    _numberOfVertices = [_vertices count];
+    _vertexData = [[NSMutableData alloc] initWithCapacity:(_numberOfVertices * sizeof(SWMVertex1P1D))];
+    for (int i = 0; i < _numberOfVertices; i++) {
+        SWMVertex1P1D vertex;
+        [[_vertices objectAtIndex:i] getValue:&vertex];
+        [_vertexData appendBytes:&vertex length:sizeof(SWMVertex1P1D)];
+    }
+    
+    _numberOfIndices = [_vertexIndices count];
+    _indexData = [[NSMutableData alloc] initWithCapacity:(_numberOfIndices * sizeof(GLushort))];
+    for (int i = 0; i < _numberOfIndices; i++) {
+        GLushort vertexIndex;
+        [[_vertexIndices objectAtIndex:i] getValue:&vertexIndex];
+        NSLog(@"%d", vertexIndex);
+        [_indexData appendBytes:&vertexIndex length:sizeof(GLushort)];
     }
 }
-
-- (int)addVertex:(GLKVector3)vertex withColour:(GLKVector4)vertexColour{
-    double length = sqrt(vertex.x * vertex.x + vertex.y * vertex.y + vertex.z * vertex.z);
-    GLKVector3 normalizedPosition = GLKVector3Make(vertex.x / length, vertex.y / length, vertex.z / length);
-    [_vertices addObject:[[SWMVertex1P1D alloc] initWithPosition:normalizedPosition andColour:vertexColour]];
+                                                           
+- (int)addVertex:(SWMVertex1P1D *)vertex{
+    GLKVector3 position = GLKVector3MakeWithArray(vertex -> _position);
+    GLKVector4 diffuseColour = GLKVector4MakeWithArray(vertex -> _diffuseColour);
+    
+    double length = sqrt(position.x * position.x + position.y * position.y + position.z * position.z);
+    GLKVector3 normalizedPosition = GLKVector3Make(position.x / length, position.y / length, position.z / length);
+    
+    SWMVertex1P1D newVertex =
+    {
+        {normalizedPosition.x, normalizedPosition.y, normalizedPosition.z},
+        {diffuseColour.x, diffuseColour.y, diffuseColour.z, diffuseColour.w}
+    };
+    
+    [_vertices addObject:[NSValue value:&newVertex withObjCType:@encode(SWMVertex1P1D)]];
     return index++;
 }
 
-- (int)getMiddlePoint:(int)p1 withSecondPoint:(int)p2 {
+- (GLushort)getMiddlePoint:(GLushort)p1 withSecondPoint:(GLushort)p2 {
     bool firstIsSmaller = p1 < p2;
-    int64_t smallerIndex = firstIsSmaller ? p1 : p2;
-    int64_t greaterIndex = firstIsSmaller ? p2 : p1;
+    GLuint smallerIndex = firstIsSmaller ? p1 : p2;
+    GLuint greaterIndex = firstIsSmaller ? p2 : p1;
     
-    int64_t key = (smallerIndex << 32) + greaterIndex;
+    GLuint key = (smallerIndex << 16) + greaterIndex;
     
-    if ([_middlePointDictionary objectForKey:[NSNumber numberWithInt:key]]) {
-        return [_middlePointDictionary objectForKey:[NSNumber numberWithInt:key]];
+    if ([_middlePointDictionary objectForKey:[NSNumber numberWithUnsignedInt:key]]) {
+        NSNumber *shortValue = [_middlePointDictionary objectForKey:[NSNumber numberWithUnsignedInt:key]];
+        return [shortValue unsignedShortValue];
     }
     
-    SWMVertex1P1D *firstVertex = [_vertices objectAtIndex:p1];
-    GLKVector3 point1 = [firstVertex position];
-    SWMVertex1P1D *secondVertex = [_vertices objectAtIndex:p2];
-    GLKVector3 point2 = [secondVertex position];
+    SWMVertex1P1D firstVertex;
+    [[_vertices objectAtIndex:p1] getValue:&firstVertex];
+    GLKVector3 point1 = GLKVector3MakeWithArray(firstVertex._position);
+    GLKVector4 diffuse1 = GLKVector4MakeWithArray(firstVertex._diffuseColour);
+    
+    SWMVertex1P1D secondVertex;
+    [[_vertices objectAtIndex:p2] getValue:&secondVertex];
+    GLKVector3 point2 = GLKVector3MakeWithArray(secondVertex._position);
+    GLKVector4 diffuse2 = GLKVector4MakeWithArray(secondVertex._diffuseColour);
+    
     GLKVector3 point3 = GLKVector3Make((point1.x + point2.x) / 2.0, (point1.y + point2.y) / 2.0, (point1.z + point2.z) / 2.0);
-    int i = [self addVertex:point3 withColour:[firstVertex diffuseColour]];
-    [_middlePointDictionary setObject:[NSNumber numberWithInt:i] forKey:[NSNumber numberWithInt:key]];
+    GLKVector4 diffuse3 = GLKVector4Make((diffuse1.x + diffuse2.x) / 2.0, (diffuse1.y + diffuse2.y) / 2.0, (diffuse1.z + diffuse2.z) / 2.0, (diffuse1.w + diffuse2.w) / 2.0);
+    
+    SWMVertex1P1D thirdVertex =
+    {
+        {point3.x, point3.y, point3.z},
+        {diffuse3.x, diffuse3.y, diffuse3.z, diffuse3.w}
+    };
+    
+    GLushort i = [self addVertex:&thirdVertex];
+    [_middlePointDictionary setObject:[NSNumber numberWithUnsignedShort:i] forKey:[NSNumber numberWithUnsignedInt:key]];
+    
     return i;
 }
+
+- (void)populateInitialVerticesAndIndicesForIcosahedronWithDifuseColour:(GLKVector4)diffuseColour{
+    
+    const SWMVertex1P1D Vertices [] = {
+        //XY Face
+        {
+            {-1, t, 0},
+            //{diffuseColour.x, diffuseColour.y, diffuseColour.z, diffuseColour.w}
+            {0.0f, 0.0f, 1.0f, 1.0f}
+        },
+        {
+            {1, t, 0},
+            {diffuseColour.x, diffuseColour.y, diffuseColour.z, diffuseColour.w}
+        },
+        {
+            {-1, -t, 0},
+            //{diffuseColour.x, diffuseColour.y, diffuseColour.z, diffuseColour.w}
+            {0.0f, 0.0f, 1.0f, 1.0f}
+        },
+        {
+            {1, -t, 0},
+            {diffuseColour.x, diffuseColour.y, diffuseColour.z, diffuseColour.w}
+        },
+        
+        // YZ Face
+        {
+            {0, -1, t},
+            {diffuseColour.x, diffuseColour.y, diffuseColour.z, diffuseColour.w}
+        },
+        {
+            {0, 1, t},
+            {diffuseColour.x, diffuseColour.y, diffuseColour.z, diffuseColour.w}
+        },
+        {
+            {0, -1, -t},
+            {diffuseColour.x, diffuseColour.y, diffuseColour.z, diffuseColour.w}
+        },
+        {
+            {0, 1, -t},
+            {diffuseColour.x, diffuseColour.y, diffuseColour.z, diffuseColour.w}
+        },
+        
+        // XZ Face
+        {
+            {t, 0, -1},
+            {diffuseColour.x, diffuseColour.y, diffuseColour.z, diffuseColour.w}
+        },
+        {
+            {t, 0, 1},
+            {diffuseColour.x, diffuseColour.y, diffuseColour.z, diffuseColour.w}
+        },
+        {
+            {-t, 0, -1},
+            //{diffuseColour.x, diffuseColour.y, diffuseColour.z, diffuseColour.w}
+            {0.0f, 0.0f, 1.0f, 1.0f}
+        },
+        {
+            {-t, 0, 1},
+            //{diffuseColour.x, diffuseColour.y, diffuseColour.z, diffuseColour.w}
+            {0.0f, 0.0f, 1.0f, 1.0f}
+        }
+    };
+    
+    for (int i = 0; i < 12; i++) {
+        [self addVertex:&(Vertices[i])];
+    }
+    
+    const GLushort Indices[] = {
+        0, 11, 5,
+        0, 5, 1,
+        0, 1, 7,
+        0, 7, 10,
+        0, 10, 11,
+        
+        1, 5, 9,
+        5, 11, 4,
+        11, 10, 2,
+        10, 7, 6,
+        7, 1, 8,
+        
+        3, 9, 4,
+        3, 4, 2,
+        3, 2, 6,
+        3, 6, 8,
+        3, 8, 9,
+        
+        4, 9, 5,
+        2, 4, 11,
+        6, 2, 10,
+        8, 6, 7,
+        9, 8, 1
+    };
+    
+    for (int i = 0; i < 60; i++) {
+        [_vertexIndices addObject:[NSValue value:&(Indices[i]) withObjCType:@encode(GLushort)]];
+    }
+}
+
+//+ (NSMutableData *)generateSphereWithRadius:(int)radius numberOfTriangleStrips:(int)triangleStrips numberOfTrianglesInTriangleStrip:(int)numTriangleInStrip diffuseColour:(GLKVector4)colour numberOfVertices:(out int *) numberOfVertices withIndices:(out NSMutableData *) indices{
+//    assert(radius > 0);
+//    assert(triangleStrips > 4);
+//    assert(numTriangleInStrip > 2);
+//
+//    float circleCircumfrence = 2 * M_PI * radius;
+//    float radiansPerTriangleStrip = (2 * M_PI) / triangleStrips;
+//
+//    // Each Triangle has two unique vertices
+//    // Each Triange Strip has numTriangleInStrip number of triangles, -2 vertices for the top most and bottom most points
+//    // Each sphere has triangleStrips number of triangle strips
+//    // The top and bottom points are shared across all triangle strips
+//
+//    int *numVertices = 2 * triangleStrips * (numTriangleInStrip - 2) + 2;
+//    SWMVertex1P1D vertices[*numVertices];
+//    NSMutableData *vertexData = [[NSMutableData alloc] initWithCapacity:*numVertices * sizeof(SWMVertex1P1D)];
+//    return vertexData;
+//}
 
 @end
 

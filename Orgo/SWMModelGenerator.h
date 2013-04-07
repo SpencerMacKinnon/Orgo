@@ -7,17 +7,16 @@
 //
 
 #import <Foundation/Foundation.h>
-#include "SWMVertex.h"
-#include "SWMVertex1P1D.h"
-@interface SWMModelGenerator : NSObject {
-    int index;
+#include "SWMVertexArray.h"
+@interface SWMModelGenerator : SWMVertexArray{
+    int t;
+    GLushort index;
+    NSMutableArray *_vertices, *_vertexIndices;
+    NSMutableDictionary *_middlePointDictionary;
 }
 
 //+ (SWMVertex1P1D *)generateSphereWithRadius:(int)radius numberOfTriangleStrips:(int)triangleStrips numberOfTrianglesInTriangleStrip:(int)numTriangleStrip diffuseColour:(GLKVector4)colour;
+- (id)initCube;
 - (id)initSphereWithRecursionLevel:(int) recursionLevel andColour:(GLKVector4)diffuseColour;
 
-@property NSMutableDictionary *middlePointDictionary;
-@property NSMutableArray *vertices;
-@property NSMutableData *vertexData;
-@property NSMutableArray *vertexIndices;
 @end

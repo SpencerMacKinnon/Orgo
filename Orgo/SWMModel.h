@@ -8,10 +8,10 @@
 
 #import <Foundation/Foundation.h>
 #import <GLKit/GLKit.h>
-#include "SWMVertexArray.h"
 #include "SWMShader.h"
 #include "SWMBitmapLoader.h"
 #include "SWMMatrix.h"
+#include "SWMModelGenerator.h"
 
 @interface SWMModel : NSObject
 {
@@ -21,7 +21,7 @@
     
     GLuint _floorTexture, _fishTexture, _colourIndex;
     
-    SWMVertexArray *_vertexArray;
+    SWMModelGenerator *_vertexArray;
     SWMShader *_shader;
     SWMMatrix *_matrix;
     
