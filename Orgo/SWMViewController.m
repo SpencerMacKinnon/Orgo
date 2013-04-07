@@ -9,7 +9,7 @@
 #import "SWMViewController.h"
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
 
-const float MAX_ZOOM_IN = -3.5;
+const float MAX_ZOOM_IN = 3.5;
 const float MAX_ZOOM_OUT = -9.0;
 
 @interface SWMViewController () {
@@ -81,7 +81,7 @@ const float MAX_ZOOM_OUT = -9.0;
     
     SWMShader *_shader = [[SWMShader alloc] init];
     _model = [[SWMModel alloc] initWithShader:_shader];
-    [_model setModelViewMatrix:GLKMatrix4MakeTranslation(0, 0, -10.0f)];
+    //[_model setModelViewMatrix:GLKMatrix4MakeTranslation(0, 0, -10.0f)];
     
     unsigned int totalDataSize = 0;
     NSMutableData *vertexData = [[NSMutableData alloc] init];
@@ -210,6 +210,7 @@ const float MAX_ZOOM_OUT = -9.0;
     UIPanGestureRecognizer *_tfpangr = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handleTwoFingerPanGesture:)];
     [_tfpangr setMinimumNumberOfTouches:2];
     [_tfpangr setMaximumNumberOfTouches:2];
+    [_tfpangr requireGestureRecognizerToFail:_tfpgr];
     [self.view addGestureRecognizer:_tfpangr];
 }
 

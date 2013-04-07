@@ -22,7 +22,7 @@
     self = [super init];
     if (self){
         _shader = shader;
-        _vertexArray = [[SWMModelGenerator alloc] initSphereWithRecursionLevel:1 andColour:GLKVector4Make(1.0f, 0.0f, 0.0f, 1.0f)];
+        _vertexArray = [[SWMModelGenerator alloc] initSphereWithRecursionLevel:3 andColour:GLKVector4Make(1.0f, 0.0f, 0.0f, 1.0f)];
         //_vertexArray = [[SWMModelGenerator alloc] initCube];
         _diffuseLightColour = GLKVector4Make(1.0, 1.0, 1.0, 0.5);
         _matrix = [[SWMMatrix alloc] init];

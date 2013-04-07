@@ -153,7 +153,6 @@
     for (int i = 0; i < _numberOfIndices; i++) {
         GLushort vertexIndex;
         [[_vertexIndices objectAtIndex:i] getValue:&vertexIndex];
-        NSLog(@"%d", vertexIndex);
         [_indexData appendBytes:&vertexIndex length:sizeof(GLushort)];
     }
 }
@@ -238,19 +237,23 @@
         // YZ Face
         {
             {0, -1, t},
-            {diffuseColour.x, diffuseColour.y, diffuseColour.z, diffuseColour.w}
+            //{diffuseColour.x, diffuseColour.y, diffuseColour.z, diffuseColour.w}
+            {0.5f, 0.0f, 0.5f, 1.0f}
         },
         {
             {0, 1, t},
-            {diffuseColour.x, diffuseColour.y, diffuseColour.z, diffuseColour.w}
+            //{diffuseColour.x, diffuseColour.y, diffuseColour.z, diffuseColour.w}
+            {0.5f, 0.0f, 0.5f, 1.0f}
         },
         {
             {0, -1, -t},
-            {diffuseColour.x, diffuseColour.y, diffuseColour.z, diffuseColour.w}
+            //{diffuseColour.x, diffuseColour.y, diffuseColour.z, diffuseColour.w}
+            {0.5f, 0.0f, 0.5f, 1.0f}
         },
         {
             {0, 1, -t},
-            {diffuseColour.x, diffuseColour.y, diffuseColour.z, diffuseColour.w}
+            //{diffuseColour.x, diffuseColour.y, diffuseColour.z, diffuseColour.w}
+            {0.5f, 0.0f, 0.5f, 1.0f}
         },
         
         // XZ Face
