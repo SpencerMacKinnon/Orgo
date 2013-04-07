@@ -18,5 +18,6 @@
 //+ (SWMVertex1P1D *)generateSphereWithRadius:(int)radius numberOfTriangleStrips:(int)triangleStrips numberOfTrianglesInTriangleStrip:(int)numTriangleStrip diffuseColour:(GLKVector4)colour;
 - (id)initCube;
 - (id)initSphereWithRecursionLevel:(int) recursionLevel andColour:(GLKVector4)diffuseColour;
+- (id)initCylinderWithSlices:(int) slices andColour:(GLKVector4)diffuseColour;
 
 @end

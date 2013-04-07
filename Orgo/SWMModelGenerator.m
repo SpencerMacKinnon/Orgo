@@ -84,6 +84,73 @@
     return self;
 }
 
+- (id)initCylinderWithSlices:(int) slices andColour:(GLKVector4)diffuseColour {
+    self = [super init];
+    if (self) {
+        _indexType = GLU_SHORT;
+        _vertexType = SWM_1P1D;
+        _middlePointDictionary = [[NSMutableDictionary alloc] init];
+        _vertices = [[NSMutableArray alloc] init];
+        _vertexIndices = [[NSMutableArray alloc] init];
+        [self generateCylinderWithSlices:slices withColour:diffuseColour];
+    }
+    
+    return self;
+}
+
+- (void)generateCylinderWithSlices:(int)slices withColour:(GLKVector4)diffuseColour {
+    
+    float decreasePerSlice = 1.0 / slices;
+    float currentSliceLevel = 1.0;
+    int trianglesInSlice = 16.0 * 4.0;
+    float sliceStepRadians = (2 * M_PI) / trianglesInSlice;
+    float currentRadians = 0.0;
+    NSLog(@"Vertex Data");
+    for (currentSliceLevel = 1.0; currentSliceLevel >= -1.0; currentSliceLevel -= decreasePerSlice) {
+        for (currentRadians = 0; currentRadians <= (2 * M_PI); currentRadians += sliceStepRadians) {
+            GLKVector3 a = GLKVector3Make(cosf(currentRadians), currentSliceLevel, sinf(currentRadians));
+            [_vertices addObject:[NSValue value:&a withObjCType:@encode(GLKVector3)]];
+            NSLog(@"%f %f %f", a.x, a.y, a.z);
+        }
+    }
+    
+    _numberOfVertices = [_vertices count];
+    _vertexData = [[NSMutableData alloc] initWithCapacity:(_numberOfVertices * sizeof(SWMVertex1P1D))];
+    
+    _numberOfIndices = 6.0 * _numberOfVertices;
+    _indexData = [[NSMutableData alloc] initWithCapacity:(_numberOfIndices * sizeof(GLushort))];
+    NSLog(@"Index Data");
+    for (int i = 0; i < _numberOfVertices; i++) {
+        GLKVector3 position;
+        [[_vertices objectAtIndex:i] getValue:&position];
+        
+        SWMVertex1P1D vertex =
+        {
+            {position.x, position.y, position.z},
+            {diffuseColour.x, diffuseColour.y, diffuseColour.z, diffuseColour.w}
+        };
+        
+        [_vertexData appendBytes:&vertex length:sizeof(SWMVertex1P1D)];
+        
+        if (position.y == -1.0) {
+            continue;
+        }
+        
+        GLushort a = i;
+        GLushort b = i + 1;
+        GLushort c = i + trianglesInSlice;
+        GLushort d = i + trianglesInSlice + 1;
+        NSLog(@"%u %u %u %u", a, b, c, d);
+        [_indexData appendBytes:&a length:sizeof(GLushort)];
+        [_indexData appendBytes:&b length:sizeof(GLushort)];
+        [_indexData appendBytes:&c length:sizeof(GLushort)];
+        
+        [_indexData appendBytes:&c length:sizeof(GLushort)];
+        [_indexData appendBytes:&d length:sizeof(GLushort)];
+        [_indexData appendBytes:&b length:sizeof(GLushort)];
+    }
+}
+
 - (id)initSphereWithRecursionLevel:(int) recursionLevel andColour:(GLKVector4)diffuseColour {
     self = [super init];
     if (self) {
@@ -94,9 +161,7 @@
         _vertexType = SWM_1P1D;
         _middlePointDictionary = [[NSMutableDictionary alloc] init];
         _vertices = [[NSMutableArray alloc] init];
-        _vertexData = [[NSMutableData alloc] init];
         _vertexIndices = [[NSMutableArray alloc] init];
-        _indexData = [[NSMutableData alloc] init];
         [self generateSphereWithRecursionLevel:recursionLevel withColour:diffuseColour];
         
     }
