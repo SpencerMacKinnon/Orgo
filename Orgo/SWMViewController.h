@@ -8,16 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import <GLKit/GLKit.h>
-#include "SWMModel.h"
+#include "SWMMaterialCollection.h"
 
 @interface SWMViewController : GLKViewController {
     GLKMatrix4 _projectionMatrix;
-    
     CGFloat _lastScale,_lastTransX, _lastTransY;
     float _aspect;
-    GLuint _indexBuffer, _vertexArray, _vertexBuffer;
-    
-    SWMModel *_model;
+    SWMMaterialCollection *_materialCollection;
 }
 
 @end

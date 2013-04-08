@@ -7,7 +7,6 @@
 //
 
 #import "SWMViewController.h"
-#define BUFFER_OFFSET(i) ((char *)NULL + (i))
 
 const float MAX_ZOOM_IN = 3.5;
 const float MAX_ZOOM_OUT = -9.0;
@@ -80,49 +79,14 @@ const float MAX_ZOOM_OUT = -9.0;
     glEnable(GL_DEPTH_TEST);
     
     SWMShader *_shader = [[SWMShader alloc] init];
-    _model = [[SWMModel alloc] initWithShader:_shader];
-    //[_model setModelViewMatrix:GLKMatrix4MakeTranslation(0, 0, -10.0f)];
-    
-    unsigned int totalDataSize = 0;
-    NSMutableData *vertexData = [[NSMutableData alloc] init];
-    
-    totalDataSize += [[_model vertexData] length];
-    [vertexData appendBytes:[[_model vertexData] mutableBytes] length:[[_model vertexData] length]];
-    
-    glGenVertexArraysOES(1, &_vertexArray);
-    glBindVertexArrayOES(_vertexArray);
-    
-    glGenBuffers(1, &_vertexBuffer);
-    glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
-    glBufferData(GL_ARRAY_BUFFER, totalDataSize, [vertexData mutableBytes], GL_STATIC_DRAW);
-    
-    glGenBuffers(1, &_indexBuffer);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, [[[_model vertexArray] indexData] length], [[[_model vertexArray] indexData] mutableBytes], GL_STATIC_DRAW);
-    
-    glEnableVertexAttribArray(GLKVertexAttribPosition);
-    glVertexAttribPointer(GLKVertexAttribPosition, 3, GL_FLOAT, GL_FALSE, sizeof(SWMVertex1P1D), BUFFER_OFFSET(0));
-    //glVertexAttribPointer(GLKVertexAttribPosition, 3, GL_FLOAT, GL_FALSE, sizeof(SWMVertex1P1N1D1UV), BUFFER_OFFSET(0));
-    
-    //glEnableVertexAttribArray(GLKVertexAttribNormal);
-    //glVertexAttribPointer(GLKVertexAttribNormal, 3, GL_FLOAT, GL_FALSE, sizeof(SWMVertex1P1N1D1UV), BUFFER_OFFSET(12));
-    
-    glEnableVertexAttribArray(GLKVertexAttribColor);
-    glVertexAttribPointer(GLKVertexAttribColor, 4, GL_FLOAT, GL_FALSE, sizeof(SWMVertex1P1D), BUFFER_OFFSET(12));
-    //glVertexAttribPointer(GLKVertexAttribColor, 4, GL_FLOAT, GL_FALSE, sizeof(SWMVertex1P1N1D1UV), BUFFER_OFFSET(24));
-    
-    //glEnableVertexAttribArray(GLKVertexAttribTexCoord0);
-    //glVertexAttribPointer(GLKVertexAttribTexCoord0, 2, GL_FLOAT, GL_FALSE, sizeof(SWMVertex1P1N1D1UV), BUFFER_OFFSET(40));
-    
-    glBindVertexArrayOES(0);
+    _materialCollection = [[SWMMaterialCollection alloc] initWithShader:_shader];
+    [_materialCollection setupGL];
 }
 
 - (void)tearDownGL
 {
     [EAGLContext setCurrentContext:self.context];
-    
-    glDeleteVertexArraysOES(1, &_vertexArray);
-    
+    [_materialCollection tearDownGL];
     self.effect = nil;
 }
 
@@ -132,13 +96,7 @@ const float MAX_ZOOM_OUT = -9.0;
 {
     _aspect = fabsf(self.view.bounds.size.width / self.view.bounds.size.height);
     _projectionMatrix = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(65.0f), _aspect, 0.1f, 100.0f);
-    
-    GLKMatrix4 modelViewMatrix = [_model objectTransform];
-    GLKMatrix3 normalMatrix = GLKMatrix3InvertAndTranspose(GLKMatrix4GetMatrix3(modelViewMatrix), NULL);
-    GLKMatrix4 modelViewProjectionMatrix = GLKMatrix4Multiply(_projectionMatrix, modelViewMatrix);
-    
-    [_model setNormalMatrix:normalMatrix];
-    [_model setModelViewProjectionMatrix:modelViewProjectionMatrix];
+    [_materialCollection updateWithProjectionMatrix:_projectionMatrix];
 }
 
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect
@@ -146,18 +104,7 @@ const float MAX_ZOOM_OUT = -9.0;
     glClearColor(0.65f, 0.65f, 0.65f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
-    glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
-    
-    GLint offset = 0;
-    int numberOfVertices = [_model numberOfVertices];
-    [_model glkView:view drawInRect:rect];
-    //glDrawElements(GL_TRIANGLES, [[_model vertexArray] numberOfIndices], GL_UNSIGNED_BYTE, 0);
-    glDrawElements(GL_TRIANGLES, [[_model vertexArray] numberOfIndices], GL_UNSIGNED_SHORT, 0);
-    offset += numberOfVertices;
-    
-    glBindVertexArrayOES(_vertexArray);
-    
+    [_materialCollection glkView:view drawInRect:rect];
 }
 
 #pragma mark - Gesture Recognizers
@@ -183,8 +130,8 @@ const float MAX_ZOOM_OUT = -9.0;
     [_tgr requireGestureRecognizerToFail:_dtgr];
     [self.view addGestureRecognizer:_tgr];
     
-    UIPinchGestureRecognizer *_tfpgr = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(handlePinchGesture:)];
-    [self.view addGestureRecognizer:_tfpgr];
+//    UIPinchGestureRecognizer *_tfpgr = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(handlePinchGesture:)];
+//    [self.view addGestureRecognizer:_tfpgr];
     
 //    UISwipeGestureRecognizer *_sgrl = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipeLeft:)];
 //    [_sgrl setDirection:UISwipeGestureRecognizerDirectionLeft];
@@ -207,11 +154,11 @@ const float MAX_ZOOM_OUT = -9.0;
     [_ofpangr setMaximumNumberOfTouches:1];
     [self.view addGestureRecognizer:_ofpangr];
     
-    UIPanGestureRecognizer *_tfpangr = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handleTwoFingerPanGesture:)];
-    [_tfpangr setMinimumNumberOfTouches:2];
-    [_tfpangr setMaximumNumberOfTouches:2];
-    [_tfpangr requireGestureRecognizerToFail:_tfpgr];
-    [self.view addGestureRecognizer:_tfpangr];
+//    UIPanGestureRecognizer *_tfpangr = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handleTwoFingerPanGesture:)];
+//    [_tfpangr setMinimumNumberOfTouches:2];
+//    [_tfpangr setMaximumNumberOfTouches:2];
+//    [_tfpangr requireGestureRecognizerToFail:_tfpgr];
+//    [self.view addGestureRecognizer:_tfpangr];
 }
 
 - (void)handleLongPress:(UILongPressGestureRecognizer *)gestureRecognizer{
@@ -219,7 +166,7 @@ const float MAX_ZOOM_OUT = -9.0;
 }
 
 - (void)handleDoubleTap:(UITapGestureRecognizer *)gestureRecognizer{
-    [_model resetOrientation];
+    [_materialCollection resetModelsOrientation];
 }
 
 - (void)handleTap:(UITapGestureRecognizer *)gestureRecognizer{
@@ -227,19 +174,19 @@ const float MAX_ZOOM_OUT = -9.0;
 }
 
 - (void)handleSwipeLeft:(UISwipeGestureRecognizer *)gestureRecognizer{
-    [_model rotateX: -(M_PI_4)];
+    [_materialCollection rotateModelsX:-(M_PI_4)];
 }
 
 - (void)handleSwipeRight:(UISwipeGestureRecognizer *)gestureRecognizer{
-    [_model rotateX: (M_PI_4)];
+    [_materialCollection rotateModelsX:(M_PI_4)];
 }
 
 - (void)handleSwipeUp:(UISwipeGestureRecognizer *)gestureRecognizer{
-    [_model rotateY: (M_PI_4)];
+    [_materialCollection rotateModelsY:(M_PI_4)];
 }
 
 - (void)handleSwipeDown:(UISwipeGestureRecognizer *)gestureRecognizer{
-    [_model rotateY: -(M_PI_4)];
+    [_materialCollection rotateModelsY:-(M_PI_4)];
 }
 
 - (void)handlePanGesture:(UIPanGestureRecognizer *)gestureRecognizer {
@@ -261,69 +208,69 @@ const float MAX_ZOOM_OUT = -9.0;
     
     if ((xMagnitude > yMagnitude) /*|| (xyDiff < DIAGONAL_PAN_DIFFERENCE)*/) {
         if (translatedPoint.x > _lastTransX) {
-            [_model rotateY:ROTATION_RATE];
+            [_materialCollection rotateModelsY:ROTATION_RATE];
         } else {
-            [_model rotateY:-ROTATION_RATE];
+            [_materialCollection rotateModelsY:-ROTATION_RATE];
         }
         _lastTransX = translatedPoint.x;
     }
     if ((yMagnitude > xMagnitude) /*|| (xyDiff < DIAGONAL_PAN_DIFFERENCE)*/)  {
         if (translatedPoint.y > _lastTransY) {
-            [_model rotateX: ROTATION_RATE];
+            [_materialCollection rotateModelsX:ROTATION_RATE];
         } else {
-            [_model rotateX:-ROTATION_RATE];
+            [_materialCollection rotateModelsX:-ROTATION_RATE];
         }
         _lastTransY = translatedPoint.y;
     }
 }
 
-- (void)handleTwoFingerPanGesture:(UIPanGestureRecognizer *)gestureRecognizer{
-   
-    CGPoint translatedPoint = [gestureRecognizer translationInView:self.view];
-    NSLog(@"Translated X: %f Translated Y: %f", translatedPoint.x, translatedPoint.y);
-    
-    CGFloat xMagnitude = sqrtf(translatedPoint.x * translatedPoint.x);
-    CGFloat yMagnitude = sqrtf(translatedPoint.y * translatedPoint.y);
-    CGFloat xyDiff = xMagnitude - yMagnitude;
-    xyDiff = sqrtf(xyDiff * xyDiff);
-    NSLog(@"xMag: %f yMag: %f xyDiff: %f", xMagnitude, yMagnitude, xyDiff);
-    
-    const float TRANSLATION_RATE = 0.03;
-    
-    float currentXTrans = [_model translationVector].x;
-    float currentYTrans = [_model translationVector].y;
-    
-    if ((xMagnitude > yMagnitude) || (xyDiff < 20.0f)) {
-        if (translatedPoint.x > 0) {
-            [_model setTranslationVectorX:currentXTrans + TRANSLATION_RATE];
-        } else {
-            [_model setTranslationVectorX:currentXTrans - TRANSLATION_RATE];
-        }
-    }
-    if ((yMagnitude > xMagnitude) || (xyDiff < 20.0f)) {
-        if (translatedPoint.y > 0) {
-            [_model setTranslationVectorY:currentYTrans - TRANSLATION_RATE];
-        } else {
-            [_model setTranslationVectorY:currentYTrans + TRANSLATION_RATE];
-        }
-    }
-}
+//- (void)handleTwoFingerPanGesture:(UIPanGestureRecognizer *)gestureRecognizer{
+//   
+//    CGPoint translatedPoint = [gestureRecognizer translationInView:self.view];
+//    NSLog(@"Translated X: %f Translated Y: %f", translatedPoint.x, translatedPoint.y);
+//    
+//    CGFloat xMagnitude = sqrtf(translatedPoint.x * translatedPoint.x);
+//    CGFloat yMagnitude = sqrtf(translatedPoint.y * translatedPoint.y);
+//    CGFloat xyDiff = xMagnitude - yMagnitude;
+//    xyDiff = sqrtf(xyDiff * xyDiff);
+//    NSLog(@"xMag: %f yMag: %f xyDiff: %f", xMagnitude, yMagnitude, xyDiff);
+//    
+//    const float TRANSLATION_RATE = 0.03;
+//    
+//    float currentXTrans = [_model translationVector].x;
+//    float currentYTrans = [_model translationVector].y;
+//    
+//    if ((xMagnitude > yMagnitude) || (xyDiff < 20.0f)) {
+//        if (translatedPoint.x > 0) {
+//            [_model setTranslationVectorX:currentXTrans + TRANSLATION_RATE];
+//        } else {
+//            [_model setTranslationVectorX:currentXTrans - TRANSLATION_RATE];
+//        }
+//    }
+//    if ((yMagnitude > xMagnitude) || (xyDiff < 20.0f)) {
+//        if (translatedPoint.y > 0) {
+//            [_model setTranslationVectorY:currentYTrans - TRANSLATION_RATE];
+//        } else {
+//            [_model setTranslationVectorY:currentYTrans + TRANSLATION_RATE];
+//        }
+//    }
+//}
 
-- (void)handlePinchGesture:(UIPinchGestureRecognizer *)gestureRecognizer{
-    
-    if([gestureRecognizer state] == UIGestureRecognizerStateBegan) {
-        _lastScale = 1.0;
-    }
-    
-    CGFloat scale = [gestureRecognizer scale] - _lastScale;
-    float newZPos = [_model translationVector].z;
-    newZPos += (4.0 * scale);
-    if (newZPos < MAX_ZOOM_OUT || newZPos > MAX_ZOOM_IN) {
-        return;
-    }
-    
-    [_model setTranslationVectorZ:newZPos];
-    _lastScale = [gestureRecognizer scale];
-}
+//- (void)handlePinchGesture:(UIPinchGestureRecognizer *)gestureRecognizer{
+//    
+//    if([gestureRecognizer state] == UIGestureRecognizerStateBegan) {
+//        _lastScale = 1.0;
+//    }
+//    
+//    CGFloat scale = [gestureRecognizer scale] - _lastScale;
+//    float newZPos = [_model translationVector].z;
+//    newZPos += (4.0 * scale);
+//    if (newZPos < MAX_ZOOM_OUT || newZPos > MAX_ZOOM_IN) {
+//        return;
+//    }
+//    
+//    [_model setTranslationVectorZ:newZPos];
+//    _lastScale = [gestureRecognizer scale];
+//}
 
 @end

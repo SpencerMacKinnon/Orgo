@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <GLKit/GLKit.h>
-#include "SWMShader.h"
+
 #include "SWMBitmapLoader.h"
 #include "SWMMatrix.h"
 #include "SWMModelGenerator.h"
@@ -19,47 +19,21 @@
     GLKMatrix4 _modelViewProjectionMatrix;
     GLKVector4 _diffuseLightColour;
     
-    GLuint _floorTexture, _fishTexture, _colourIndex;
-    
     SWMModelGenerator *_vertexArray;
-    SWMShader *_shader;
     SWMMatrix *_matrix;
-    
-    // Uniform index.
-    enum
-    {
-        UNIFORM_MODELVIEWPROJECTION_MATRIX,
-        UNIFORM_NORMAL_MATRIX,
-        UNIFORM_SAMPLER2D,
-        NUM_UNIFORMS
-    };
-    GLint uniforms[NUM_UNIFORMS];
-    
-    // Attribute index.
-    enum
-    {
-        ATTRIB_VERTEX,
-        ATTRIB_NORMAL,
-        ATTRIB_VERTEX_UV,
-        NUM_ATTRIBUTES
-    };
-    GLint attributes[NUM_ATTRIBUTES];
 }
 
-@property GLKMatrix4 modelViewMatrix, modelViewProjectionMatrix;
+@property GLKMatrix4 modelViewProjectionMatrix;
 @property GLKMatrix3 normalMatrix;
-@property SWMVertexArray *vertexArray;
-@property SWMShader *shader;
 @property GLKVector3 rotationVector, translationVector;
+@property GLKVector4 diffuseLightColour;
 
-- (id)initWithShader:(SWMShader *)shader;
-- (void)glkView:(GLKView *)view drawInRect:(CGRect)rect;
-- (BOOL)loadShaders;
+- (id)initWithModelGenerator:(SWMModelGenerator *)modelGenerator;
 - (int)numberOfVertices;
+- (int)numberOfIndices;
 - (GLKMatrix4)objectTransform;
-- (BOOL)releaseShaders;
-- (void)tearDownGL;
 - (NSMutableData *)vertexData;
+- (NSMutableData *)indexData;
 - (void)resetOrientation;
 - (void)setTranslationVectorX:(float)transX;
 - (void)setTranslationVectorY:(float)transY;

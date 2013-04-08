@@ -84,9 +84,10 @@
     return self;
 }
 
-- (id)initCylinderWithSlices:(int) slices andColour:(GLKVector4)diffuseColour {
+- (id)initCylinderWithSlices:(int) slices andColour:(GLKVector4)diffuseColour andExistingVertexCount:(GLushort)existingVertexCount{
     self = [super init];
     if (self) {
+        _existingVertexCount = existingVertexCount;
         _indexType = GLU_SHORT;
         _vertexType = SWM_1P1D;
         _middlePointDictionary = [[NSMutableDictionary alloc] init];
@@ -105,12 +106,11 @@
     int trianglesInSlice = 16.0 * 4.0;
     float sliceStepRadians = (2 * M_PI) / trianglesInSlice;
     float currentRadians = 0.0;
-    NSLog(@"Vertex Data");
+    
     for (currentSliceLevel = 1.0; currentSliceLevel >= -1.0; currentSliceLevel -= decreasePerSlice) {
         for (currentRadians = 0; currentRadians <= (2 * M_PI); currentRadians += sliceStepRadians) {
             GLKVector3 a = GLKVector3Make(cosf(currentRadians), currentSliceLevel, sinf(currentRadians));
             [_vertices addObject:[NSValue value:&a withObjCType:@encode(GLKVector3)]];
-            NSLog(@"%f %f %f", a.x, a.y, a.z);
         }
     }
     
@@ -119,7 +119,7 @@
     
     _numberOfIndices = 6.0 * _numberOfVertices;
     _indexData = [[NSMutableData alloc] initWithCapacity:(_numberOfIndices * sizeof(GLushort))];
-    NSLog(@"Index Data");
+
     for (int i = 0; i < _numberOfVertices; i++) {
         GLKVector3 position;
         [[_vertices objectAtIndex:i] getValue:&position];
@@ -136,11 +136,11 @@
             continue;
         }
         
-        GLushort a = i;
-        GLushort b = i + 1;
-        GLushort c = i + trianglesInSlice;
-        GLushort d = i + trianglesInSlice + 1;
-        NSLog(@"%u %u %u %u", a, b, c, d);
+        GLushort a = i + _existingVertexCount;
+        GLushort b = i + 1 + _existingVertexCount;
+        GLushort c = i + trianglesInSlice + _existingVertexCount;
+        GLushort d = i + trianglesInSlice + 1 + _existingVertexCount;
+
         [_indexData appendBytes:&a length:sizeof(GLushort)];
         [_indexData appendBytes:&b length:sizeof(GLushort)];
         [_indexData appendBytes:&c length:sizeof(GLushort)];
@@ -151,11 +151,12 @@
     }
 }
 
-- (id)initSphereWithRecursionLevel:(int) recursionLevel andColour:(GLKVector4)diffuseColour {
+- (id)initSphereWithRecursionLevel:(int) recursionLevel andColour:(GLKVector4)diffuseColour andExistingVertexCount:(GLushort)existingVertexCount{
     self = [super init];
     if (self) {
         // golden ratio
         t = (1.0 + sqrt(5.0)) / 2.0;
+        _existingVertexCount = existingVertexCount;
         index = 0;
         _indexType = GLU_SHORT;
         _vertexType = SWM_1P1D;
@@ -218,6 +219,7 @@
     for (int i = 0; i < _numberOfIndices; i++) {
         GLushort vertexIndex;
         [[_vertexIndices objectAtIndex:i] getValue:&vertexIndex];
+        vertexIndex += _existingVertexCount;
         [_indexData appendBytes:&vertexIndex length:sizeof(GLushort)];
     }
 }
