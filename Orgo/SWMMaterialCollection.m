@@ -19,9 +19,9 @@
         SWMModelGenerator *modelGen = [[SWMModelGenerator alloc] initSphereWithRecursionLevel:2 andColour:GLKVector4Make(1.0f, 0.0f, 0.0f, 1.0f) andExistingVertexCount:0];
         SWMModel *model = [[SWMModel alloc] initWithModelGenerator:modelGen];
         NSLog(@"%d", [model numberOfVertices]);
-        SWMModelGenerator *modelGen2 = [[SWMModelGenerator alloc] initCylinderWithSlices:8 andColour:GLKVector4Make(0.0f, 1.0f, 0.0f, 1.0f) andExistingVertexCount:[model numberOfVertices]];
+        SWMModelGenerator *modelGen2 = [[SWMModelGenerator alloc] initCylinderWithSlices:1 andColour:GLKVector4Make(0.18f, 0.73f, 0.156f, 1.0f) andExistingVertexCount:[model numberOfVertices]];
         SWMModel *model2 = [[SWMModel alloc] initWithModelGenerator:modelGen2];
-        [model2 setTranslationVectorY:-3.0f];
+        [model2 setTranslationVectorY:2.0f];
         _models = [[NSMutableArray alloc] initWithObjects:model, model2, nil];
     }
     
@@ -32,7 +32,7 @@
     
     glBindVertexArrayOES(_vertexArray);
     
-    GLint offset = 0;
+    GLuint offset = 0;
     
     glUseProgram([_shader program]);
     glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
@@ -44,7 +44,7 @@
         glUniform4fv(uniforms[DIFFUSE_COLOR], 1, [model diffuseLightColour].v);
         
         int numberOfIndices = [model numberOfIndices];
-        glDrawElements(GL_TRIANGLES, numberOfIndices, GL_UNSIGNED_SHORT, offset);
+        glDrawElements(GL_TRIANGLES, numberOfIndices, GL_UNSIGNED_SHORT, (GLvoid*)(sizeof(GLushort) * offset));
         offset += numberOfIndices;
     }
     //glActiveTexture(GL_TEXTURE0);
@@ -56,7 +56,6 @@
 - (BOOL)loadShaders{
     uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX] = glGetUniformLocation([_shader program], "modelViewProjectionMatrix");
     uniforms[UNIFORM_NORMAL_MATRIX] = glGetUniformLocation([_shader program], "normalMatrix");
-    
     uniforms[DIFFUSE_COLOR] = glGetUniformLocation([_shader program], "diffuseColour");
     
     //uniforms[UNIFORM_SAMPLER2D] = glGetUniformLocation([_shader program], "myTextureSampler");
@@ -87,7 +86,7 @@
         [vertexData appendBytes:[[model vertexData] mutableBytes] length:[[model vertexData] length]];
         [indexData appendBytes:[[model indexData] mutableBytes] length:[[model indexData] length]];
     }
-    
+    //NSLog(@"tvs %d tis %d", [vertexData length], [indexData length]);
     glGenVertexArraysOES(1, &_vertexArray);
     glBindVertexArrayOES(_vertexArray);
     
