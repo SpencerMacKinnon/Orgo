@@ -21,18 +21,6 @@
     return self;
 }
 
-- (void)addSphereWithRecursionLevel:(int)recursionLevel withColour:(GLKVector4)colour andTransformation:(SWMMatrix *)transformation {
-    int currentVertexCount = [self currentVertexCount];
-    SWMModelGenerator *modelGen = [[SWMModelGenerator alloc] initSphereWithRecursionLevel:recursionLevel andColour:colour andExistingVertexCount:currentVertexCount];
-    [self addModelWithModelGen:modelGen andTransformation:transformation];
-}
-
-- (void)addCylinderWithSlices:(int)slices withColour:(GLKVector4)colour andTransformation:(SWMMatrix *)transformation {
-    int currentVertexCount = [self currentVertexCount];
-    SWMModelGenerator *modelGen = [[SWMModelGenerator alloc] initCylinderWithSlices:slices andColour:colour andExistingVertexCount:currentVertexCount];
-    [self addModelWithModelGen:modelGen andTransformation:transformation];
-}
-
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect{
     
     glBindVertexArrayOES(_vertexArray);
@@ -131,16 +119,7 @@
     }
 }
 
-- (unsigned int)currentVertexCount {
-    if (_models != nil && [_models count] > 0) {
-        return [[_models lastObject] numberOfVertices];
-    } else {
-        return 0;
-    }
-}
-
-- (void)addModelWithModelGen:(SWMModelGenerator *)modelGen andTransformation:(SWMMatrix *)transformation {
-    SWMModel *model = [[SWMModel alloc] initWithModelGenerator:modelGen andTransformation:transformation];
+- (void)addModel:(SWMModel *)model {
     [_models addObject:model];
 }
 

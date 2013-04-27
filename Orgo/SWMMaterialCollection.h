@@ -7,8 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
-#include "SWMModel.h"
-#include "SWMShader.h"
+#import "SWMModel.h"
+#import "SWMShader.h"
 
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
 
@@ -44,9 +44,7 @@
 @property SWMShader *shader;
 
 - (id)initWithShader:(SWMShader *)shader;
-
-- (void)addSphereWithRecursionLevel:(int)recursionLevel withColour:(GLKVector4)colour andTransformation:(SWMMatrix *)transformation;
-- (void)addCylinderWithSlices:(int)slices withColour:(GLKVector4)colour andTransformation:(SWMMatrix *)transformation;
+- (void)addModel:(SWMModel *)model;
 
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect;
 - (BOOL)loadShaders;

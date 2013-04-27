@@ -81,10 +81,12 @@ const float MAX_ZOOM_OUT = -9.0;
     SWMShader *_shader = [[SWMShader alloc] init];
     _materialCollection = [[SWMMaterialCollection alloc] initWithShader:_shader];
     
-    SWMMatrix *_matrix = [[SWMMatrix alloc] init];
+    SWMAtomFactory *_atomFactory = [[SWMAtomFactory alloc] init];
+    SWMModel *sphere = [_atomFactory createOxygen];
+    SWMModel *cylinder = [_atomFactory createSingleBond];
     
-    [_materialCollection addSphereWithRecursionLevel:2 withColour:GLKVector4Make(1.0f, 0.0f, 0.0f, 1.0f) andTransformation:_matrix];
-    [_materialCollection addCylinderWithSlices:1 withColour:GLKVector4Make(0.0f, 0.0f, 0.0f, 1.0f) andTransformation:_matrix];
+    [_materialCollection addModel:sphere];
+    [_materialCollection addModel:cylinder];
     [_materialCollection setupGL];
 }
 

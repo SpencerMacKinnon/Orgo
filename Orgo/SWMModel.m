@@ -15,7 +15,7 @@
 @synthesize rotationVector = _rotationVector;
 @synthesize translationVector = _translationVector;
 
-- (id)initWithModelGenerator:(SWMModelGenerator *)modelGenerator andTransformation:(SWMMatrix *)transformation{
+- (id)initWithModelGenerator:(SWMVertexData *)modelGenerator andTransformation:(SWMMatrix *)transformation{
     self = [super init];
     if (self){
         _vertexArray = modelGenerator;

@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <GLKit/GLKit.h>
-#include "SWMVertex.h"
+#import "SWMVertex.h"
 #define TEX_COORD_MAX 1
 
 @interface SWMVertexArray : NSObject {

@@ -8,7 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import <GLKit/GLKit.h>
-#include "SWMMaterialCollection.h"
+#import "SWMMaterialCollection.h"
+#import "SWMAtomFactory.h"
 
 @interface SWMViewController : GLKViewController {
     GLKMatrix4 _projectionMatrix;

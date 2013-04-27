@@ -1,16 +1,14 @@
 //
-//  SWMModelGenerator.m
+//  SWMVertexData.m
 //  Orgo
 //
 //  Created by Spencer MacKinnon on 4/2/13.
 //  Copyright (c) 2013 Spencer MacKinnon. All rights reserved.
 //
 
-#import "SWMModelGenerator.h"
+#import "SWMVertexData.h"
 
-@implementation SWMModelGenerator
-
-
+@implementation SWMVertexData
 
 - (id)initCube{
     self = [super init];
@@ -284,7 +282,7 @@
 
 - (void)populateInitialVerticesAndIndicesForIcosahedronWithDifuseColour:(GLKVector4)diffuseColour{
     
-    const SWMVertex1P1D Vertices [] = {
+    SWMVertex1P1D Vertices [] = {
         //XY Face
         {
             {-1, t, 0},

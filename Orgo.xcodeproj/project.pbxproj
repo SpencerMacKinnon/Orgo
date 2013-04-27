@@ -12,7 +12,7 @@
 		0151713E16DC8E450082DEEC /* SWMVertexArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 0151713B16DC8E450082DEEC /* SWMVertexArray.m */; };
 		0151714616DC92B60082DEEC /* SWMVertex.m in Sources */ = {isa = PBXBuildFile; fileRef = 0151714516DC92B60082DEEC /* SWMVertex.m */; };
 		017ECEA916FE77A80086E0E4 /* SWMMatrix.m in Sources */ = {isa = PBXBuildFile; fileRef = 017ECEA816FE77A80086E0E4 /* SWMMatrix.m */; };
-		017ECEAC170BCC210086E0E4 /* SWMModelGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 017ECEAB170BCC200086E0E4 /* SWMModelGenerator.m */; };
+		017ECEAC170BCC210086E0E4 /* SWMVertexData.m in Sources */ = {isa = PBXBuildFile; fileRef = 017ECEAB170BCC200086E0E4 /* SWMVertexData.m */; };
 		017ECEC61711669F0086E0E4 /* Shaders in Resources */ = {isa = PBXBuildFile; fileRef = 017ECEC51711669E0086E0E4 /* Shaders */; };
 		017ECEC9171250710086E0E4 /* SWMMaterialCollection.m in Sources */ = {isa = PBXBuildFile; fileRef = 017ECEC8171250710086E0E4 /* SWMMaterialCollection.m */; };
 		01B5AD5816879EE5009216E0 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01B5AD5716879EE5009216E0 /* UIKit.framework */; };
@@ -31,6 +31,8 @@
 		01B5AD7F16879EE5009216E0 /* SWMViewController_iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 01B5AD7D16879EE5009216E0 /* SWMViewController_iPad.xib */; };
 		01F03ABB16E2C7EB0045C13C /* SWMBitmapLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 01F03ABA16E2C7EB0045C13C /* SWMBitmapLoader.m */; };
 		01F03AC916E3EE5A0045C13C /* Art in Resources */ = {isa = PBXBuildFile; fileRef = 01F03AC816E3EE5A0045C13C /* Art */; };
+		01F48CD2172C876800BF1AD5 /* SWMAtomFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 01F48CD1172C876800BF1AD5 /* SWMAtomFactory.m */; };
+		01F48CD5172C8C7700BF1AD5 /* SWMModelFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 01F48CD4172C8C7700BF1AD5 /* SWMModelFactory.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,8 +46,8 @@
 		0151714516DC92B60082DEEC /* SWMVertex.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWMVertex.m; sourceTree = "<group>"; };
 		017ECEA716FE77A80086E0E4 /* SWMMatrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWMMatrix.h; sourceTree = "<group>"; };
 		017ECEA816FE77A80086E0E4 /* SWMMatrix.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWMMatrix.m; sourceTree = "<group>"; };
-		017ECEAA170BCC200086E0E4 /* SWMModelGenerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWMModelGenerator.h; sourceTree = "<group>"; };
-		017ECEAB170BCC200086E0E4 /* SWMModelGenerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWMModelGenerator.m; sourceTree = "<group>"; };
+		017ECEAA170BCC200086E0E4 /* SWMVertexData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWMVertexData.h; sourceTree = "<group>"; };
+		017ECEAB170BCC200086E0E4 /* SWMVertexData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWMVertexData.m; sourceTree = "<group>"; };
 		017ECEC51711669E0086E0E4 /* Shaders */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Shaders; sourceTree = "<group>"; };
 		017ECEC7171250710086E0E4 /* SWMMaterialCollection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWMMaterialCollection.h; sourceTree = "<group>"; };
 		017ECEC8171250710086E0E4 /* SWMMaterialCollection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWMMaterialCollection.m; sourceTree = "<group>"; };
@@ -71,6 +73,10 @@
 		01F03AB916E2C7EB0045C13C /* SWMBitmapLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWMBitmapLoader.h; sourceTree = "<group>"; };
 		01F03ABA16E2C7EB0045C13C /* SWMBitmapLoader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWMBitmapLoader.m; sourceTree = "<group>"; };
 		01F03AC816E3EE5A0045C13C /* Art */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Art; sourceTree = "<group>"; };
+		01F48CD0172C876800BF1AD5 /* SWMAtomFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWMAtomFactory.h; sourceTree = "<group>"; };
+		01F48CD1172C876800BF1AD5 /* SWMAtomFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWMAtomFactory.m; sourceTree = "<group>"; };
+		01F48CD3172C8C7700BF1AD5 /* SWMModelFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWMModelFactory.h; sourceTree = "<group>"; };
+		01F48CD4172C8C7700BF1AD5 /* SWMModelFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWMModelFactory.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -92,8 +98,8 @@
 		01B5AD4816879EE5009216E0 = {
 			isa = PBXGroup;
 			children = (
-				01B5AD6116879EE5009216E0 /* Orgo */,
 				01B5AD5616879EE5009216E0 /* Frameworks */,
+				01B5AD6116879EE5009216E0 /* Orgo */,
 				01B5AD5416879EE5009216E0 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -121,31 +127,35 @@
 		01B5AD6116879EE5009216E0 /* Orgo */ = {
 			isa = PBXGroup;
 			children = (
-				017ECEC51711669E0086E0E4 /* Shaders */,
 				01F03AC816E3EE5A0045C13C /* Art */,
-				0151713616DC8E450082DEEC /* SWMModel.h */,
-				0151713716DC8E450082DEEC /* SWMModel.m */,
-				0151713816DC8E450082DEEC /* SWMShader.h */,
-				0151713916DC8E450082DEEC /* SWMShader.m */,
-				0151713A16DC8E450082DEEC /* SWMVertexArray.h */,
-				0151713B16DC8E450082DEEC /* SWMVertexArray.m */,
+				017ECEC51711669E0086E0E4 /* Shaders */,
+				01B5AD6216879EE5009216E0 /* Supporting Files */,
 				01B5AD6A16879EE5009216E0 /* SWMAppDelegate.h */,
 				01B5AD6B16879EE5009216E0 /* SWMAppDelegate.m */,
-				01B5AD7716879EE5009216E0 /* SWMViewController.h */,
-				01B5AD7816879EE5009216E0 /* SWMViewController.m */,
-				01B5AD7A16879EE5009216E0 /* SWMViewController_iPhone.xib */,
-				01B5AD7D16879EE5009216E0 /* SWMViewController_iPad.xib */,
-				01B5AD6216879EE5009216E0 /* Supporting Files */,
-				0151714416DC92B60082DEEC /* SWMVertex.h */,
-				0151714516DC92B60082DEEC /* SWMVertex.m */,
+				01F48CD0172C876800BF1AD5 /* SWMAtomFactory.h */,
+				01F48CD1172C876800BF1AD5 /* SWMAtomFactory.m */,
 				01F03AB916E2C7EB0045C13C /* SWMBitmapLoader.h */,
 				01F03ABA16E2C7EB0045C13C /* SWMBitmapLoader.m */,
-				017ECEA716FE77A80086E0E4 /* SWMMatrix.h */,
-				017ECEA816FE77A80086E0E4 /* SWMMatrix.m */,
-				017ECEAA170BCC200086E0E4 /* SWMModelGenerator.h */,
-				017ECEAB170BCC200086E0E4 /* SWMModelGenerator.m */,
 				017ECEC7171250710086E0E4 /* SWMMaterialCollection.h */,
 				017ECEC8171250710086E0E4 /* SWMMaterialCollection.m */,
+				017ECEA716FE77A80086E0E4 /* SWMMatrix.h */,
+				017ECEA816FE77A80086E0E4 /* SWMMatrix.m */,
+				0151713616DC8E450082DEEC /* SWMModel.h */,
+				0151713716DC8E450082DEEC /* SWMModel.m */,
+				01F48CD3172C8C7700BF1AD5 /* SWMModelFactory.h */,
+				01F48CD4172C8C7700BF1AD5 /* SWMModelFactory.m */,
+				017ECEAA170BCC200086E0E4 /* SWMVertexData.h */,
+				017ECEAB170BCC200086E0E4 /* SWMVertexData.m */,
+				0151713816DC8E450082DEEC /* SWMShader.h */,
+				0151713916DC8E450082DEEC /* SWMShader.m */,
+				0151714416DC92B60082DEEC /* SWMVertex.h */,
+				0151714516DC92B60082DEEC /* SWMVertex.m */,
+				0151713A16DC8E450082DEEC /* SWMVertexArray.h */,
+				0151713B16DC8E450082DEEC /* SWMVertexArray.m */,
+				01B5AD7716879EE5009216E0 /* SWMViewController.h */,
+				01B5AD7816879EE5009216E0 /* SWMViewController.m */,
+				01B5AD7D16879EE5009216E0 /* SWMViewController_iPad.xib */,
+				01B5AD7A16879EE5009216E0 /* SWMViewController_iPhone.xib */,
 			);
 			path = Orgo;
 			sourceTree = "<group>";
@@ -243,8 +253,10 @@
 				0151714616DC92B60082DEEC /* SWMVertex.m in Sources */,
 				01F03ABB16E2C7EB0045C13C /* SWMBitmapLoader.m in Sources */,
 				017ECEA916FE77A80086E0E4 /* SWMMatrix.m in Sources */,
-				017ECEAC170BCC210086E0E4 /* SWMModelGenerator.m in Sources */,
+				017ECEAC170BCC210086E0E4 /* SWMVertexData.m in Sources */,
 				017ECEC9171250710086E0E4 /* SWMMaterialCollection.m in Sources */,
+				01F48CD2172C876800BF1AD5 /* SWMAtomFactory.m in Sources */,
+				01F48CD5172C8C7700BF1AD5 /* SWMModelFactory.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
