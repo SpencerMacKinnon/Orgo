@@ -10,16 +10,26 @@
 #import <GLKit/GLKit.h>
 
 @interface SWMMatrix : NSObject {
-    GLKVector3 _rotationAxes, _rotationVector, _translationVector;
-    GLKVector3 _xRotationAxes, _yRotationAxes, _zRotationAxes;
+    float _rotation;
+    GLKVector3 _translationVector;
+    GLKVector3 _anchorPosition;
+    GLKVector3 _currentPosition;
+    GLKQuaternion _quatStart;
+    GLKQuaternion _quat;
+    
+    BOOL _slerping;
+    float _slerpCur;
+    float _slerpMax;
+    GLKQuaternion _slerpStart;
+    GLKQuaternion _slerpEnd;
 }
+
+- (GLKMatrix4)objectTransformWithTimeSinceLastUpdate:(NSTimeInterval)timeSinceLastUpdate;
 - (void)resetOrientation;
 - (void)setTranslationVectorX:(float)transX;
 - (void)setTranslationVectorY:(float)transY;
 - (void)setTranslationVectorZ:(float)transZ;
-- (void)rotateX:(float)rotX;
-- (void)rotateY:(float)rotY;
-- (void)rotateZ:(float)rotZ;
-- (GLKMatrix4)objectTransform;
+- (void)touchAtPoint:(CGPoint)location withViewBounds:(CGRect)viewBounds;
+- (void)touchesMoved:(CGPoint)location withViewBounds:(CGRect)viewBounds;
 
 @end

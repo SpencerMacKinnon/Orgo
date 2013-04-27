@@ -42,8 +42,8 @@
     return [_vertexArray numberOfIndices];
 }
 
-- (GLKMatrix4)objectTransform {
-    return [_matrix objectTransform];
+- (GLKMatrix4)objectTransformWithTimeSinceLastUpdate:(NSTimeInterval)timeSinceLastUpdate {
+    return [_matrix objectTransformWithTimeSinceLastUpdate:timeSinceLastUpdate];
 }
 
 - (void)resetOrientation {
@@ -59,14 +59,13 @@
 - (void)setTranslationVectorZ:(float)transZ {
     [_matrix setTranslationVectorZ:transZ];
 }
-- (void)rotateX:(float)rotX {
-    [_matrix rotateX:rotX];
+
+- (void)touchAtPoint:(CGPoint)location withViewBounds:(CGRect)viewBounds {
+    [_matrix touchAtPoint:location withViewBounds:viewBounds];
 }
-- (void)rotateY:(float)rotY {
-    [_matrix rotateY:rotY];
-}
-- (void)rotateZ:(float)rotZ {
-    [_matrix rotateZ:rotZ];
+
+- (void)touchesMoved:(CGPoint)location withViewBounds:(CGRect)viewBounds {
+    [_matrix touchesMoved:location withViewBounds:viewBounds];
 }
 
 @end

@@ -96,7 +96,7 @@ const float MAX_ZOOM_OUT = -9.0;
 {
     _aspect = fabsf(self.view.bounds.size.width / self.view.bounds.size.height);
     _projectionMatrix = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(65.0f), _aspect, 0.1f, 100.0f);
-    [_materialCollection updateWithProjectionMatrix:_projectionMatrix];
+    [_materialCollection updateWithProjectionMatrix:_projectionMatrix andTimeSinceLastUpdate:self.timeSinceLastUpdate];
 }
 
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect
@@ -115,162 +115,28 @@ const float MAX_ZOOM_OUT = -9.0;
     _lastTransX = 0.0f;
     _lastTransY = 0.0f;
     
-    UILongPressGestureRecognizer *_lgpr = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPress:)];
-    _lgpr.minimumPressDuration = 1.0;
-    [self.view addGestureRecognizer:_lgpr];
-    
     UITapGestureRecognizer *_dtgr = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleDoubleTap:)];
     _dtgr.numberOfTapsRequired = 2;
     _dtgr.numberOfTouchesRequired = 1;
     [self.view addGestureRecognizer:_dtgr];
-    
-    UITapGestureRecognizer *_tgr = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleTap:)];
-    _tgr.numberOfTapsRequired = 1;
-    _tgr.numberOfTouchesRequired = 1;
-    [_tgr requireGestureRecognizerToFail:_dtgr];
-    [self.view addGestureRecognizer:_tgr];
-    
-//    UIPinchGestureRecognizer *_tfpgr = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(handlePinchGesture:)];
-//    [self.view addGestureRecognizer:_tfpgr];
-    
-//    UISwipeGestureRecognizer *_sgrl = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipeLeft:)];
-//    [_sgrl setDirection:UISwipeGestureRecognizerDirectionLeft];
-//    [self.view addGestureRecognizer:_sgrl];
-//    
-//    UISwipeGestureRecognizer *_sgrr = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipeRight:)];
-//    [_sgrr setDirection:UISwipeGestureRecognizerDirectionRight];
-//    [self.view addGestureRecognizer:_sgrr];
-//    
-//    UISwipeGestureRecognizer *_sgru = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipeUp:)];
-//    [_sgrr setDirection:UISwipeGestureRecognizerDirectionUp];
-//    [self.view addGestureRecognizer:_sgru];
-//    
-//    UISwipeGestureRecognizer *_sgrd = [[UISwipeGestureRecognizer alloc] initWithTarget:self action:@selector(handleSwipeDown:)];
-//    [_sgrd setDirection:UISwipeGestureRecognizerDirectionDown];
-//    [self.view addGestureRecognizer:_sgrd];
-    
-    UIPanGestureRecognizer *_ofpangr = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handlePanGesture:)];
-    [_ofpangr setMinimumNumberOfTouches:1];
-    [_ofpangr setMaximumNumberOfTouches:1];
-    [self.view addGestureRecognizer:_ofpangr];
-    
-//    UIPanGestureRecognizer *_tfpangr = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handleTwoFingerPanGesture:)];
-//    [_tfpangr setMinimumNumberOfTouches:2];
-//    [_tfpangr setMaximumNumberOfTouches:2];
-//    [_tfpangr requireGestureRecognizerToFail:_tfpgr];
-//    [self.view addGestureRecognizer:_tfpangr];
 }
 
-- (void)handleLongPress:(UILongPressGestureRecognizer *)gestureRecognizer{
-    NSLog(@"Long press detected");
-}
-
-- (void)handleDoubleTap:(UITapGestureRecognizer *)gestureRecognizer{
+- (void)handleDoubleTap:(UITapGestureRecognizer *)gestureRecognizer {
     [_materialCollection resetModelsOrientation];
 }
 
-- (void)handleTap:(UITapGestureRecognizer *)gestureRecognizer{
-    NSLog(@"Tap detected");
-}
-
-- (void)handleSwipeLeft:(UISwipeGestureRecognizer *)gestureRecognizer{
-    [_materialCollection rotateModelsX:-(M_PI_4)];
-}
-
-- (void)handleSwipeRight:(UISwipeGestureRecognizer *)gestureRecognizer{
-    [_materialCollection rotateModelsX:(M_PI_4)];
-}
-
-- (void)handleSwipeUp:(UISwipeGestureRecognizer *)gestureRecognizer{
-    [_materialCollection rotateModelsY:(M_PI_4)];
-}
-
-- (void)handleSwipeDown:(UISwipeGestureRecognizer *)gestureRecognizer{
-    [_materialCollection rotateModelsY:-(M_PI_4)];
-}
-
-- (void)handlePanGesture:(UIPanGestureRecognizer *)gestureRecognizer {
+- (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
+    UITouch *touch = [touches anyObject];
+    CGPoint location = [touch locationInView:self.view];
     
-    if([gestureRecognizer state] == UIGestureRecognizerStateBegan) {
-        _lastTransX = 0.0f;
-        _lastTransY = 0.0f;
-    }
-    
-    CGPoint translatedPoint = [gestureRecognizer translationInView:self.view];
-    
-    CGFloat xMagnitude = sqrtf(translatedPoint.x * translatedPoint.x);
-    CGFloat yMagnitude = sqrtf(translatedPoint.y * translatedPoint.y);
-    CGFloat xyDiff = xMagnitude - yMagnitude;
-    xyDiff = sqrtf(xyDiff * xyDiff);
-
-    const float ROTATION_RATE = M_PI_4 * 0.1f;
-    const float DIAGONAL_PAN_DIFFERENCE = 1.0f;
-    
-    if ((xMagnitude > yMagnitude) /*|| (xyDiff < DIAGONAL_PAN_DIFFERENCE)*/) {
-        if (translatedPoint.x > _lastTransX) {
-            [_materialCollection rotateModelsY:ROTATION_RATE];
-        } else {
-            [_materialCollection rotateModelsY:-ROTATION_RATE];
-        }
-        _lastTransX = translatedPoint.x;
-    }
-    if ((yMagnitude > xMagnitude) /*|| (xyDiff < DIAGONAL_PAN_DIFFERENCE)*/)  {
-        if (translatedPoint.y > _lastTransY) {
-            [_materialCollection rotateModelsX:ROTATION_RATE];
-        } else {
-            [_materialCollection rotateModelsX:-ROTATION_RATE];
-        }
-        _lastTransY = translatedPoint.y;
-    }
+    [_materialCollection touchAtPoint:location withViewBounds:self.view.bounds];
 }
 
-//- (void)handleTwoFingerPanGesture:(UIPanGestureRecognizer *)gestureRecognizer{
-//   
-//    CGPoint translatedPoint = [gestureRecognizer translationInView:self.view];
-//    NSLog(@"Translated X: %f Translated Y: %f", translatedPoint.x, translatedPoint.y);
-//    
-//    CGFloat xMagnitude = sqrtf(translatedPoint.x * translatedPoint.x);
-//    CGFloat yMagnitude = sqrtf(translatedPoint.y * translatedPoint.y);
-//    CGFloat xyDiff = xMagnitude - yMagnitude;
-//    xyDiff = sqrtf(xyDiff * xyDiff);
-//    NSLog(@"xMag: %f yMag: %f xyDiff: %f", xMagnitude, yMagnitude, xyDiff);
-//    
-//    const float TRANSLATION_RATE = 0.03;
-//    
-//    float currentXTrans = [_model translationVector].x;
-//    float currentYTrans = [_model translationVector].y;
-//    
-//    if ((xMagnitude > yMagnitude) || (xyDiff < 20.0f)) {
-//        if (translatedPoint.x > 0) {
-//            [_model setTranslationVectorX:currentXTrans + TRANSLATION_RATE];
-//        } else {
-//            [_model setTranslationVectorX:currentXTrans - TRANSLATION_RATE];
-//        }
-//    }
-//    if ((yMagnitude > xMagnitude) || (xyDiff < 20.0f)) {
-//        if (translatedPoint.y > 0) {
-//            [_model setTranslationVectorY:currentYTrans - TRANSLATION_RATE];
-//        } else {
-//            [_model setTranslationVectorY:currentYTrans + TRANSLATION_RATE];
-//        }
-//    }
-//}
-
-//- (void)handlePinchGesture:(UIPinchGestureRecognizer *)gestureRecognizer{
-//    
-//    if([gestureRecognizer state] == UIGestureRecognizerStateBegan) {
-//        _lastScale = 1.0;
-//    }
-//    
-//    CGFloat scale = [gestureRecognizer scale] - _lastScale;
-//    float newZPos = [_model translationVector].z;
-//    newZPos += (4.0 * scale);
-//    if (newZPos < MAX_ZOOM_OUT || newZPos > MAX_ZOOM_IN) {
-//        return;
-//    }
-//    
-//    [_model setTranslationVectorZ:newZPos];
-//    _lastScale = [gestureRecognizer scale];
-//}
+- (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
+    UITouch *touch = [touches anyObject];
+    CGPoint location = [touch locationInView:self.view];
+    
+    [_materialCollection touchesMoved:location withViewBounds:self.view.bounds];
+}
 
 @end

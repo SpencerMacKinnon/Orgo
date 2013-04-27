@@ -50,10 +50,9 @@
 - (void)resetModelsOrientation;
 - (void)setupGL;
 - (void)tearDownGL;
-- (void)updateWithProjectionMatrix:(GLKMatrix4)projectionMatrix;
+- (void)updateWithProjectionMatrix:(GLKMatrix4)projectionMatrix andTimeSinceLastUpdate:(NSTimeInterval)timeSinceLastUpdate;
 
-- (void)rotateModelsX:(float)rotX;
-- (void)rotateModelsY:(float)rotY;
-- (void)rotateModelsZ:(float)rotZ;
+- (void)touchAtPoint:(CGPoint)location withViewBounds:(CGRect)viewBounds;
+- (void)touchesMoved:(CGPoint)location withViewBounds:(CGRect)viewBounds;
 
 @end

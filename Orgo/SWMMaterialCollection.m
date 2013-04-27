@@ -22,7 +22,7 @@
         SWMModelGenerator *modelGen2 = [[SWMModelGenerator alloc] initCylinderWithSlices:1 andColour:GLKVector4Make(0.18f, 0.73f, 0.156f, 1.0f) andExistingVertexCount:[model numberOfVertices]];
         SWMModel *model2 = [[SWMModel alloc] initWithModelGenerator:modelGen2];
         [model2 setTranslationVectorY:2.0f];
-        _models = [[NSMutableArray alloc] initWithObjects:model, model2, nil];
+        _models = [[NSMutableArray alloc] initWithObjects:model, /*model2,*/ nil];
     }
     
     return self;
@@ -118,9 +118,9 @@
     [_shader tearDownGL];
 }
 
-- (void)updateWithProjectionMatrix:(GLKMatrix4)projectionMatrix{
+- (void)updateWithProjectionMatrix:(GLKMatrix4)projectionMatrix andTimeSinceLastUpdate:(NSTimeInterval)timeSinceLastUpdate{
     for (SWMModel *model in _models) {
-        GLKMatrix4 modelViewMatrix = [model objectTransform];
+        GLKMatrix4 modelViewMatrix = [model objectTransformWithTimeSinceLastUpdate:timeSinceLastUpdate];
         GLKMatrix3 normalMatrix = GLKMatrix3InvertAndTranspose(GLKMatrix4GetMatrix3(modelViewMatrix), NULL);
         GLKMatrix4 modelViewProjectionMatrix = GLKMatrix4Multiply(projectionMatrix, modelViewMatrix);
         
@@ -129,19 +129,15 @@
     }
 }
 
-- (void)rotateModelsX:(float)rotX {
+- (void)touchAtPoint:(CGPoint)location withViewBounds:(CGRect)viewBounds {
     for (SWMModel *model in _models) {
-        [model rotateX: rotX];
+        [model touchAtPoint:location withViewBounds:viewBounds];
     }
 }
-- (void)rotateModelsY:(float)rotY {
+
+- (void)touchesMoved:(CGPoint)location withViewBounds:(CGRect)viewBounds {
     for (SWMModel *model in _models) {
-        [model rotateY: rotY];
-    }
-}
-- (void)rotateModelsZ:(float)rotZ {
-    for (SWMModel *model in _models) {
-        [model rotateZ: rotZ];
+        [model touchesMoved:location withViewBounds:viewBounds];
     }
 }
 

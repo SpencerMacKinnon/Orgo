@@ -31,15 +31,14 @@
 - (id)initWithModelGenerator:(SWMModelGenerator *)modelGenerator;
 - (int)numberOfVertices;
 - (int)numberOfIndices;
-- (GLKMatrix4)objectTransform;
+- (GLKMatrix4)objectTransformWithTimeSinceLastUpdate:(NSTimeInterval)timeSinceLastUpdate;
 - (NSMutableData *)vertexData;
 - (NSMutableData *)indexData;
 - (void)resetOrientation;
 - (void)setTranslationVectorX:(float)transX;
 - (void)setTranslationVectorY:(float)transY;
 - (void)setTranslationVectorZ:(float)transZ;
-- (void)rotateX:(float)rotX;
-- (void)rotateY:(float)rotY;
-- (void)rotateZ:(float)rotZ;
+- (void)touchAtPoint:(CGPoint)location withViewBounds:(CGRect)viewBounds;
+- (void)touchesMoved:(CGPoint)location withViewBounds:(CGRect)viewBounds;
 
 @end
