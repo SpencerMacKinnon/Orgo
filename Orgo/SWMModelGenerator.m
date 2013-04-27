@@ -148,37 +148,8 @@
             [_indexData appendBytes:&d length:sizeof(GLushort)];
             [_indexData appendBytes:&b length:sizeof(GLushort)];
             _numberOfIndices+=6;
-            NSLog(@"C %d %d %d %d", a, b, c, d);
         }
     }
-//    
-//    
-//    
-//    for (int i = 0; i < _numberOfVertices; i++, _numberOfIndices+=6) {
-//        GLKVector3 position;
-//        [[_vertices objectAtIndex:i] getValue:&position];
-//        
-//        SWMVertex1P1D vertex =
-//        {
-//            {position.x, position.y, position.z},
-//            {diffuseColour.x, diffuseColour.y, diffuseColour.z, diffuseColour.w}
-//        };
-//        
-//        [_vertexData appendBytes:&vertex length:sizeof(SWMVertex1P1D)];
-//        
-//        if (position.y == -1.0) {
-//            continue;
-//        }
-//        
-//        GLushort a = i + _existingVertexCount;
-//        GLushort b = i + 1 + _existingVertexCount;
-//        GLushort c = i + trianglesInSlice + _existingVertexCount;
-//        GLushort d = i + trianglesInSlice + 1 + _existingVertexCount;
-//
-//        
-//        //NSLog(@"C %d %d %d %d", a, b, c, d);
-//    }
-//    NSLog(@"nic %u", _numberOfIndices);
 }
 
 - (id)initSphereWithRecursionLevel:(int) recursionLevel andColour:(GLKVector4)diffuseColour andExistingVertexCount:(GLushort)existingVertexCount{
@@ -194,7 +165,6 @@
         _vertices = [[NSMutableArray alloc] init];
         _vertexIndices = [[NSMutableArray alloc] init];
         [self generateSphereWithRecursionLevel:recursionLevel withColour:diffuseColour];
-        
     }
     return self;
 }
@@ -236,8 +206,10 @@
         }
         _vertexIndices = [[NSMutableArray alloc] initWithArray:newVertexIndices];
     }
+    
     _numberOfVertices = [_vertices count];
     _vertexData = [[NSMutableData alloc] initWithCapacity:(_numberOfVertices * sizeof(SWMVertex1P1D))];
+    
     for (int i = 0; i < _numberOfVertices; i++) {
         SWMVertex1P1D vertex;
         [[_vertices objectAtIndex:i] getValue:&vertex];
@@ -246,14 +218,14 @@
     
     _numberOfIndices = [_vertexIndices count];
     _indexData = [[NSMutableData alloc] initWithCapacity:(_numberOfIndices * sizeof(GLushort))];
+    
     for (int i = 0; i < _numberOfIndices; i++) {
         GLushort vertexIndex;
         [[_vertexIndices objectAtIndex:i] getValue:&vertexIndex];
         vertexIndex += _existingVertexCount;
-        //NSLog(@"S %d", vertexIndex);
+
         [_indexData appendBytes:&vertexIndex length:sizeof(GLushort)];
     }
-    NSLog(@"nis %u", _numberOfIndices);
 }
                                                            
 - (int)addVertex:(SWMVertex1P1D *)vertex{
@@ -316,8 +288,8 @@
         //XY Face
         {
             {-1, t, 0},
-            //{diffuseColour.x, diffuseColour.y, diffuseColour.z, diffuseColour.w}
-            {0.0f, 0.0f, 1.0f, 1.0f}
+            {diffuseColour.x, diffuseColour.y, diffuseColour.z, diffuseColour.w}
+            //{0.0f, 0.0f, 1.0f, 1.0f}
         },
         {
             {1, t, 0},
@@ -325,8 +297,8 @@
         },
         {
             {-1, -t, 0},
-            //{diffuseColour.x, diffuseColour.y, diffuseColour.z, diffuseColour.w}
-            {0.0f, 0.0f, 1.0f, 1.0f}
+            {diffuseColour.x, diffuseColour.y, diffuseColour.z, diffuseColour.w}
+            //{0.0f, 0.0f, 1.0f, 1.0f}
         },
         {
             {1, -t, 0},
@@ -336,23 +308,23 @@
         // YZ Face
         {
             {0, -1, t},
-            //{diffuseColour.x, diffuseColour.y, diffuseColour.z, diffuseColour.w}
-            {0.5f, 0.0f, 0.5f, 1.0f}
+            {diffuseColour.x, diffuseColour.y, diffuseColour.z, diffuseColour.w}
+            //{0.5f, 0.0f, 0.5f, 1.0f}
         },
         {
             {0, 1, t},
-            //{diffuseColour.x, diffuseColour.y, diffuseColour.z, diffuseColour.w}
-            {0.5f, 0.0f, 0.5f, 1.0f}
+            {diffuseColour.x, diffuseColour.y, diffuseColour.z, diffuseColour.w}
+            //{0.5f, 0.0f, 0.5f, 1.0f}
         },
         {
             {0, -1, -t},
-            //{diffuseColour.x, diffuseColour.y, diffuseColour.z, diffuseColour.w}
-            {0.5f, 0.0f, 0.5f, 1.0f}
+            {diffuseColour.x, diffuseColour.y, diffuseColour.z, diffuseColour.w}
+            //{0.5f, 0.0f, 0.5f, 1.0f}
         },
         {
             {0, 1, -t},
-            //{diffuseColour.x, diffuseColour.y, diffuseColour.z, diffuseColour.w}
-            {0.5f, 0.0f, 0.5f, 1.0f}
+            {diffuseColour.x, diffuseColour.y, diffuseColour.z, diffuseColour.w}
+            //{0.5f, 0.0f, 0.5f, 1.0f}
         },
         
         // XZ Face
@@ -366,13 +338,13 @@
         },
         {
             {-t, 0, -1},
-            //{diffuseColour.x, diffuseColour.y, diffuseColour.z, diffuseColour.w}
-            {0.0f, 0.0f, 1.0f, 1.0f}
+            {diffuseColour.x, diffuseColour.y, diffuseColour.z, diffuseColour.w}
+            //{0.0f, 0.0f, 1.0f, 1.0f}
         },
         {
             {-t, 0, 1},
-            //{diffuseColour.x, diffuseColour.y, diffuseColour.z, diffuseColour.w}
-            {0.0f, 0.0f, 1.0f, 1.0f}
+            {diffuseColour.x, diffuseColour.y, diffuseColour.z, diffuseColour.w}
+            //{0.0f, 0.0f, 1.0f, 1.0f}
         }
     };
     
@@ -410,25 +382,6 @@
         [_vertexIndices addObject:[NSValue value:&(Indices[i]) withObjCType:@encode(GLushort)]];
     }
 }
-
-//+ (NSMutableData *)generateSphereWithRadius:(int)radius numberOfTriangleStrips:(int)triangleStrips numberOfTrianglesInTriangleStrip:(int)numTriangleInStrip diffuseColour:(GLKVector4)colour numberOfVertices:(out int *) numberOfVertices withIndices:(out NSMutableData *) indices{
-//    assert(radius > 0);
-//    assert(triangleStrips > 4);
-//    assert(numTriangleInStrip > 2);
-//
-//    float circleCircumfrence = 2 * M_PI * radius;
-//    float radiansPerTriangleStrip = (2 * M_PI) / triangleStrips;
-//
-//    // Each Triangle has two unique vertices
-//    // Each Triange Strip has numTriangleInStrip number of triangles, -2 vertices for the top most and bottom most points
-//    // Each sphere has triangleStrips number of triangle strips
-//    // The top and bottom points are shared across all triangle strips
-//
-//    int *numVertices = 2 * triangleStrips * (numTriangleInStrip - 2) + 2;
-//    SWMVertex1P1D vertices[*numVertices];
-//    NSMutableData *vertexData = [[NSMutableData alloc] initWithCapacity:*numVertices * sizeof(SWMVertex1P1D)];
-//    return vertexData;
-//}
 
 @end
 

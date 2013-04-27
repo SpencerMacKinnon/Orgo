@@ -24,6 +24,8 @@
     GLKQuaternion _slerpEnd;
 }
 
+@property GLKVector3 scalingVector;
+
 - (GLKMatrix4)objectTransformWithTimeSinceLastUpdate:(NSTimeInterval)timeSinceLastUpdate;
 - (void)resetOrientation;
 - (void)setTranslationVectorX:(float)transX;

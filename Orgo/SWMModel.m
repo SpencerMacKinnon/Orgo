@@ -15,12 +15,12 @@
 @synthesize rotationVector = _rotationVector;
 @synthesize translationVector = _translationVector;
 
-- (id)initWithModelGenerator:(SWMModelGenerator *)modelGenerator{
+- (id)initWithModelGenerator:(SWMModelGenerator *)modelGenerator andTransformation:(SWMMatrix *)transformation{
     self = [super init];
     if (self){
         _vertexArray = modelGenerator;
         _diffuseLightColour = GLKVector4Make(1.0, 1.0, 1.0, 0.5);
-        _matrix = [[SWMMatrix alloc] init];
+        _matrix = transformation;
     }
     
     return self;

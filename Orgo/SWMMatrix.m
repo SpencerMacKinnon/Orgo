@@ -15,9 +15,12 @@
 // 2  6  10 14      0 0 1 0
 // 3  7  11 15      0 0 0 1
 
+@synthesize scalingVector;
+
 - (id)init{
     self = [super init];
     if (self) {
+        scalingVector = GLKVector3Make(1.0f, 1.0f, 1.0f);
         _translationVector = GLKVector3Make(0.0f, 0.0f, -6.0f);
         _quat = GLKQuaternionMake(0, 0, 0, 1);
         _quatStart = GLKQuaternionMake(0, 0, 0, 1);
@@ -44,6 +47,10 @@
     _translationVector.z = transZ;
 }
 
+- (GLKMatrix4)scaling {
+    return GLKMatrix4MakeScale(scalingVector.x, scalingVector.y, scalingVector.z);
+}
+
 - (GLKMatrix4)translation {
     return GLKMatrix4MakeTranslation(_translationVector.x, _translationVector.y, _translationVector.z);
 }
@@ -64,7 +71,7 @@
         _quat = GLKQuaternionSlerp(_slerpStart, _slerpEnd, slerpAmt);
     }
     
-    return GLKMatrix4Multiply([self translation], [self rotation]);
+    return GLKMatrix4Multiply([self translation], GLKMatrix4Multiply([self rotation], [self scaling]));
 }
 
 - (void)computeIncremental {
@@ -73,7 +80,7 @@
     float dot = GLKVector3DotProduct(_anchorPosition, _currentPosition);
     float angle = acosf(dot);
     
-    GLKQuaternion Q_rot = GLKQuaternionMakeWithAngleAndVector3Axis(angle * 2, axis);
+    GLKQuaternion Q_rot = GLKQuaternionMakeWithAngleAndVector3Axis(angle * 1, axis);
     Q_rot = GLKQuaternionNormalize(Q_rot);
     
     _quat = GLKQuaternionMultiply(Q_rot, _quatStart);

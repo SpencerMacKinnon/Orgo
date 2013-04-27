@@ -28,7 +28,7 @@
 @property GLKVector3 rotationVector, translationVector;
 @property GLKVector4 diffuseLightColour;
 
-- (id)initWithModelGenerator:(SWMModelGenerator *)modelGenerator;
+- (id)initWithModelGenerator:(SWMModelGenerator *)modelGenerator andTransformation:(SWMMatrix *)transformation;
 - (int)numberOfVertices;
 - (int)numberOfIndices;
 - (GLKMatrix4)objectTransformWithTimeSinceLastUpdate:(NSTimeInterval)timeSinceLastUpdate;

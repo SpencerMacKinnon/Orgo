@@ -44,6 +44,10 @@
 @property SWMShader *shader;
 
 - (id)initWithShader:(SWMShader *)shader;
+
+- (void)addSphereWithRecursionLevel:(int)recursionLevel withColour:(GLKVector4)colour andTransformation:(SWMMatrix *)transformation;
+- (void)addCylinderWithSlices:(int)slices withColour:(GLKVector4)colour andTransformation:(SWMMatrix *)transformation;
+
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect;
 - (BOOL)loadShaders;
 - (BOOL)releaseShaders;
