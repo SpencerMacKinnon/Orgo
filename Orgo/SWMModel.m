@@ -50,16 +50,6 @@
     [_matrix resetOrientation];
 }
 
-- (void)setTranslationVectorX:(float)transX {
-    [_matrix setTranslationVectorX:transX];
-}
-- (void)setTranslationVectorY:(float)transY {
-    [_matrix setTranslationVectorY:transY];
-}
-- (void)setTranslationVectorZ:(float)transZ {
-    [_matrix setTranslationVectorZ:transZ];
-}
-
 - (void)touchAtPoint:(CGPoint)location withViewBounds:(CGRect)viewBounds {
     [_matrix touchAtPoint:location withViewBounds:viewBounds];
 }

@@ -16,13 +16,15 @@
 // 3  7  11 15      0 0 0 1
 
 @synthesize scalingVector;
+@synthesize translationVector;
+@synthesize quat;
 
 - (id)init{
     self = [super init];
     if (self) {
         scalingVector = GLKVector3Make(1.0f, 1.0f, 1.0f);
-        _translationVector = GLKVector3Make(0.0f, 0.0f, -6.0f);
-        _quat = GLKQuaternionMake(0, 0, 0, 1);
+        translationVector = GLKVector3Make(0.0f, 0.0f, -6.0f);
+        quat = GLKQuaternionMake(0, 0, 0, 1);
         _quatStart = GLKQuaternionMake(0, 0, 0, 1);
     }
     
@@ -33,18 +35,8 @@
     _slerping = YES;
     _slerpCur = 0;
     _slerpMax = 1.0;
-    _slerpStart = _quat;
+    _slerpStart = quat;
     _slerpEnd = GLKQuaternionMake(0, 0, 0, 1);
-}
-
-- (void)setTranslationVectorX:(float)transX {
-    _translationVector.x = transX;
-}
-- (void)setTranslationVectorY:(float)transY {
-    _translationVector.y = transY;
-}
-- (void)setTranslationVectorZ:(float)transZ {
-    _translationVector.z = transZ;
 }
 
 - (GLKMatrix4)scaling {
@@ -52,10 +44,10 @@
 }
 
 - (GLKMatrix4)translation {
-    return GLKMatrix4MakeTranslation(_translationVector.x, _translationVector.y, _translationVector.z);
+    return GLKMatrix4MakeTranslation(translationVector.x, translationVector.y, translationVector.z);
 }
 - (GLKMatrix4)rotation {
-    return GLKMatrix4MakeWithQuaternion(_quat);
+    return GLKMatrix4MakeWithQuaternion(quat);
 }
 
 - (GLKMatrix4)objectTransformWithTimeSinceLastUpdate:(NSTimeInterval)timeSinceLastUpdate{
@@ -68,7 +60,7 @@
             _slerping = NO;
         }
         
-        _quat = GLKQuaternionSlerp(_slerpStart, _slerpEnd, slerpAmt);
+        quat = GLKQuaternionSlerp(_slerpStart, _slerpEnd, slerpAmt);
     }
     
     return GLKMatrix4Multiply([self translation], GLKMatrix4Multiply([self rotation], [self scaling]));
@@ -83,7 +75,7 @@
     GLKQuaternion Q_rot = GLKQuaternionMakeWithAngleAndVector3Axis(angle * 1, axis);
     Q_rot = GLKQuaternionNormalize(Q_rot);
     
-    _quat = GLKQuaternionMultiply(Q_rot, _quatStart);
+    quat = GLKQuaternionMultiply(Q_rot, _quatStart);
 }
 
 - (void)touchAtPoint:(CGPoint)location withViewBounds:(CGRect)viewBounds {
@@ -91,7 +83,7 @@
     _anchorPosition = [self projectOntoSurface:_anchorPosition withViewBounds:viewBounds];
     
     _currentPosition = _anchorPosition;
-    _quatStart = _quat;
+    _quatStart = quat;
 }
 
 - (void)touchesMoved:(CGPoint)location withViewBounds:(CGRect)viewBounds {

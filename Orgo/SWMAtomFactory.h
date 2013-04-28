@@ -16,4 +16,5 @@
 - (SWMModel *)createOxygen;
 - (SWMModel *)createHydrogen;
 - (SWMModel *)createSingleBond;
+- (SWMModel *)createSingleBond2;
 @end

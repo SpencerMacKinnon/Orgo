@@ -105,38 +105,35 @@
     float sliceStepRadians = (2 * M_PI) / trianglesInSlice;
     float currentRadians = 0.0;
     
+    _vertexData = [[NSMutableData alloc] init];
+    
     for (currentSliceLevel = 1.0; currentSliceLevel >= -1.0; currentSliceLevel -= decreasePerSlice) {
         for (currentRadians = 0; currentRadians <= (2 * M_PI); currentRadians += sliceStepRadians) {
-            GLKVector3 a = GLKVector3Make(cosf(currentRadians), currentSliceLevel, sinf(currentRadians));
-            [_vertices addObject:[NSValue value:&a withObjCType:@encode(GLKVector3)]];
-        }
-    }
-    
-    _numberOfVertices = [_vertices count];
-    _vertexData = [[NSMutableData alloc] initWithCapacity:(_numberOfVertices * sizeof(SWMVertex1P1D))];
-    _indexData = [[NSMutableData alloc] init];
-
-    for (int i = 0; i <= slices; i++) {
-        for (int j = 0; j < trianglesInSlice; j++) {
-            GLKVector3 position;
-            [[_vertices objectAtIndex:(j % trianglesInSlice) + (i * trianglesInSlice)] getValue:&position];
             
             SWMVertex1P1D vertex =
             {
-                {position.x, position.y, position.z},
+                {cosf(currentRadians), currentSliceLevel, sinf(currentRadians)},
                 {diffuseColour.x, diffuseColour.y, diffuseColour.z, diffuseColour.w}
             };
             
             [_vertexData appendBytes:&vertex length:sizeof(SWMVertex1P1D)];
-            
-            if (i == slices) {
-                continue;
-            }
+            _numberOfVertices++;
+        }
+    }
+    
+    _indexData = [[NSMutableData alloc] init];
+
+    NSLog(@"%d", _existingVertexCount);
+    
+    for (int i = 0; i <= slices; i++) {
+        for (int j = 0; j < trianglesInSlice; j++) {
             
             GLushort a = (j % trianglesInSlice) + (i * trianglesInSlice) + _existingVertexCount;
             GLushort b = ((j + 1)  % trianglesInSlice) + (i * trianglesInSlice) + _existingVertexCount;
             GLushort c = (j % trianglesInSlice) + ((i + 1) * trianglesInSlice) + _existingVertexCount;
             GLushort d = ((j + 1) % trianglesInSlice) + ((i + 1) * trianglesInSlice)  + _existingVertexCount;
+            
+            NSLog(@"%d %d %d %d",a,b,c,d);
             
             [_indexData appendBytes:&a length:sizeof(GLushort)];
             [_indexData appendBytes:&b length:sizeof(GLushort)];
@@ -145,9 +142,10 @@
             [_indexData appendBytes:&c length:sizeof(GLushort)];
             [_indexData appendBytes:&d length:sizeof(GLushort)];
             [_indexData appendBytes:&b length:sizeof(GLushort)];
-            _numberOfIndices+=6;
         }
     }
+    
+    _numberOfIndices = [_indexData length] / sizeof(GLushort);
 }
 
 - (id)initSphereWithRecursionLevel:(int) recursionLevel andColour:(GLKVector4)diffuseColour andExistingVertexCount:(GLushort)existingVertexCount{

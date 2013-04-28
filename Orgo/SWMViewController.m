@@ -82,11 +82,17 @@ const float MAX_ZOOM_OUT = -9.0;
     _materialCollection = [[SWMMaterialCollection alloc] initWithShader:_shader];
     
     SWMAtomFactory *_atomFactory = [[SWMAtomFactory alloc] init];
-    SWMModel *sphere = [_atomFactory createOxygen];
-    SWMModel *cylinder = [_atomFactory createSingleBond];
+    SWMModel *bond1 = [_atomFactory createSingleBond];
+    SWMModel *bond2 = [_atomFactory createSingleBond2];
+    SWMModel *oxygen = [_atomFactory createOxygen];
+    SWMModel *hydrogen = [_atomFactory createHydrogen];
     
-    [_materialCollection addModel:sphere];
-    [_materialCollection addModel:cylinder];
+    [_materialCollection addModel:bond1];
+    [_materialCollection addModel:bond2];
+    [_materialCollection addModel:oxygen];
+    [_materialCollection addModel:hydrogen];
+    
+    
     [_materialCollection setupGL];
 }
 

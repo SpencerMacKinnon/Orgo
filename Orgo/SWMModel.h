@@ -35,9 +35,6 @@
 - (NSMutableData *)vertexData;
 - (NSMutableData *)indexData;
 - (void)resetOrientation;
-- (void)setTranslationVectorX:(float)transX;
-- (void)setTranslationVectorY:(float)transY;
-- (void)setTranslationVectorZ:(float)transZ;
 - (void)touchAtPoint:(CGPoint)location withViewBounds:(CGRect)viewBounds;
 - (void)touchesMoved:(CGPoint)location withViewBounds:(CGRect)viewBounds;
 
