@@ -10,7 +10,7 @@
 #import <GLKit/GLKit.h>
 
 #import "SWMBitmapLoader.h"
-#import "SWMMatrix.h"
+#import "SWMObjectTransformation.h"
 #import "SWMVertexData.h"
 
 @interface SWMModel : NSObject
@@ -20,7 +20,7 @@
     GLKVector4 _diffuseLightColour;
     
     SWMVertexData *_vertexArray;
-    SWMMatrix *_matrix;
+    SWMObjectTransformation *_matrix;
 }
 
 @property GLKMatrix4 modelViewProjectionMatrix;
@@ -28,7 +28,7 @@
 @property GLKVector3 rotationVector, translationVector;
 @property GLKVector4 diffuseLightColour;
 
-- (id)initWithModelGenerator:(SWMVertexData *)modelGenerator andTransformation:(SWMMatrix *)transformation;
+- (id)initWithModelGenerator:(SWMVertexData *)modelGenerator andTransformation:(SWMObjectTransformation *)transformation;
 - (int)numberOfVertices;
 - (int)numberOfIndices;
 - (GLKMatrix4)objectTransformWithTimeSinceLastUpdate:(NSTimeInterval)timeSinceLastUpdate;

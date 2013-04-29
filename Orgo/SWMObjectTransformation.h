@@ -1,5 +1,5 @@
 //
-//  SWMMatrix.h
+//  SWMObjectTransformation.h
 //  Orgo
 //
 //  Created by Spencer MacKinnon on 3/23/13.
@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <GLKit/GLKit.h>
 
-@interface SWMMatrix : NSObject {
+@interface SWMObjectTransformation : NSObject {
     float _rotation;
     GLKVector3 _anchorPosition;
     GLKVector3 _currentPosition;

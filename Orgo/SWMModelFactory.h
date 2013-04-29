@@ -15,6 +15,6 @@
 
 - (SWMModel *)createSphereWithRecursionLevel:(int)recursionLevel withColour:(GLKVector4)colour;
 - (SWMModel *)createCylinderWithSlices:(int)slices withColour:(GLKVector4)colour;
-- (SWMModel *)addModelWithModelGen:(SWMVertexData *)modelGen andTransformation:(SWMMatrix *)transformation;
+- (SWMModel *)addModelWithModelGen:(SWMVertexData *)modelGen andTransformation:(SWMObjectTransformation *)transformation;
 
 @end

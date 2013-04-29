@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "SWMModel.h"
 #import "SWMShader.h"
+#import "SWMGraph.h"
 
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
 

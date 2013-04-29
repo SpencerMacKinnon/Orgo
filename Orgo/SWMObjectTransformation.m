@@ -1,14 +1,14 @@
 //
-//  SWMMatrix.m
+//  SWMObjectTransformation.m
 //  Orgo
 //
 //  Created by Spencer MacKinnon on 3/23/13.
 //  Copyright (c) 2013 Spencer MacKinnon. All rights reserved.
 //
 
-#import "SWMMatrix.h"
+#import "SWMObjectTransformation.h"
 
-@implementation SWMMatrix
+@implementation SWMObjectTransformation
 // They go row and then column
 // 0  4  8  12      1 0 0 0
 // 1  5  9  13      0 1 0 0

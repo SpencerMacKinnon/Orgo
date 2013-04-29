@@ -27,17 +27,17 @@
 
 - (SWMModel *)createSphereWithRecursionLevel:(int)recursionLevel withColour:(GLKVector4)colour {
     SWMVertexData *modelGen = [[SWMVertexData alloc] initSphereWithRecursionLevel:recursionLevel andColour:colour andExistingVertexCount:currentVertexCount];
-    SWMMatrix *transformation = [[SWMMatrix alloc] init];
+    SWMObjectTransformation *transformation = [[SWMObjectTransformation alloc] init];
     return [self addModelWithModelGen:modelGen andTransformation:transformation];
 }
 
 - (SWMModel *)createCylinderWithSlices:(int)slices withColour:(GLKVector4)colour {
     SWMVertexData *modelGen = [[SWMVertexData alloc] initCylinderWithSlices:slices andColour:colour andExistingVertexCount:currentVertexCount];
-    SWMMatrix *transformation = [[SWMMatrix alloc] init];
+    SWMObjectTransformation *transformation = [[SWMObjectTransformation alloc] init];
     return [self addModelWithModelGen:modelGen andTransformation:transformation];
 }
 
-- (SWMModel *)addModelWithModelGen:(SWMVertexData *)modelGen andTransformation:(SWMMatrix *)transformation {
+- (SWMModel *)addModelWithModelGen:(SWMVertexData *)modelGen andTransformation:(SWMObjectTransformation *)transformation {
     SWMModel *model = [[SWMModel alloc] initWithModelGenerator:modelGen andTransformation:transformation];
     currentVertexCount += [model numberOfVertices];
     return model;

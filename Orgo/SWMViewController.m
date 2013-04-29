@@ -78,6 +78,9 @@ const float MAX_ZOOM_OUT = -9.0;
     
     glEnable(GL_DEPTH_TEST);
     
+    _compoundGraph = [[SWMCompoundGraph alloc] initWithNumberOfVertices:3];
+    
+    
     SWMShader *_shader = [[SWMShader alloc] init];
     _materialCollection = [[SWMMaterialCollection alloc] initWithShader:_shader];
     
