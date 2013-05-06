@@ -16,6 +16,11 @@ typedef struct {
     float _diffuseColour[4];
 } SWMVertex1P1D;
 
+typedef struct {
+    float _position[3];
+    float _normal[3];
+} SWMVertex1P1N;
+
 typedef struct  {
     float _position[3];
     float _normal[3];
@@ -42,6 +47,7 @@ typedef enum {
 
 typedef enum {
     SWM_1P1D,
+    SWM_1P1N,
     SWM_P1N1D1UV,
     SWM_1P1N1D1S2UV4J
 } SWM_VERTEX_TYPE;

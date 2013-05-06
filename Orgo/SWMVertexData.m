@@ -82,22 +82,22 @@
     return self;
 }
 
-- (id)initCylinderWithSlices:(int) slices andColour:(GLKVector4)diffuseColour andExistingVertexCount:(GLushort)existingVertexCount{
+- (id)initCylinderWithSlices:(int) slices andExistingVertexCount:(GLushort)existingVertexCount{
     self = [super init];
     if (self) {
         _existingVertexCount = existingVertexCount;
         _indexType = GLU_SHORT;
-        _vertexType = SWM_1P1D;
+        _vertexType = SWM_1P1N;
         _middlePointDictionary = [[NSMutableDictionary alloc] init];
         _vertices = [[NSMutableArray alloc] init];
         _vertexIndices = [[NSMutableArray alloc] init];
-        [self generateCylinderWithSlices:slices withColour:diffuseColour];
+        [self generateCylinderWithSlices:slices];
     }
     
     return self;
 }
 
-- (void)generateCylinderWithSlices:(int)slices withColour:(GLKVector4)diffuseColour {
+- (void)generateCylinderWithSlices:(int)slices{
     
     float decreasePerSlice = 1.0 / slices;
     float currentSliceLevel = 1.0;
@@ -110,20 +110,20 @@
     for (currentSliceLevel = 1.0; currentSliceLevel >= -1.0; currentSliceLevel -= decreasePerSlice) {
         for (currentRadians = 0; currentRadians <= (2 * M_PI); currentRadians += sliceStepRadians) {
             
-            SWMVertex1P1D vertex =
+            SWMVertex1P1N vertex =
             {
                 {cosf(currentRadians), currentSliceLevel, sinf(currentRadians)},
-                {diffuseColour.x, diffuseColour.y, diffuseColour.z, diffuseColour.w}
+                {cosf(currentRadians), currentSliceLevel, sinf(currentRadians)}
             };
             
-            [_vertexData appendBytes:&vertex length:sizeof(SWMVertex1P1D)];
+            NSLog(@"%f %f %f", vertex._normal[0], vertex._normal[1], vertex._normal[2]);
+            
+            [_vertexData appendBytes:&vertex length:sizeof(SWMVertex1P1N)];
             _numberOfVertices++;
         }
     }
     
     _indexData = [[NSMutableData alloc] init];
-
-    NSLog(@"%d", _existingVertexCount);
     
     for (int i = 0; i <= slices; i++) {
         for (int j = 0; j < trianglesInSlice; j++) {
@@ -132,8 +132,6 @@
             GLushort b = ((j + 1)  % trianglesInSlice) + (i * trianglesInSlice) + _existingVertexCount;
             GLushort c = (j % trianglesInSlice) + ((i + 1) * trianglesInSlice) + _existingVertexCount;
             GLushort d = ((j + 1) % trianglesInSlice) + ((i + 1) * trianglesInSlice)  + _existingVertexCount;
-            
-            NSLog(@"%d %d %d %d",a,b,c,d);
             
             [_indexData appendBytes:&a length:sizeof(GLushort)];
             [_indexData appendBytes:&b length:sizeof(GLushort)];
@@ -148,7 +146,7 @@
     _numberOfIndices = [_indexData length] / sizeof(GLushort);
 }
 
-- (id)initSphereWithRecursionLevel:(int) recursionLevel andColour:(GLKVector4)diffuseColour andExistingVertexCount:(GLushort)existingVertexCount{
+- (id)initSphereWithRecursionLevel:(int)recursionLevel andExistingVertexCount:(GLushort)existingVertexCount{
     self = [super init];
     if (self) {
         // golden ratio
@@ -156,17 +154,17 @@
         _existingVertexCount = existingVertexCount;
         index = 0;
         _indexType = GLU_SHORT;
-        _vertexType = SWM_1P1D;
+        _vertexType = SWM_1P1N;
         _middlePointDictionary = [[NSMutableDictionary alloc] init];
         _vertices = [[NSMutableArray alloc] init];
         _vertexIndices = [[NSMutableArray alloc] init];
-        [self generateSphereWithRecursionLevel:recursionLevel withColour:diffuseColour];
+        [self generateSphereWithRecursionLevel:recursionLevel];
     }
     return self;
 }
 
-- (void)generateSphereWithRecursionLevel:(int)recursionLevel withColour:(GLKVector4)diffuseColour{
-    [self populateInitialVerticesAndIndicesForIcosahedronWithDifuseColour:diffuseColour];
+- (void)generateSphereWithRecursionLevel:(int)recursionLevel {
+    [self populateInitialVerticesAndIndicesForIcosahedron];
     
     for (int i = 0; i < recursionLevel; i++) {
         NSMutableArray *newVertexIndices = [[NSMutableArray alloc] init];
@@ -204,12 +202,12 @@
     }
     
     _numberOfVertices = [_vertices count];
-    _vertexData = [[NSMutableData alloc] initWithCapacity:(_numberOfVertices * sizeof(SWMVertex1P1D))];
+    _vertexData = [[NSMutableData alloc] initWithCapacity:(_numberOfVertices * sizeof(SWMVertex1P1N))];
     
     for (int i = 0; i < _numberOfVertices; i++) {
-        SWMVertex1P1D vertex;
+        SWMVertex1P1N vertex;
         [[_vertices objectAtIndex:i] getValue:&vertex];
-        [_vertexData appendBytes:&vertex length:sizeof(SWMVertex1P1D)];
+        [_vertexData appendBytes:&vertex length:sizeof(SWMVertex1P1N)];
     }
     
     _numberOfIndices = [_vertexIndices count];
@@ -224,20 +222,19 @@
     }
 }
                                                            
-- (int)addVertex:(SWMVertex1P1D *)vertex{
+- (int)addVertex:(SWMVertex1P1N *)vertex{
     GLKVector3 position = GLKVector3MakeWithArray(vertex -> _position);
-    GLKVector4 diffuseColour = GLKVector4MakeWithArray(vertex -> _diffuseColour);
     
     double length = sqrt(position.x * position.x + position.y * position.y + position.z * position.z);
     GLKVector3 normalizedPosition = GLKVector3Make(position.x / length, position.y / length, position.z / length);
     
-    SWMVertex1P1D newVertex =
+    SWMVertex1P1N newVertex =
     {
         {normalizedPosition.x, normalizedPosition.y, normalizedPosition.z},
-        {diffuseColour.x, diffuseColour.y, diffuseColour.z, diffuseColour.w}
+        {normalizedPosition.x, normalizedPosition.y, normalizedPosition.z}
     };
     
-    [_vertices addObject:[NSValue value:&newVertex withObjCType:@encode(SWMVertex1P1D)]];
+    [_vertices addObject:[NSValue value:&newVertex withObjCType:@encode(SWMVertex1P1N)]];
     return index++;
 }
 
@@ -253,23 +250,20 @@
         return [shortValue unsignedShortValue];
     }
     
-    SWMVertex1P1D firstVertex;
+    SWMVertex1P1N firstVertex;
     [[_vertices objectAtIndex:p1] getValue:&firstVertex];
     GLKVector3 point1 = GLKVector3MakeWithArray(firstVertex._position);
-    GLKVector4 diffuse1 = GLKVector4MakeWithArray(firstVertex._diffuseColour);
     
-    SWMVertex1P1D secondVertex;
+    SWMVertex1P1N secondVertex;
     [[_vertices objectAtIndex:p2] getValue:&secondVertex];
     GLKVector3 point2 = GLKVector3MakeWithArray(secondVertex._position);
-    GLKVector4 diffuse2 = GLKVector4MakeWithArray(secondVertex._diffuseColour);
     
     GLKVector3 point3 = GLKVector3Make((point1.x + point2.x) / 2.0, (point1.y + point2.y) / 2.0, (point1.z + point2.z) / 2.0);
-    GLKVector4 diffuse3 = GLKVector4Make((diffuse1.x + diffuse2.x) / 2.0, (diffuse1.y + diffuse2.y) / 2.0, (diffuse1.z + diffuse2.z) / 2.0, (diffuse1.w + diffuse2.w) / 2.0);
     
-    SWMVertex1P1D thirdVertex =
+    SWMVertex1P1N thirdVertex =
     {
         {point3.x, point3.y, point3.z},
-        {diffuse3.x, diffuse3.y, diffuse3.z, diffuse3.w}
+        {point3.x, point3.y, point3.z}
     };
     
     GLushort i = [self addVertex:&thirdVertex];
@@ -278,69 +272,61 @@
     return i;
 }
 
-- (void)populateInitialVerticesAndIndicesForIcosahedronWithDifuseColour:(GLKVector4)diffuseColour{
+- (void)populateInitialVerticesAndIndicesForIcosahedron{
     
-    SWMVertex1P1D Vertices [] = {
+    SWMVertex1P1N Vertices [] = {
         //XY Face
         {
             {-1, t, 0},
-            {diffuseColour.x, diffuseColour.y, diffuseColour.z, diffuseColour.w}
-            //{0.0f, 0.0f, 1.0f, 1.0f}
+            {-1, t, 0}
         },
         {
             {1, t, 0},
-            {diffuseColour.x, diffuseColour.y, diffuseColour.z, diffuseColour.w}
+            {1, t, 0}
         },
         {
             {-1, -t, 0},
-            {diffuseColour.x, diffuseColour.y, diffuseColour.z, diffuseColour.w}
-            //{0.0f, 0.0f, 1.0f, 1.0f}
+            {-1, -t, 0}
         },
         {
             {1, -t, 0},
-            {diffuseColour.x, diffuseColour.y, diffuseColour.z, diffuseColour.w}
+            {1, -t, 0}
         },
         
         // YZ Face
         {
             {0, -1, t},
-            {diffuseColour.x, diffuseColour.y, diffuseColour.z, diffuseColour.w}
-            //{0.5f, 0.0f, 0.5f, 1.0f}
+            {0, -1, t}
         },
         {
             {0, 1, t},
-            {diffuseColour.x, diffuseColour.y, diffuseColour.z, diffuseColour.w}
-            //{0.5f, 0.0f, 0.5f, 1.0f}
+            {0, 1, t}
         },
         {
             {0, -1, -t},
-            {diffuseColour.x, diffuseColour.y, diffuseColour.z, diffuseColour.w}
-            //{0.5f, 0.0f, 0.5f, 1.0f}
+            {0, -1, -t}
         },
         {
             {0, 1, -t},
-            {diffuseColour.x, diffuseColour.y, diffuseColour.z, diffuseColour.w}
-            //{0.5f, 0.0f, 0.5f, 1.0f}
+            {0, 1, -t}
         },
         
         // XZ Face
         {
             {t, 0, -1},
-            {diffuseColour.x, diffuseColour.y, diffuseColour.z, diffuseColour.w}
+            {t, 0, -1}
         },
         {
             {t, 0, 1},
-            {diffuseColour.x, diffuseColour.y, diffuseColour.z, diffuseColour.w}
+            {t, 0, 1}
         },
         {
             {-t, 0, -1},
-            {diffuseColour.x, diffuseColour.y, diffuseColour.z, diffuseColour.w}
-            //{0.0f, 0.0f, 1.0f, 1.0f}
+            {-t, 0, -1}
         },
         {
             {-t, 0, 1},
-            {diffuseColour.x, diffuseColour.y, diffuseColour.z, diffuseColour.w}
-            //{0.0f, 0.0f, 1.0f, 1.0f}
+            {-t, 0, 1}
         }
     };
     

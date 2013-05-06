@@ -54,6 +54,24 @@
     [vertices replaceObjectAtIndex:index withObject:vertex];
 }
 
+- (void)createDirectionalEdgeFromFirstVertex:(unsigned short)firstVertex toSecondVertex:(unsigned short)secondVertex {
+    if (![self vertexPairExistsInGraph:firstVertex secondVertex:secondVertex]) {
+        return;
+    }
+    
+    adjacencyMatrix[(firstVertex * numVertices) + secondVertex] = YES;
+    numEdges++;
+}
+
+- (void)removeDirectionalEdgeFromFirstVertex:(unsigned short)firstVertex toSecondVertex:(unsigned short)secondVertex {
+    if (![self vertexPairExistsInGraph:firstVertex secondVertex:secondVertex]) {
+        return;
+    }
+    
+    adjacencyMatrix[(firstVertex * numVertices) + secondVertex] = NO;
+    numEdges--;
+}
+
 - (void)createEdgeBetweenFirstVertex:(unsigned short)firstVertex andSecondVertex:(unsigned short)secondVertex {
     if (![self vertexPairExistsInGraph:firstVertex secondVertex:secondVertex]) {
         return;
@@ -61,7 +79,7 @@
     
     adjacencyMatrix[(firstVertex * numVertices) + secondVertex] = YES;
     adjacencyMatrix[(secondVertex * numVertices) + firstVertex] = YES;
-    numEdges++;
+    numEdges += 2;
 }
 
 - (void)removeEdgeBetweenFirstVertex:(unsigned short)firstVertex andSecondVertex:(unsigned short)secondVertex {
@@ -71,7 +89,7 @@
     
     adjacencyMatrix[(firstVertex * numVertices) + secondVertex] = NO;
     adjacencyMatrix[(secondVertex * numVertices) + firstVertex] = NO;
-    numEdges--;
+    numEdges -= 2;
 }
 
 - (void)resetAdjacencyMatrix {

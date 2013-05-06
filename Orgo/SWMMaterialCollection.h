@@ -20,29 +20,23 @@
     SWMShader *_shader;
     NSMutableArray *_models;
     
-    // Uniform index.
-    enum
-    {
-        UNIFORM_MODELVIEWPROJECTION_MATRIX,
-        UNIFORM_NORMAL_MATRIX,
-        DIFFUSE_COLOR,
-        //UNIFORM_SAMPLER2D,
-        NUM_UNIFORMS
-    };
-    GLint uniforms[NUM_UNIFORMS];
+    
     
     // Attribute index.
     enum
     {
         ATTRIB_VERTEX,
         ATTRIB_NORMAL,
-        //ATTRIB_VERTEX_UV,
         NUM_ATTRIBUTES
     };
     GLint attributes[NUM_ATTRIBUTES];
+    
+    GLKVector3 lightPosition;
+    float spec;
 }
 
 @property SWMShader *shader;
+@property GLKVector3 lightColour;
 
 - (id)initWithShader:(SWMShader *)shader;
 - (void)addModel:(SWMModel *)model;

@@ -26,13 +26,13 @@
 }
 
 - (SWMModel *)createSphereWithRecursionLevel:(int)recursionLevel withColour:(GLKVector4)colour {
-    SWMVertexData *modelGen = [[SWMVertexData alloc] initSphereWithRecursionLevel:recursionLevel andColour:colour andExistingVertexCount:currentVertexCount];
+    SWMVertexData *modelGen = [[SWMVertexData alloc] initSphereWithRecursionLevel:recursionLevel andExistingVertexCount:currentVertexCount];
     SWMObjectTransformation *transformation = [[SWMObjectTransformation alloc] init];
     return [self addModelWithModelGen:modelGen andTransformation:transformation];
 }
 
 - (SWMModel *)createCylinderWithSlices:(int)slices withColour:(GLKVector4)colour {
-    SWMVertexData *modelGen = [[SWMVertexData alloc] initCylinderWithSlices:slices andColour:colour andExistingVertexCount:currentVertexCount];
+    SWMVertexData *modelGen = [[SWMVertexData alloc] initCylinderWithSlices:slices andExistingVertexCount:currentVertexCount];
     SWMObjectTransformation *transformation = [[SWMObjectTransformation alloc] init];
     return [self addModelWithModelGen:modelGen andTransformation:transformation];
 }

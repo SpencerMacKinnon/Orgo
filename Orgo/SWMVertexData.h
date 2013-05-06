@@ -17,7 +17,7 @@
 }
 
 - (id)initCube;
-- (id)initSphereWithRecursionLevel:(int) recursionLevel andColour:(GLKVector4)diffuseColour andExistingVertexCount:(GLushort)existingVertexCount;
-- (id)initCylinderWithSlices:(int) slices andColour:(GLKVector4)diffuseColour andExistingVertexCount:(GLushort)existingVertexCount;
+- (id)initSphereWithRecursionLevel:(int)recursionLevel andExistingVertexCount:(GLushort)existingVertexCount;
+- (id)initCylinderWithSlices:(int)slices andExistingVertexCount:(GLushort)existingVertexCount;
 
 @end

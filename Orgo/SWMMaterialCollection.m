@@ -8,7 +8,34 @@
 
 #import "SWMMaterialCollection.h"
 
+// Uniform index.
+enum
+{
+    MatrixMVP,
+    MatrixNormal,
+    VectorDiffuseColour,
+    VectorCameraPosition,
+    VectorLightDirection,
+    VectorLightColour,
+    FloatSpecular,
+    NumUniforms
+};
+
+GLint uniforms[NumUniforms];
+
+const char* uniformNames[NumUniforms] = {
+    "u_mvp",
+    "u_normal",
+    "u_diffusecolour",
+    "u_cameraposition",
+    "u_lightdirection",
+    "u_lightcolour",
+    "u_specular",
+};
+
 @implementation SWMMaterialCollection
+
+@synthesize lightColour;
 
 - (id)initWithShader:(SWMShader *)shader{
     self = [super init];
@@ -16,6 +43,9 @@
         _shader = shader;
         [self loadShaders];
         _models = [[NSMutableArray alloc] init];
+        [self setLightPosition:GLKVector3Make(0.0f, 0.0f, -1.0f)];
+        [self setLightColour:GLKVector3Make(0.0f, 1.0f, 0.0f)];
+        spec = 64.0f;
     }
     
     return self;
@@ -32,9 +62,9 @@
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
     
     for (SWMModel *model in _models) {
-        glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, [model modelViewProjectionMatrix].m);
-        glUniformMatrix3fv(uniforms[UNIFORM_NORMAL_MATRIX], 1, 0, [model normalMatrix].m);
-        glUniform4fv(uniforms[DIFFUSE_COLOR], 1, [model diffuseLightColour].v);
+        glUniformMatrix4fv(uniforms[MatrixMVP], 1, 0, [model modelViewProjectionMatrix].m);
+        glUniformMatrix3fv(uniforms[MatrixNormal], 1, 0, [model normalMatrix].m);
+        glUniform4fv(uniforms[VectorDiffuseColour], 1, [model diffuseLightColour].v);
         
         int numberOfIndices = [model numberOfIndices];
         glDrawElements(GL_TRIANGLES, numberOfIndices, GL_UNSIGNED_SHORT, (GLvoid*)(sizeof(GLushort) * offset));
@@ -45,9 +75,13 @@
 }
 
 - (BOOL)loadShaders{
-    uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX] = glGetUniformLocation([_shader program], "modelViewProjectionMatrix");
-    uniforms[UNIFORM_NORMAL_MATRIX] = glGetUniformLocation([_shader program], "normalMatrix");
-    uniforms[DIFFUSE_COLOR] = glGetUniformLocation([_shader program], "diffuseColour");
+    uniforms[MatrixMVP] = glGetUniformLocation([_shader program], uniformNames[MatrixMVP]);
+    uniforms[MatrixNormal] = glGetUniformLocation([_shader program], uniformNames[MatrixNormal]);
+    uniforms[VectorDiffuseColour] = glGetUniformLocation([_shader program], uniformNames[VectorDiffuseColour]);
+    uniforms[VectorCameraPosition] = glGetUniformLocation([_shader program], uniformNames[VectorCameraPosition]);
+    uniforms[VectorLightDirection] = glGetUniformLocation([_shader program], uniformNames[VectorLightDirection]);
+    uniforms[VectorLightColour] = glGetUniformLocation([_shader program], uniformNames[VectorLightColour]);
+    uniforms[FloatSpecular] = glGetUniformLocation([_shader program], uniformNames[FloatSpecular]);
     
     return YES;
 }
@@ -83,10 +117,15 @@
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, [indexData length], [indexData mutableBytes], GL_STATIC_DRAW);
     
     glEnableVertexAttribArray(GLKVertexAttribPosition);
-    glVertexAttribPointer(GLKVertexAttribPosition, 3, GL_FLOAT, GL_FALSE, sizeof(SWMVertex1P1D), BUFFER_OFFSET(0));
+    glVertexAttribPointer(GLKVertexAttribPosition, 3, GL_FLOAT, GL_FALSE, sizeof(SWMVertex1P1N), BUFFER_OFFSET(0));
     
-    glEnableVertexAttribArray(GLKVertexAttribColor);
-    glVertexAttribPointer(GLKVertexAttribColor, 4, GL_FLOAT, GL_FALSE, sizeof(SWMVertex1P1D), BUFFER_OFFSET(12));
+    glEnableVertexAttribArray(GLKVertexAttribNormal);
+    glVertexAttribPointer(GLKVertexAttribNormal, 3, GL_FLOAT, GL_FALSE, sizeof(SWMVertex1P1N), BUFFER_OFFSET(12));
+    
+    glUniform4f(uniforms[VectorCameraPosition], 0.0f, 0.0f, 0.0f, 1.0f);
+    glUniform4fv(uniforms[VectorLightDirection], 1, lightPosition.v);
+    glUniform4fv(uniforms[VectorLightColour], 1, lightColour.v);
+    glUniform1f(uniforms[FloatSpecular], spec);
     
     glBindVertexArrayOES(0);
 }
@@ -121,6 +160,10 @@
 
 - (void)addModel:(SWMModel *)model {
     [_models addObject:model];
+}
+
+- (void)setLightPosition:(GLKVector3)lightPos {
+    lightPosition = GLKVector3Normalize(lightPos);
 }
 
 @end
