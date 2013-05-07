@@ -85,6 +85,12 @@ const float MAX_ZOOM_OUT = -9.0;
     _materialCollection = [[SWMMaterialCollection alloc] initWithShader:_shader];
     
     SWMAtomFactory *_atomFactory = [[SWMAtomFactory alloc] init];
+    SWMVertexData *sphere = [_atomFactory createSphereVerticesWithRecursionLevel:2];
+    SWMVertexData *cylinder = [_atomFactory createCylinderVerticesWithSlices:2];
+    
+    [_materialCollection addVertexData:sphere];
+    [_materialCollection addVertexData:cylinder];
+    
     SWMModel *bond1 = [_atomFactory createSingleBond];
     SWMModel *bond2 = [_atomFactory createSingleBond2];
     SWMModel *oxygen = [_atomFactory createOxygen];

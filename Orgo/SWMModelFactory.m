@@ -9,7 +9,7 @@
 #import "SWMModelFactory.h"
 
 @interface SWMModelFactory()
-@property (nonatomic, readwrite) unsigned int currentVertexCount;
+@property (nonatomic, readwrite) unsigned int currentVertexCount, currentIndexCount;
 @end
 
 @implementation SWMModelFactory
@@ -20,27 +20,33 @@
     self = [super init];
     if (self) {
         currentVertexCount = 0;
+        _currentIndexCount = 0;
     }
     
     return self;
 }
 
-- (SWMModel *)createSphereWithRecursionLevel:(int)recursionLevel withColour:(GLKVector4)colour {
-    SWMVertexData *modelGen = [[SWMVertexData alloc] initSphereWithRecursionLevel:recursionLevel andExistingVertexCount:currentVertexCount];
-    SWMObjectTransformation *transformation = [[SWMObjectTransformation alloc] init];
-    return [self addModelWithModelGen:modelGen andTransformation:transformation];
+- (SWMVertexData *)createSphereVerticesWithRecursionLevel:(int)recursionLevel {
+    SWMVertexData *vertexGen = [[SWMVertexData alloc] initSphereWithRecursionLevel:recursionLevel
+                                                          withExistingVertexCount:currentVertexCount
+                                                                        andOffset:_currentIndexCount];
+    [vertexGen setVertexSetName:@"SPHERE"];
+    return [self returnVertexData:vertexGen];
 }
 
-- (SWMModel *)createCylinderWithSlices:(int)slices withColour:(GLKVector4)colour {
-    SWMVertexData *modelGen = [[SWMVertexData alloc] initCylinderWithSlices:slices andExistingVertexCount:currentVertexCount];
-    SWMObjectTransformation *transformation = [[SWMObjectTransformation alloc] init];
-    return [self addModelWithModelGen:modelGen andTransformation:transformation];
+- (SWMVertexData *)createCylinderVerticesWithSlices:(int)slices {
+    SWMVertexData *vertexGen = [[SWMVertexData alloc] initCylinderWithSlices:slices
+                                                    withExistingVertexCount:currentVertexCount
+                                                                  andOffset:_currentIndexCount];
+    [vertexGen setVertexSetName:@"CYLINDER"];
+    return [self returnVertexData:vertexGen];
 }
 
-- (SWMModel *)addModelWithModelGen:(SWMVertexData *)modelGen andTransformation:(SWMObjectTransformation *)transformation {
-    SWMModel *model = [[SWMModel alloc] initWithModelGenerator:modelGen andTransformation:transformation];
-    currentVertexCount += [model numberOfVertices];
-    return model;
+- (SWMVertexData *)returnVertexData:(SWMVertexData *)vertexData {
+    currentVertexCount += [vertexData numberOfVertices];
+    _currentIndexCount += [vertexData numberOfIndices];
+    
+    return vertexData;
 }
 
 @end

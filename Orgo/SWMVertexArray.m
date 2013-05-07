@@ -10,18 +10,22 @@
 
 @implementation SWMVertexArray
 
-@synthesize numberOfIndices = _numberOfIndices;
-@synthesize numberOfVertices = _numberOfVertices;
-@synthesize indexData = _indexData;
-@synthesize vertexData = _vertexData;
+@synthesize numberOfIndices;
+@synthesize numberOfVertices;
+@synthesize indexData;
+@synthesize vertexData;
+@synthesize vertexSetName;
+@synthesize offset;
 
 - (id)init{
     self = [super init];
     if (self) {
-        _vertexData = [[NSMutableData alloc] init];
-        _numberOfVertices = 0;
-        _indexData = [[NSMutableData alloc] init];
-        _numberOfIndices = 0;
+        self.vertexData = [[NSMutableData alloc] init];
+        self.numberOfVertices = 0;
+        self.indexData = [[NSMutableData alloc] init];
+        self.numberOfIndices = 0;
+        self.offset = 0;
+        self.vertexSetName = [NSString stringWithFormat:@""];
     }
     
     return self;

@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "SWMModel.h"
 #import "SWMShader.h"
+#import "SWMVertexData.h"
 #import "SWMGraph.h"
 
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
@@ -19,17 +20,7 @@
     
     SWMShader *_shader;
     NSMutableArray *_models;
-    
-    
-    
-    // Attribute index.
-    enum
-    {
-        ATTRIB_VERTEX,
-        ATTRIB_NORMAL,
-        NUM_ATTRIBUTES
-    };
-    GLint attributes[NUM_ATTRIBUTES];
+    NSMutableDictionary *_vertexSets;
     
     GLKVector3 lightPosition;
     float spec;
@@ -40,6 +31,7 @@
 
 - (id)initWithShader:(SWMShader *)shader;
 - (void)addModel:(SWMModel *)model;
+- (void)addVertexData:(SWMVertexData *)vertexData;
 
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect;
 - (BOOL)loadShaders;

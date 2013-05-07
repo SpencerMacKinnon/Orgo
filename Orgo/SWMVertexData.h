@@ -16,8 +16,8 @@
     NSMutableDictionary *_middlePointDictionary;
 }
 
-- (id)initCube;
-- (id)initSphereWithRecursionLevel:(int)recursionLevel andExistingVertexCount:(GLushort)existingVertexCount;
-- (id)initCylinderWithSlices:(int)slices andExistingVertexCount:(GLushort)existingVertexCount;
+//- (id)initCube;
+- (id)initSphereWithRecursionLevel:(int)recursionLevel withExistingVertexCount:(GLushort)existingVertexCount andOffset:(GLuint)offset;
+- (id)initCylinderWithSlices:(int)slices withExistingVertexCount:(GLushort)existingVertexCount andOffset:(GLuint)offset;
 
 @end

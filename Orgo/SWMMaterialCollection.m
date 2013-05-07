@@ -40,7 +40,9 @@ const char* uniformNames[NumUniforms] = {
     if (self) {
         _shader = shader;
         [self loadShaders];
+        
         _models = [[NSMutableArray alloc] init];
+        _vertexSets = [[NSMutableDictionary alloc] init];
         [self setLightPosition:GLKVector3Make(0.0f, 0.5f, 7.0f)];
         [self setLightColour:GLKVector3Make(1.0f, 1.0f, 1.0f)];
         spec = 64.0f;
@@ -53,8 +55,6 @@ const char* uniformNames[NumUniforms] = {
     
     glBindVertexArrayOES(_vertexArray);
     
-    GLuint offset = 0;
-    
     glUseProgram([_shader program]);
     glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
@@ -64,12 +64,20 @@ const char* uniformNames[NumUniforms] = {
         glUniformMatrix3fv(uniforms[MatrixNormal], 1, 0, [model normalMatrix].m);
         glUniform4fv(uniforms[VectorDiffuseColour], 1, [model diffuseLightColour].v);
         
-        int numberOfIndices = [model numberOfIndices];
-        glDrawElements(GL_TRIANGLES, numberOfIndices, GL_UNSIGNED_SHORT, (GLvoid*)(sizeof(GLushort) * offset));
-        offset += numberOfIndices;
+        [self drawVerticesForModelName:[model vertexSetName]];
     }
     
     glBindVertexArrayOES(0);
+}
+
+- (BOOL)drawVerticesForModelName:(NSString *)modelName {
+    if ([_vertexSets valueForKey:modelName]) {
+        SWMVertexData *vertexData = [_vertexSets valueForKey:modelName];
+        glDrawElements(GL_TRIANGLES, [vertexData numberOfIndices], GL_UNSIGNED_SHORT, (GLvoid*)(sizeof(GLushort) * [vertexData offset]));
+        return YES;
+    }
+    
+    return NO;
 }
 
 - (BOOL)loadShaders{
@@ -94,12 +102,15 @@ const char* uniformNames[NumUniforms] = {
 }
 
 - (void)setupGL{
-    NSMutableData *vertexData = [[NSMutableData alloc] init];
-    NSMutableData *indexData = [[NSMutableData alloc] init];
+    NSMutableData *vertexSetData = [[NSMutableData alloc] init];
+    NSMutableData *indexSetData = [[NSMutableData alloc] init];
     
-    for (SWMModel *model in _models) {
-        [vertexData appendBytes:[[model vertexData] mutableBytes] length:[[model vertexData] length]];
-        [indexData appendBytes:[[model indexData] mutableBytes] length:[[model indexData] length]];
+    NSEnumerator *dictionaryEnumerator = [_vertexSets objectEnumerator];
+    SWMVertexData *modelVertices;
+    
+    while ((modelVertices = [dictionaryEnumerator nextObject])) {
+        [vertexSetData appendBytes:[[modelVertices vertexData] mutableBytes] length:[[modelVertices vertexData] length]];
+        [indexSetData appendBytes:[[modelVertices indexData] mutableBytes] length:[[modelVertices indexData] length]];
     }
 
     glGenVertexArraysOES(1, &_vertexArray);
@@ -107,11 +118,11 @@ const char* uniformNames[NumUniforms] = {
     
     glGenBuffers(1, &_vertexBuffer);
     glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
-    glBufferData(GL_ARRAY_BUFFER, [vertexData length], [vertexData mutableBytes], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, [vertexSetData length], [vertexSetData mutableBytes], GL_STATIC_DRAW);
     
     glGenBuffers(1, &_indexBuffer);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, [indexData length], [indexData mutableBytes], GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, [indexSetData length], [indexSetData mutableBytes], GL_STATIC_DRAW);
     
     glEnableVertexAttribArray(GLKVertexAttribPosition);
     glVertexAttribPointer(GLKVertexAttribPosition, 3, GL_FLOAT, GL_FALSE, sizeof(SWMVertex1P1N), BUFFER_OFFSET(0));
@@ -155,12 +166,16 @@ const char* uniformNames[NumUniforms] = {
     }
 }
 
+- (void)setLightPosition:(GLKVector3)lightPos {
+    lightPosition = lightPos;
+}
+
 - (void)addModel:(SWMModel *)model {
     [_models addObject:model];
 }
 
-- (void)setLightPosition:(GLKVector3)lightPos {
-    lightPosition = lightPos;//GLKVector3Normalize(lightPos);
+- (void)addVertexData:(SWMVertexData *)vertexData {
+    [_vertexSets setValue:vertexData forKey:[vertexData vertexSetName]];
 }
 
 @end

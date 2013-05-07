@@ -8,13 +8,13 @@
 
 #import <Foundation/Foundation.h>
 #import "SWMModel.h"
+#import "SWMVertexData.h"
 
 @interface SWMModelFactory : NSObject
 
-@property (nonatomic, readonly) unsigned int currentVertexCount;
+@property (nonatomic, readonly) unsigned int currentVertexCount, currentIndexCount;
 
-- (SWMModel *)createSphereWithRecursionLevel:(int)recursionLevel withColour:(GLKVector4)colour;
-- (SWMModel *)createCylinderWithSlices:(int)slices withColour:(GLKVector4)colour;
-- (SWMModel *)addModelWithModelGen:(SWMVertexData *)modelGen andTransformation:(SWMObjectTransformation *)transformation;
+- (SWMVertexData *)createSphereVerticesWithRecursionLevel:(int)recursionLevel;
+- (SWMVertexData *)createCylinderVerticesWithSlices:(int)slices;
 
 @end

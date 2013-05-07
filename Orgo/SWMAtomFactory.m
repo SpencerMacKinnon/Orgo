@@ -14,60 +14,50 @@
 @implementation SWMAtomFactory
 
 - (SWMModel *)createOxygen {
-    SWMVertexData *modelGen = [[SWMVertexData alloc]
-                               initSphereWithRecursionLevel:2                               andExistingVertexCount:[super currentVertexCount]];
-    
     SWMObjectTransformation *transformation = [[SWMObjectTransformation alloc] init];
     [transformation setScalingVector:GLKVector3Make(0.75f, 0.75f, 0.75f)];
     
-    SWMModel *oxygen = [super addModelWithModelGen:modelGen andTransformation:transformation];
+    SWMModel *oxygen = [[SWMModel alloc] initWithTransformation:transformation];
     [oxygen setDiffuseLightColour:GLKVector4Make(1.0f, 0.0f, 0.0f, 1.0f)];
+    [oxygen setVertexSetName:@"SPHERE"];
     
     return oxygen;
 }
 
 - (SWMModel *)createHydrogen {
-    SWMVertexData *modelGen = [[SWMVertexData alloc]
-                               initSphereWithRecursionLevel:2
-                               andExistingVertexCount:[super currentVertexCount]];
-    
     SWMObjectTransformation *transformation = [[SWMObjectTransformation alloc] init];
     [transformation setScalingVector:GLKVector3Make(0.5f, 0.5f, 0.5f)];
     [transformation setTranslationVector:GLKVector3Make(0.0f, -2.0f, -6.0f)];
     
-    SWMModel *hydrogen = [super addModelWithModelGen:modelGen andTransformation:transformation];
+    SWMModel *hydrogen = [[SWMModel alloc] initWithTransformation:transformation];;
     [hydrogen setDiffuseLightColour:GLKVector4Make(1.0f, 1.0f, 1.0f, 1.0f)];
+    [hydrogen setVertexSetName:@"SPHERE"];
+    
     return hydrogen;
 }
 
 - (SWMModel *)createSingleBond {
-    SWMVertexData *modelGen = [[SWMVertexData alloc]
-                               initCylinderWithSlices:1
-                               andExistingVertexCount:[super currentVertexCount]];
-    
     SWMObjectTransformation *transformation = [[SWMObjectTransformation alloc] init];
     [transformation setScalingVector:GLKVector3Make(0.2f, 1.0f, 0.2f)];
     [transformation setQuat:GLKQuaternionMakeWithAngleAndAxis(DEGREES_TO_RADIANS(215), 0.0f, 0.0f, 1.0f)];
     [transformation setTranslationVector:GLKVector3Make(1.0f, -1.0f, -6.0f)];
     
-    SWMModel *singleBond = [super addModelWithModelGen:modelGen andTransformation:transformation];
+    SWMModel *singleBond = [[SWMModel alloc] initWithTransformation:transformation];
     [singleBond setDiffuseLightColour:GLKVector4Make(0.0f, 0.0f, 0.0f, 1.0f)];
+    [singleBond setVertexSetName:@"CYLINDER"];
     
     return singleBond;
 }
 
 - (SWMModel *)createSingleBond2 {
-    SWMVertexData *modelGen = [[SWMVertexData alloc]
-                               initCylinderWithSlices:1
-                               andExistingVertexCount:[super currentVertexCount]];
-    
     SWMObjectTransformation *transformation = [[SWMObjectTransformation alloc] init];
     [transformation setScalingVector:GLKVector3Make(0.2f, 1.0f, 0.2f)];
     [transformation setQuat:GLKQuaternionMakeWithAngleAndAxis(DEGREES_TO_RADIANS(135), 0.0f, 0.0f, 1.0f)];
     [transformation setTranslationVector:GLKVector3Make(-1.0f, -1.0f, -6.0f)];
     
-    SWMModel *singleBond = [super addModelWithModelGen:modelGen andTransformation:transformation];
+    SWMModel *singleBond = [[SWMModel alloc] initWithTransformation:transformation];
     [singleBond setDiffuseLightColour:GLKVector4Make(0.0f, 0.0f, 0.0f, 1.0f)];
+    [singleBond setVertexSetName:@"CYLINDER"];
     
     return singleBond;
 }

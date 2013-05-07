@@ -9,18 +9,16 @@
 #import <Foundation/Foundation.h>
 #import <GLKit/GLKit.h>
 #import "SWMVertex.h"
-#define TEX_COORD_MAX 1
 
 @interface SWMVertexArray : NSObject {
-    unsigned int _numberOfIndices, _numberOfVertices;
-    NSMutableData *_indexData, *_vertexData;
     GLU_INDEX_TYPE _indexType;
     SWM_VERTEX_TYPE _vertexType;
-    
 }
 
-@property (readonly) unsigned int  numberOfIndices, numberOfVertices;
-@property (readonly) NSMutableData *indexData, *vertexData;
+@property (readwrite) GLuint offset;
+@property (readwrite) unsigned int  numberOfIndices, numberOfVertices;
+@property (readwrite) NSMutableData *indexData, *vertexData;
+@property (readwrite) NSString *vertexSetName;
 
 -(GLU_INDEX_TYPE)getIndexType;
 -(SWM_VERTEX_TYPE)getVertexType;

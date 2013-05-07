@@ -15,31 +15,14 @@
 @synthesize rotationVector = _rotationVector;
 @synthesize translationVector = _translationVector;
 
-- (id)initWithModelGenerator:(SWMVertexData *)modelGenerator andTransformation:(SWMObjectTransformation *)transformation{
+- (id)initWithTransformation:(SWMObjectTransformation *)transformation{
     self = [super init];
     if (self){
-        _vertexArray = modelGenerator;
-        _diffuseLightColour = GLKVector4Make(1.0, 1.0, 1.0, 0.5);
+        _diffuseLightColour = GLKVector4Make(1.0, 1.0, 1.0, 1.0);
         _matrix = transformation;
     }
     
     return self;
-}
-
-- (NSMutableData *)vertexData{
-    return [_vertexArray vertexData];
-}
-
-- (NSMutableData *)indexData{
-    return [_vertexArray indexData];
-}
-
-- (int)numberOfVertices {
-    return [_vertexArray numberOfVertices];
-}
-
-- (int)numberOfIndices {
-    return [_vertexArray numberOfIndices];
 }
 
 - (GLKMatrix4)objectTransformWithTimeSinceLastUpdate:(NSTimeInterval)timeSinceLastUpdate {

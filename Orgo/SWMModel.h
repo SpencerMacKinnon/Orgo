@@ -11,7 +11,6 @@
 
 #import "SWMBitmapLoader.h"
 #import "SWMObjectTransformation.h"
-#import "SWMVertexData.h"
 
 @interface SWMModel : NSObject
 {
@@ -19,7 +18,6 @@
     GLKMatrix4 _modelViewProjectionMatrix;
     GLKVector4 _diffuseLightColour;
     
-    SWMVertexData *_vertexArray;
     SWMObjectTransformation *_matrix;
 }
 
@@ -27,13 +25,10 @@
 @property GLKMatrix3 normalMatrix;
 @property GLKVector3 rotationVector, translationVector;
 @property GLKVector4 diffuseLightColour;
+@property NSString *vertexSetName;
 
-- (id)initWithModelGenerator:(SWMVertexData *)modelGenerator andTransformation:(SWMObjectTransformation *)transformation;
-- (int)numberOfVertices;
-- (int)numberOfIndices;
+- (id)initWithTransformation:(SWMObjectTransformation *)transformation;
 - (GLKMatrix4)objectTransformWithTimeSinceLastUpdate:(NSTimeInterval)timeSinceLastUpdate;
-- (NSMutableData *)vertexData;
-- (NSMutableData *)indexData;
 - (void)resetOrientation;
 - (void)touchAtPoint:(CGPoint)location withViewBounds:(CGRect)viewBounds;
 - (void)touchesMoved:(CGPoint)location withViewBounds:(CGRect)viewBounds;

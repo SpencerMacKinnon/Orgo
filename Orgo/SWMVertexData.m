@@ -10,87 +10,90 @@
 
 @implementation SWMVertexData
 
-- (id)initCube{
-    self = [super init];
-    
-    if (self) {
-        
-        const SWMVertex1P1N1D1UV Vertices[] = {
-            // Front
-            {{1, -1, 1}, {0, 0, 1}, {1, 0, 0, 1}, {TEX_COORD_MAX, 0}},
-            {{1, 1, 1}, {0, 0, 1}, {0, 1, 0, 1}, {TEX_COORD_MAX, TEX_COORD_MAX}},
-            {{-1, 1, 1}, {0, 0, 1}, {0, 0, 1, 1}, {0, TEX_COORD_MAX}},
-            {{-1, -1, 1}, {0, 0, 1}, {0, 0, 0, 1}, {0, 0}},
-            // Back
-            {{1, 1, -1}, {0, 0, -1}, {1, 0, 0, 1}, {TEX_COORD_MAX, 0}},
-            {{-1, -1, -1}, {0, 0, -1}, {0, 1, 0, 1}, {TEX_COORD_MAX, TEX_COORD_MAX}},
-            {{1, -1, -1}, {0, 0, -1}, {0, 0, 1, 1}, {0, TEX_COORD_MAX}},
-            {{-1, 1, -1}, {0, 0, -1}, {0, 0, 0, 1}, {0, 0}},
-            // Left
-            {{-1, -1, 1}, {-1, 0, 0}, {1, 0, 0, 1}, {TEX_COORD_MAX, 0}},
-            {{-1, 1, 1}, {-1, 0, 0}, {0, 1, 0, 1}, {TEX_COORD_MAX, TEX_COORD_MAX}},
-            {{-1, 1, -1}, {-1, 0, 0}, {0, 0, 1, 1}, {0, TEX_COORD_MAX}},
-            {{-1, -1, -1}, {-1, 0, 0}, {0, 0, 0, 1}, {0, 0}},
-            // Right
-            {{1, -1, -1}, {1, 0, 0}, {1, 0, 0, 1}, {TEX_COORD_MAX, 0}},
-            {{1, 1, -1}, {1, 0, 0}, {0, 1, 0, 1}, {TEX_COORD_MAX, TEX_COORD_MAX}},
-            {{1, 1, 1}, {1, 0, 0}, {0, 0, 1, 1}, {0, TEX_COORD_MAX}},
-            {{1, -1, 1}, {1, 0, 0}, {0, 0, 0, 1}, {0, 0}},
-            // Top
-            {{1, 1, 1}, {0, 1, 0}, {1, 0, 0, 1}, {TEX_COORD_MAX, 0}},
-            {{1, 1, -1}, {0, 1, 0}, {0, 1, 0, 1}, {TEX_COORD_MAX, TEX_COORD_MAX}},
-            {{-1, 1, -1}, {0, 1, 0}, {0, 0, 1, 1}, {0, TEX_COORD_MAX}},
-            {{-1, 1, 1}, {0, 1, 0}, {0, 0, 0, 1}, {0, 0}},
-            // Bottom
-            {{1, -1, -1}, {0, -1, 0}, {1, 0, 0, 1}, {TEX_COORD_MAX, 0}},
-            {{1, -1, 1}, {0, -1, 0}, {0, 1, 0, 1}, {TEX_COORD_MAX, TEX_COORD_MAX}},
-            {{-1, -1, 1}, {0, -1, 0}, {0, 0, 1, 1}, {0, TEX_COORD_MAX}},
-            {{-1, -1, -1}, {0, -1, 0}, {0, 0, 0, 1}, {0, 0}}
-        };
-        
-        _vertexData = [[NSMutableData alloc] initWithBytes:Vertices length:sizeof(Vertices)];
-        _numberOfVertices = sizeof(Vertices) / sizeof(SWMVertex1P1N1D1UV);
-        
-        const GLubyte Indices[] = {
-            // Front
-            0, 1, 2,
-            2, 3, 0,
-            // Back
-            4, 5, 6,
-            4, 5, 7,
-            // Left
-            8, 9, 10,
-            10, 11, 8,
-            // Right
-            12, 13, 14,
-            14, 15, 12,
-            // Top
-            16, 17, 18,
-            18, 19, 16,
-            // Bottom
-            20, 21, 22,
-            22, 23, 20
-        };
-        
-        _indexData = [[NSMutableData alloc] initWithBytes:Indices length:sizeof(Indices)];
-        _numberOfIndices = sizeof(Indices) / sizeof(Indices[0]);
-        
-        _indexType = GLU_BYTE;
-        _vertexType = SWM_P1N1D1UV;
-    }
-    
-    return self;
-}
+//- (id)initCube{
+//    self = [super init];
+//    
+//    if (self) {
+//        
+//        const SWMVertex1P1N1D1UV Vertices[] = {
+//            // Front
+//            {{1, -1, 1}, {0, 0, 1}, {1, 0, 0, 1}, {TEX_COORD_MAX, 0}},
+//            {{1, 1, 1}, {0, 0, 1}, {0, 1, 0, 1}, {TEX_COORD_MAX, TEX_COORD_MAX}},
+//            {{-1, 1, 1}, {0, 0, 1}, {0, 0, 1, 1}, {0, TEX_COORD_MAX}},
+//            {{-1, -1, 1}, {0, 0, 1}, {0, 0, 0, 1}, {0, 0}},
+//            // Back
+//            {{1, 1, -1}, {0, 0, -1}, {1, 0, 0, 1}, {TEX_COORD_MAX, 0}},
+//            {{-1, -1, -1}, {0, 0, -1}, {0, 1, 0, 1}, {TEX_COORD_MAX, TEX_COORD_MAX}},
+//            {{1, -1, -1}, {0, 0, -1}, {0, 0, 1, 1}, {0, TEX_COORD_MAX}},
+//            {{-1, 1, -1}, {0, 0, -1}, {0, 0, 0, 1}, {0, 0}},
+//            // Left
+//            {{-1, -1, 1}, {-1, 0, 0}, {1, 0, 0, 1}, {TEX_COORD_MAX, 0}},
+//            {{-1, 1, 1}, {-1, 0, 0}, {0, 1, 0, 1}, {TEX_COORD_MAX, TEX_COORD_MAX}},
+//            {{-1, 1, -1}, {-1, 0, 0}, {0, 0, 1, 1}, {0, TEX_COORD_MAX}},
+//            {{-1, -1, -1}, {-1, 0, 0}, {0, 0, 0, 1}, {0, 0}},
+//            // Right
+//            {{1, -1, -1}, {1, 0, 0}, {1, 0, 0, 1}, {TEX_COORD_MAX, 0}},
+//            {{1, 1, -1}, {1, 0, 0}, {0, 1, 0, 1}, {TEX_COORD_MAX, TEX_COORD_MAX}},
+//            {{1, 1, 1}, {1, 0, 0}, {0, 0, 1, 1}, {0, TEX_COORD_MAX}},
+//            {{1, -1, 1}, {1, 0, 0}, {0, 0, 0, 1}, {0, 0}},
+//            // Top
+//            {{1, 1, 1}, {0, 1, 0}, {1, 0, 0, 1}, {TEX_COORD_MAX, 0}},
+//            {{1, 1, -1}, {0, 1, 0}, {0, 1, 0, 1}, {TEX_COORD_MAX, TEX_COORD_MAX}},
+//            {{-1, 1, -1}, {0, 1, 0}, {0, 0, 1, 1}, {0, TEX_COORD_MAX}},
+//            {{-1, 1, 1}, {0, 1, 0}, {0, 0, 0, 1}, {0, 0}},
+//            // Bottom
+//            {{1, -1, -1}, {0, -1, 0}, {1, 0, 0, 1}, {TEX_COORD_MAX, 0}},
+//            {{1, -1, 1}, {0, -1, 0}, {0, 1, 0, 1}, {TEX_COORD_MAX, TEX_COORD_MAX}},
+//            {{-1, -1, 1}, {0, -1, 0}, {0, 0, 1, 1}, {0, TEX_COORD_MAX}},
+//            {{-1, -1, -1}, {0, -1, 0}, {0, 0, 0, 1}, {0, 0}}
+//        };
+//        
+//        _vertexData = [[NSMutableData alloc] initWithBytes:Vertices length:sizeof(Vertices)];
+//        _numberOfVertices = sizeof(Vertices) / sizeof(SWMVertex1P1N1D1UV);
+//        
+//        const GLubyte Indices[] = {
+//            // Front
+//            0, 1, 2,
+//            2, 3, 0,
+//            // Back
+//            4, 5, 6,
+//            4, 5, 7,
+//            // Left
+//            8, 9, 10,
+//            10, 11, 8,
+//            // Right
+//            12, 13, 14,
+//            14, 15, 12,
+//            // Top
+//            16, 17, 18,
+//            18, 19, 16,
+//            // Bottom
+//            20, 21, 22,
+//            22, 23, 20
+//        };
+//        
+//        _indexData = [[NSMutableData alloc] initWithBytes:Indices length:sizeof(Indices)];
+//        _numberOfIndices = sizeof(Indices) / sizeof(Indices[0]);
+//        
+//        _indexType = GLU_BYTE;
+//        _vertexType = SWM_P1N1D1UV;
+//    }
+//    
+//    return self;
+//}
 
-- (id)initCylinderWithSlices:(int) slices andExistingVertexCount:(GLushort)existingVertexCount{
+- (id)initCylinderWithSlices:(int) slices withExistingVertexCount:(GLushort)existingVertexCount andOffset:(GLuint)offset{
     self = [super init];
     if (self) {
         _existingVertexCount = existingVertexCount;
+        self.offset = offset;
+        self.vertexSetName = @"CYLINDER";
         _indexType = GLU_SHORT;
         _vertexType = SWM_1P1N;
         _middlePointDictionary = [[NSMutableDictionary alloc] init];
         _vertices = [[NSMutableArray alloc] init];
         _vertexIndices = [[NSMutableArray alloc] init];
+        
         [self generateCylinderWithSlices:slices];
     }
     
@@ -105,8 +108,6 @@
     float sliceStepRadians = (2 * M_PI) / trianglesInSlice;
     float currentRadians = 0.0;
     
-    _vertexData = [[NSMutableData alloc] init];
-    
     for (currentSliceLevel = 1.0; currentSliceLevel >= -1.0; currentSliceLevel -= decreasePerSlice) {
         for (currentRadians = 0; currentRadians <= (2 * M_PI); currentRadians += sliceStepRadians) {
             
@@ -116,12 +117,11 @@
                 {cosf(currentRadians), currentSliceLevel, sinf(currentRadians)}
             };
             
-            [_vertexData appendBytes:&vertex length:sizeof(SWMVertex1P1N)];
-            _numberOfVertices++;
+            
+            [self.vertexData appendBytes:&vertex length:sizeof(SWMVertex1P1N)];
+            self.numberOfVertices++;
         }
     }
-    
-    _indexData = [[NSMutableData alloc] init];
     
     for (int i = 0; i <= slices; i++) {
         for (int j = 0; j < trianglesInSlice; j++) {
@@ -131,25 +131,26 @@
             GLushort c = (j % trianglesInSlice) + ((i + 1) * trianglesInSlice) + _existingVertexCount;
             GLushort d = ((j + 1) % trianglesInSlice) + ((i + 1) * trianglesInSlice)  + _existingVertexCount;
             
-            [_indexData appendBytes:&a length:sizeof(GLushort)];
-            [_indexData appendBytes:&b length:sizeof(GLushort)];
-            [_indexData appendBytes:&c length:sizeof(GLushort)];
+            [self.indexData appendBytes:&a length:sizeof(GLushort)];
+            [self.indexData appendBytes:&b length:sizeof(GLushort)];
+            [self.indexData appendBytes:&c length:sizeof(GLushort)];
             
-            [_indexData appendBytes:&c length:sizeof(GLushort)];
-            [_indexData appendBytes:&d length:sizeof(GLushort)];
-            [_indexData appendBytes:&b length:sizeof(GLushort)];
+            [self.indexData appendBytes:&c length:sizeof(GLushort)];
+            [self.indexData appendBytes:&d length:sizeof(GLushort)];
+            [self.indexData appendBytes:&b length:sizeof(GLushort)];
         }
     }
     
-    _numberOfIndices = [_indexData length] / sizeof(GLushort);
+    self.numberOfIndices = [self.indexData length] / sizeof(GLushort);
 }
 
-- (id)initSphereWithRecursionLevel:(int)recursionLevel andExistingVertexCount:(GLushort)existingVertexCount{
+- (id)initSphereWithRecursionLevel:(int)recursionLevel withExistingVertexCount:(GLushort)existingVertexCount andOffset:(GLuint)offset{
     self = [super init];
     if (self) {
         // golden ratio
         t = (1.0 + sqrt(5.0)) / 2.0;
         _existingVertexCount = existingVertexCount;
+        self.offset = offset;
         index = 0;
         _indexType = GLU_SHORT;
         _vertexType = SWM_1P1N;
@@ -199,24 +200,22 @@
         _vertexIndices = [[NSMutableArray alloc] initWithArray:newVertexIndices];
     }
     
-    _numberOfVertices = [_vertices count];
-    _vertexData = [[NSMutableData alloc] initWithCapacity:(_numberOfVertices * sizeof(SWMVertex1P1N))];
+    self.numberOfVertices = [_vertices count];
     
-    for (int i = 0; i < _numberOfVertices; i++) {
+    for (int i = 0; i < self.numberOfVertices; i++) {
         SWMVertex1P1N vertex;
         [[_vertices objectAtIndex:i] getValue:&vertex];
-        [_vertexData appendBytes:&vertex length:sizeof(SWMVertex1P1N)];
+        [self.vertexData appendBytes:&vertex length:sizeof(SWMVertex1P1N)];
     }
     
-    _numberOfIndices = [_vertexIndices count];
-    _indexData = [[NSMutableData alloc] initWithCapacity:(_numberOfIndices * sizeof(GLushort))];
+    self.numberOfIndices = [_vertexIndices count];
     
-    for (int i = 0; i < _numberOfIndices; i++) {
+    for (int i = 0; i < self.numberOfIndices; i++) {
         GLushort vertexIndex;
         [[_vertexIndices objectAtIndex:i] getValue:&vertexIndex];
         vertexIndex += _existingVertexCount;
 
-        [_indexData appendBytes:&vertexIndex length:sizeof(GLushort)];
+        [self.indexData appendBytes:&vertexIndex length:sizeof(GLushort)];
     }
 }
                                                            
