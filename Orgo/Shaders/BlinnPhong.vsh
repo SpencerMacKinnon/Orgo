@@ -3,7 +3,6 @@ attribute vec3 normal;
 
 uniform mat4 u_mvp;
 uniform mat3 u_normal;
-//uniform vec4 u_cameraposition;
 //uniform vec4 u_lightdirection;
 
 varying lowp vec3 N;

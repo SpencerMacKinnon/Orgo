@@ -14,7 +14,6 @@ enum
     MatrixMVP,
     MatrixNormal,
     VectorDiffuseColour,
-    VectorCameraPosition,
     VectorLightDirection,
     VectorLightColour,
     FloatSpecular,
@@ -27,7 +26,6 @@ const char* uniformNames[NumUniforms] = {
     "u_mvp",
     "u_normal",
     "u_diffusecolour",
-    "u_cameraposition",
     "u_lightdirection",
     "u_lightcolour",
     "u_specular",
@@ -43,8 +41,8 @@ const char* uniformNames[NumUniforms] = {
         _shader = shader;
         [self loadShaders];
         _models = [[NSMutableArray alloc] init];
-        [self setLightPosition:GLKVector3Make(0.0f, 0.0f, -1.0f)];
-        [self setLightColour:GLKVector3Make(0.0f, 1.0f, 0.0f)];
+        [self setLightPosition:GLKVector3Make(0.0f, 0.5f, 7.0f)];
+        [self setLightColour:GLKVector3Make(1.0f, 1.0f, 1.0f)];
         spec = 64.0f;
     }
     
@@ -78,7 +76,6 @@ const char* uniformNames[NumUniforms] = {
     uniforms[MatrixMVP] = glGetUniformLocation([_shader program], uniformNames[MatrixMVP]);
     uniforms[MatrixNormal] = glGetUniformLocation([_shader program], uniformNames[MatrixNormal]);
     uniforms[VectorDiffuseColour] = glGetUniformLocation([_shader program], uniformNames[VectorDiffuseColour]);
-    uniforms[VectorCameraPosition] = glGetUniformLocation([_shader program], uniformNames[VectorCameraPosition]);
     uniforms[VectorLightDirection] = glGetUniformLocation([_shader program], uniformNames[VectorLightDirection]);
     uniforms[VectorLightColour] = glGetUniformLocation([_shader program], uniformNames[VectorLightColour]);
     uniforms[FloatSpecular] = glGetUniformLocation([_shader program], uniformNames[FloatSpecular]);
@@ -122,8 +119,8 @@ const char* uniformNames[NumUniforms] = {
     glEnableVertexAttribArray(GLKVertexAttribNormal);
     glVertexAttribPointer(GLKVertexAttribNormal, 3, GL_FLOAT, GL_FALSE, sizeof(SWMVertex1P1N), BUFFER_OFFSET(12));
     
-    glUniform4f(uniforms[VectorCameraPosition], 0.0f, 0.0f, 0.0f, 1.0f);
-    glUniform4fv(uniforms[VectorLightDirection], 1, lightPosition.v);
+    glUseProgram([_shader program]);
+    glUniform3fv(uniforms[VectorLightDirection], 1, lightPosition.v);
     glUniform4fv(uniforms[VectorLightColour], 1, lightColour.v);
     glUniform1f(uniforms[FloatSpecular], spec);
     
@@ -163,7 +160,7 @@ const char* uniformNames[NumUniforms] = {
 }
 
 - (void)setLightPosition:(GLKVector3)lightPos {
-    lightPosition = GLKVector3Normalize(lightPos);
+    lightPosition = lightPos;//GLKVector3Normalize(lightPos);
 }
 
 @end

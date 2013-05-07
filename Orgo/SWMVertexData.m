@@ -116,8 +116,6 @@
                 {cosf(currentRadians), currentSliceLevel, sinf(currentRadians)}
             };
             
-            NSLog(@"%f %f %f", vertex._normal[0], vertex._normal[1], vertex._normal[2]);
-            
             [_vertexData appendBytes:&vertex length:sizeof(SWMVertex1P1N)];
             _numberOfVertices++;
         }
