@@ -9,15 +9,15 @@
 #import <UIKit/UIKit.h>
 #import <GLKit/GLKit.h>
 #import "SWMAtomFactory.h"
-#import "SWMCompoundGraph.h"
+#import "SWMModelGraph.h"
 #import "SWMMaterialCollection.h"
 
 @interface SWMViewController : GLKViewController {
     GLKMatrix4 _projectionMatrix;
     CGFloat _lastScale,_lastTransX, _lastTransY;
     float _aspect;
-    SWMMaterialCollection *_materialCollection;
-    SWMCompoundGraph *_compoundGraph;
+    
+    SWMModelGraph *_modelGraph;
 }
 
 @end

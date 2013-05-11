@@ -15,9 +15,9 @@
     [super addVertex:value];
 }
 
-- (void)addAtom:(SWM_ATOM)atom atIndex:(unsigned short)index {
+- (void)replaceAtom:(SWM_ATOM)atom atIndex:(unsigned short)index {
     NSValue *value = [NSValue value:&atom withObjCType:@encode(SWM_ATOM)];
-    [super addVertex:value atIndex:index];
+    [super replaceVertex:value atIndex:index];
 }
 
 @end

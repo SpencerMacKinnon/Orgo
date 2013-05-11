@@ -32,8 +32,7 @@
 		01F03AC916E3EE5A0045C13C /* Art in Resources */ = {isa = PBXBuildFile; fileRef = 01F03AC816E3EE5A0045C13C /* Art */; };
 		01F48CD2172C876800BF1AD5 /* SWMAtomFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 01F48CD1172C876800BF1AD5 /* SWMAtomFactory.m */; };
 		01F48CD5172C8C7700BF1AD5 /* SWMModelFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 01F48CD4172C8C7700BF1AD5 /* SWMModelFactory.m */; };
-		01F4EBBB172DB0A600C4EBA7 /* SWMGraph.m in Sources */ = {isa = PBXBuildFile; fileRef = 01F4EBBA172DB0A600C4EBA7 /* SWMGraph.m */; };
-		01F4EBCB172E044500C4EBA7 /* SWMCompoundGraph.m in Sources */ = {isa = PBXBuildFile; fileRef = 01F4EBCA172E044500C4EBA7 /* SWMCompoundGraph.m */; };
+		01F4EBBB172DB0A600C4EBA7 /* SWMModelGraph.m in Sources */ = {isa = PBXBuildFile; fileRef = 01F4EBBA172DB0A600C4EBA7 /* SWMModelGraph.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -77,11 +76,9 @@
 		01F48CD1172C876800BF1AD5 /* SWMAtomFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWMAtomFactory.m; sourceTree = "<group>"; };
 		01F48CD3172C8C7700BF1AD5 /* SWMModelFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWMModelFactory.h; sourceTree = "<group>"; };
 		01F48CD4172C8C7700BF1AD5 /* SWMModelFactory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWMModelFactory.m; sourceTree = "<group>"; };
-		01F4EBB9172DB0A600C4EBA7 /* SWMGraph.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWMGraph.h; sourceTree = "<group>"; };
-		01F4EBBA172DB0A600C4EBA7 /* SWMGraph.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWMGraph.m; sourceTree = "<group>"; };
+		01F4EBB9172DB0A600C4EBA7 /* SWMModelGraph.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWMModelGraph.h; sourceTree = "<group>"; };
+		01F4EBBA172DB0A600C4EBA7 /* SWMModelGraph.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWMModelGraph.m; sourceTree = "<group>"; };
 		01F4EBC6172E032C00C4EBA7 /* SWMAtom.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWMAtom.h; sourceTree = "<group>"; };
-		01F4EBC9172E044500C4EBA7 /* SWMCompoundGraph.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWMCompoundGraph.h; sourceTree = "<group>"; };
-		01F4EBCA172E044500C4EBA7 /* SWMCompoundGraph.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWMCompoundGraph.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -141,8 +138,8 @@
 				01F48CD1172C876800BF1AD5 /* SWMAtomFactory.m */,
 				01F03AB916E2C7EB0045C13C /* SWMBitmapLoader.h */,
 				01F03ABA16E2C7EB0045C13C /* SWMBitmapLoader.m */,
-				01F4EBB9172DB0A600C4EBA7 /* SWMGraph.h */,
-				01F4EBBA172DB0A600C4EBA7 /* SWMGraph.m */,
+				01F4EBB9172DB0A600C4EBA7 /* SWMModelGraph.h */,
+				01F4EBBA172DB0A600C4EBA7 /* SWMModelGraph.m */,
 				017ECEC7171250710086E0E4 /* SWMMaterialCollection.h */,
 				017ECEC8171250710086E0E4 /* SWMMaterialCollection.m */,
 				0151713616DC8E450082DEEC /* SWMModel.h */,
@@ -163,8 +160,6 @@
 				01B5AD7D16879EE5009216E0 /* SWMViewController_iPad.xib */,
 				01B5AD7A16879EE5009216E0 /* SWMViewController_iPhone.xib */,
 				01F4EBC6172E032C00C4EBA7 /* SWMAtom.h */,
-				01F4EBC9172E044500C4EBA7 /* SWMCompoundGraph.h */,
-				01F4EBCA172E044500C4EBA7 /* SWMCompoundGraph.m */,
 			);
 			path = Orgo;
 			sourceTree = "<group>";
@@ -265,8 +260,7 @@
 				017ECEC9171250710086E0E4 /* SWMMaterialCollection.m in Sources */,
 				01F48CD2172C876800BF1AD5 /* SWMAtomFactory.m in Sources */,
 				01F48CD5172C8C7700BF1AD5 /* SWMModelFactory.m in Sources */,
-				01F4EBBB172DB0A600C4EBA7 /* SWMGraph.m in Sources */,
-				01F4EBCB172E044500C4EBA7 /* SWMCompoundGraph.m in Sources */,
+				01F4EBBB172DB0A600C4EBA7 /* SWMModelGraph.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

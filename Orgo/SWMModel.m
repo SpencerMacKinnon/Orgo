@@ -10,6 +10,7 @@
 
 @implementation SWMModel
 
+@synthesize modelViewMatrix = _modelViewMatrix;
 @synthesize modelViewProjectionMatrix = _modelViewProjectionMatrix;
 @synthesize normalMatrix = _normalMatrix;
 @synthesize rotationVector = _rotationVector;
@@ -25,8 +26,17 @@
     return self;
 }
 
-- (GLKMatrix4)objectTransformWithTimeSinceLastUpdate:(NSTimeInterval)timeSinceLastUpdate {
-    return [_matrix objectTransformWithTimeSinceLastUpdate:timeSinceLastUpdate];
+- (GLKMatrix4)slerpWithTimeSinceLastUpdate:(NSTimeInterval)timeSinceLastUpdate {
+    return [_matrix slerpWithTimeSinceLastUpdate:timeSinceLastUpdate];
+}
+
+- (GLKMatrix4)objectTransform {
+    return [_matrix objectTransform];
+}
+
+- (void)scaleModel {
+    //self.modelViewMatrix = GLKMatrix4Multiply([_matrix scaling], self.modelViewMatrix);
+    self.modelViewMatrix = GLKMatrix4Multiply(self.modelViewMatrix, [_matrix scaling]);
 }
 
 - (void)resetOrientation {

@@ -10,7 +10,6 @@
 #import "SWMModel.h"
 #import "SWMShader.h"
 #import "SWMVertexData.h"
-#import "SWMGraph.h"
 
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
 
@@ -19,7 +18,6 @@
     GLuint _indexBuffer, _vertexArray, _vertexBuffer;
     
     SWMShader *_shader;
-    NSMutableArray *_models;
     NSMutableDictionary *_vertexSets;
     
     GLKVector3 lightPosition;
@@ -30,18 +28,12 @@
 @property GLKVector3 lightColour;
 
 - (id)initWithShader:(SWMShader *)shader;
-- (void)addModel:(SWMModel *)model;
 - (void)addVertexData:(SWMVertexData *)vertexData;
 
-- (void)glkView:(GLKView *)view drawInRect:(CGRect)rect;
+- (void)glkView:(GLKView *)view drawInRect:(CGRect)rect withModels:(NSArray *)models;
 - (BOOL)loadShaders;
 - (BOOL)releaseShaders;
-- (void)resetModelsOrientation;
 - (void)setupGL;
 - (void)tearDownGL;
-- (void)updateWithProjectionMatrix:(GLKMatrix4)projectionMatrix andTimeSinceLastUpdate:(NSTimeInterval)timeSinceLastUpdate;
-
-- (void)touchAtPoint:(CGPoint)location withViewBounds:(CGRect)viewBounds;
-- (void)touchesMoved:(CGPoint)location withViewBounds:(CGRect)viewBounds;
 
 @end

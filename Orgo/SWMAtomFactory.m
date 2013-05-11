@@ -16,6 +16,7 @@
 - (SWMModel *)createOxygen {
     SWMObjectTransformation *transformation = [[SWMObjectTransformation alloc] init];
     [transformation setScalingVector:GLKVector3Make(0.75f, 0.75f, 0.75f)];
+    [transformation setTranslationVector:GLKVector3Make(0.0f, 0.0f, -6.0f)];
     
     SWMModel *oxygen = [[SWMModel alloc] initWithTransformation:transformation];
     [oxygen setDiffuseLightColour:GLKVector4Make(1.0f, 0.0f, 0.0f, 1.0f)];
@@ -27,7 +28,7 @@
 - (SWMModel *)createHydrogen {
     SWMObjectTransformation *transformation = [[SWMObjectTransformation alloc] init];
     [transformation setScalingVector:GLKVector3Make(0.5f, 0.5f, 0.5f)];
-    [transformation setTranslationVector:GLKVector3Make(0.0f, -2.0f, -6.0f)];
+    [transformation setTranslationVector:GLKVector3Make(0.0f, 1.0f, 0.0f)];
     
     SWMModel *hydrogen = [[SWMModel alloc] initWithTransformation:transformation];;
     [hydrogen setDiffuseLightColour:GLKVector4Make(1.0f, 1.0f, 1.0f, 1.0f)];
@@ -40,7 +41,7 @@
     SWMObjectTransformation *transformation = [[SWMObjectTransformation alloc] init];
     [transformation setScalingVector:GLKVector3Make(0.2f, 1.0f, 0.2f)];
     [transformation setQuat:GLKQuaternionMakeWithAngleAndAxis(DEGREES_TO_RADIANS(215), 0.0f, 0.0f, 1.0f)];
-    [transformation setTranslationVector:GLKVector3Make(1.0f, -1.0f, -6.0f)];
+    [transformation setTranslationVector:GLKVector3Make(0.5f, -0.5f, 0.0f)];
     
     SWMModel *singleBond = [[SWMModel alloc] initWithTransformation:transformation];
     [singleBond setDiffuseLightColour:GLKVector4Make(0.0f, 0.0f, 0.0f, 1.0f)];
@@ -53,7 +54,7 @@
     SWMObjectTransformation *transformation = [[SWMObjectTransformation alloc] init];
     [transformation setScalingVector:GLKVector3Make(0.2f, 1.0f, 0.2f)];
     [transformation setQuat:GLKQuaternionMakeWithAngleAndAxis(DEGREES_TO_RADIANS(135), 0.0f, 0.0f, 1.0f)];
-    [transformation setTranslationVector:GLKVector3Make(-1.0f, -1.0f, -6.0f)];
+    [transformation setTranslationVector:GLKVector3Make(-0.5f, -0.5f, 0.0f)];
     
     SWMModel *singleBond = [[SWMModel alloc] initWithTransformation:transformation];
     [singleBond setDiffuseLightColour:GLKVector4Make(0.0f, 0.0f, 0.0f, 1.0f)];

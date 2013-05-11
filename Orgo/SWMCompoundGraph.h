@@ -6,9 +6,9 @@
 //  Copyright (c) 2013 Spencer MacKinnon. All rights reserved.
 //
 
-#import "SWMGraph.h"
+#import "SWMModelGraph.h"
 #import "SWMAtom.h"
 
-@interface SWMCompoundGraph : SWMGraph
+@interface SWMCompoundGraph : SWMModelGraph
 
 @end

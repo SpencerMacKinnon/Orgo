@@ -41,7 +41,6 @@ const char* uniformNames[NumUniforms] = {
         _shader = shader;
         [self loadShaders];
         
-        _models = [[NSMutableArray alloc] init];
         _vertexSets = [[NSMutableDictionary alloc] init];
         [self setLightPosition:GLKVector3Make(0.0f, 0.5f, 7.0f)];
         [self setLightColour:GLKVector3Make(1.0f, 1.0f, 1.0f)];
@@ -51,7 +50,7 @@ const char* uniformNames[NumUniforms] = {
     return self;
 }
 
-- (void)glkView:(GLKView *)view drawInRect:(CGRect)rect{
+- (void)glkView:(GLKView *)view drawInRect:(CGRect)rect withModels:(NSArray *)models{
     
     glBindVertexArrayOES(_vertexArray);
     
@@ -59,7 +58,7 @@ const char* uniformNames[NumUniforms] = {
     glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _indexBuffer);
     
-    for (SWMModel *model in _models) {
+    for (SWMModel *model in models) {
         glUniformMatrix4fv(uniforms[MatrixMVP], 1, 0, [model modelViewProjectionMatrix].m);
         glUniformMatrix3fv(uniforms[MatrixNormal], 1, 0, [model normalMatrix].m);
         glUniform4fv(uniforms[VectorDiffuseColour], 1, [model diffuseLightColour].v);
@@ -93,12 +92,6 @@ const char* uniformNames[NumUniforms] = {
 
 - (BOOL)releaseShaders{
     return [_shader releaseShaders];
-}
-
-- (void)resetModelsOrientation {
-    for (SWMModel *model in _models) {
-        [model resetOrientation];
-    }
 }
 
 - (void)setupGL{
@@ -143,35 +136,8 @@ const char* uniformNames[NumUniforms] = {
     [_shader tearDownGL];
 }
 
-- (void)updateWithProjectionMatrix:(GLKMatrix4)projectionMatrix andTimeSinceLastUpdate:(NSTimeInterval)timeSinceLastUpdate{
-    for (SWMModel *model in _models) {
-        GLKMatrix4 modelViewMatrix = [model objectTransformWithTimeSinceLastUpdate:timeSinceLastUpdate];
-        GLKMatrix3 normalMatrix = GLKMatrix3InvertAndTranspose(GLKMatrix4GetMatrix3(modelViewMatrix), NULL);
-        GLKMatrix4 modelViewProjectionMatrix = GLKMatrix4Multiply(projectionMatrix, modelViewMatrix);
-        
-        [model setNormalMatrix:normalMatrix];
-        [model setModelViewProjectionMatrix:modelViewProjectionMatrix];
-    }
-}
-
-- (void)touchAtPoint:(CGPoint)location withViewBounds:(CGRect)viewBounds {
-    for (SWMModel *model in _models) {
-        [model touchAtPoint:location withViewBounds:viewBounds];
-    }
-}
-
-- (void)touchesMoved:(CGPoint)location withViewBounds:(CGRect)viewBounds {
-    for (SWMModel *model in _models) {
-        [model touchesMoved:location withViewBounds:viewBounds];
-    }
-}
-
 - (void)setLightPosition:(GLKVector3)lightPos {
     lightPosition = lightPos;
-}
-
-- (void)addModel:(SWMModel *)model {
-    [_models addObject:model];
 }
 
 - (void)addVertexData:(SWMVertexData *)vertexData {

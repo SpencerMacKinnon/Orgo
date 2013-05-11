@@ -23,7 +23,7 @@
     self = [super init];
     if (self) {
         scalingVector = GLKVector3Make(1.0f, 1.0f, 1.0f);
-        translationVector = GLKVector3Make(0.0f, 0.0f, -6.0f);
+        translationVector = GLKVector3Make(0.0f, 0.0f, 0.0f);
         quat = GLKQuaternionMake(0, 0, 0, 1);
         _quatStart = GLKQuaternionMake(0, 0, 0, 1);
     }
@@ -50,7 +50,7 @@
     return GLKMatrix4MakeWithQuaternion(quat);
 }
 
-- (GLKMatrix4)objectTransformWithTimeSinceLastUpdate:(NSTimeInterval)timeSinceLastUpdate{
+- (GLKMatrix4)slerpWithTimeSinceLastUpdate:(NSTimeInterval)timeSinceLastUpdate{
     
     if (_slerping) {
         _slerpCur += timeSinceLastUpdate;
@@ -63,7 +63,11 @@
         quat = GLKQuaternionSlerp(_slerpStart, _slerpEnd, slerpAmt);
     }
     
-    return GLKMatrix4Multiply([self translation], GLKMatrix4Multiply([self rotation], [self scaling]));
+    return [self objectTransform];
+}
+
+- (GLKMatrix4)objectTransform {
+    return GLKMatrix4Multiply([self translation], [self rotation]);
 }
 
 - (void)computeIncremental {

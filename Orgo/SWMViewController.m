@@ -78,29 +78,34 @@ const float MAX_ZOOM_OUT = -9.0;
     
     glEnable(GL_DEPTH_TEST);
     
-    _compoundGraph = [[SWMCompoundGraph alloc] initWithNumberOfVertices:3];
-    
-    
     SWMShader *_shader = [[SWMShader alloc] init];
-    _materialCollection = [[SWMMaterialCollection alloc] initWithShader:_shader];
     
     SWMAtomFactory *_atomFactory = [[SWMAtomFactory alloc] init];
     SWMVertexData *sphere = [_atomFactory createSphereVerticesWithRecursionLevel:2];
     SWMVertexData *cylinder = [_atomFactory createCylinderVerticesWithSlices:2];
     
+    SWMMaterialCollection *_materialCollection = [[SWMMaterialCollection alloc] initWithShader:_shader];
     [_materialCollection addVertexData:sphere];
     [_materialCollection addVertexData:cylinder];
+    
+    _modelGraph = [[SWMModelGraph alloc] initWithMaterialCollection:_materialCollection];
     
     SWMModel *bond1 = [_atomFactory createSingleBond];
     SWMModel *bond2 = [_atomFactory createSingleBond2];
     SWMModel *oxygen = [_atomFactory createOxygen];
-    SWMModel *hydrogen = [_atomFactory createHydrogen];
+    SWMModel *hydrogen1 = [_atomFactory createHydrogen];
+    SWMModel *hydrogen2 = [_atomFactory createHydrogen];
     
-    [_materialCollection addModel:bond1];
-    [_materialCollection addModel:bond2];
-    [_materialCollection addModel:oxygen];
-    [_materialCollection addModel:hydrogen];
+    [_modelGraph addModel:oxygen];
+    [_modelGraph addModel:bond1];
+    [_modelGraph addModel:bond2];
+    [_modelGraph addModel:hydrogen1];
+    [_modelGraph addModel:hydrogen2];
     
+    [_modelGraph createEdgeBetweenFirstVertex:0 andSecondVertex:1];
+    [_modelGraph createEdgeBetweenFirstVertex:0 andSecondVertex:2];
+    [_modelGraph createEdgeBetweenFirstVertex:1 andSecondVertex:3];
+    [_modelGraph createEdgeBetweenFirstVertex:2 andSecondVertex:4];
     
     [_materialCollection setupGL];
 }
@@ -108,7 +113,7 @@ const float MAX_ZOOM_OUT = -9.0;
 - (void)tearDownGL
 {
     [EAGLContext setCurrentContext:self.context];
-    [_materialCollection tearDownGL];
+    [[_modelGraph materialCollection] tearDownGL];
     self.effect = nil;
 }
 
@@ -118,7 +123,7 @@ const float MAX_ZOOM_OUT = -9.0;
 {
     _aspect = fabsf(self.view.bounds.size.width / self.view.bounds.size.height);
     _projectionMatrix = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(65.0f), _aspect, 0.1f, 100.0f);
-    [_materialCollection updateWithProjectionMatrix:_projectionMatrix andTimeSinceLastUpdate:self.timeSinceLastUpdate];
+    [_modelGraph updateWithProjectionMatrix:_projectionMatrix andTimeSinceLastUpdate:self.timeSinceLastUpdate];
 }
 
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect
@@ -126,7 +131,7 @@ const float MAX_ZOOM_OUT = -9.0;
     glClearColor(0.65f, 0.65f, 0.65f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
-    [_materialCollection glkView:view drawInRect:rect];
+    [_modelGraph glkView:view drawInRect:rect];
 }
 
 #pragma mark - Gesture Recognizers
@@ -144,21 +149,21 @@ const float MAX_ZOOM_OUT = -9.0;
 }
 
 - (void)handleDoubleTap:(UITapGestureRecognizer *)gestureRecognizer {
-    [_materialCollection resetModelsOrientation];
+    [_modelGraph resetModelsOrientation];
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
     UITouch *touch = [touches anyObject];
     CGPoint location = [touch locationInView:self.view];
     
-    [_materialCollection touchAtPoint:location withViewBounds:self.view.bounds];
+    [_modelGraph touchAtPoint:location withViewBounds:self.view.bounds];
 }
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
     UITouch *touch = [touches anyObject];
     CGPoint location = [touch locationInView:self.view];
     
-    [_materialCollection touchesMoved:location withViewBounds:self.view.bounds];
+    [_modelGraph touchesMoved:location withViewBounds:self.view.bounds];
 }
 
 @end

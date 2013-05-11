@@ -25,7 +25,9 @@
 @property GLKVector3 scalingVector;
 @property GLKQuaternion quat;
 
-- (GLKMatrix4)objectTransformWithTimeSinceLastUpdate:(NSTimeInterval)timeSinceLastUpdate;
+- (GLKMatrix4)slerpWithTimeSinceLastUpdate:(NSTimeInterval)timeSinceLastUpdate;
+- (GLKMatrix4)objectTransform;
+- (GLKMatrix4)scaling;
 - (void)resetOrientation;
 - (void)touchAtPoint:(CGPoint)location withViewBounds:(CGRect)viewBounds;
 - (void)touchesMoved:(CGPoint)location withViewBounds:(CGRect)viewBounds;
