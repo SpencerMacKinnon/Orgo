@@ -14,6 +14,8 @@
 		017ECEAC170BCC210086E0E4 /* SWMVertexData.m in Sources */ = {isa = PBXBuildFile; fileRef = 017ECEAB170BCC200086E0E4 /* SWMVertexData.m */; };
 		017ECEC61711669F0086E0E4 /* Shaders in Resources */ = {isa = PBXBuildFile; fileRef = 017ECEC51711669E0086E0E4 /* Shaders */; };
 		017ECEC9171250710086E0E4 /* SWMMaterialCollection.m in Sources */ = {isa = PBXBuildFile; fileRef = 017ECEC8171250710086E0E4 /* SWMMaterialCollection.m */; };
+		01B3E68817404399008537EE /* Orgo.png in Resources */ = {isa = PBXBuildFile; fileRef = 01B3E68717404399008537EE /* Orgo.png */; };
+		01B3E68A174043DF008537EE /* Orgo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 01B3E689174043DF008537EE /* Orgo@2x.png */; };
 		01B5AD5816879EE5009216E0 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01B5AD5716879EE5009216E0 /* UIKit.framework */; };
 		01B5AD5A16879EE5009216E0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01B5AD5916879EE5009216E0 /* Foundation.framework */; };
 		01B5AD5C16879EE5009216E0 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 01B5AD5B16879EE5009216E0 /* CoreGraphics.framework */; };
@@ -50,6 +52,8 @@
 		017ECEC51711669E0086E0E4 /* Shaders */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Shaders; sourceTree = "<group>"; };
 		017ECEC7171250710086E0E4 /* SWMMaterialCollection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWMMaterialCollection.h; sourceTree = "<group>"; };
 		017ECEC8171250710086E0E4 /* SWMMaterialCollection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWMMaterialCollection.m; sourceTree = "<group>"; };
+		01B3E68717404399008537EE /* Orgo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Orgo.png; sourceTree = "<group>"; };
+		01B3E689174043DF008537EE /* Orgo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Orgo@2x.png"; sourceTree = "<group>"; };
 		01B5AD5316879EE5009216E0 /* Orgo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Orgo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		01B5AD5716879EE5009216E0 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		01B5AD5916879EE5009216E0 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -100,6 +104,8 @@
 		01B5AD4816879EE5009216E0 = {
 			isa = PBXGroup;
 			children = (
+				01B3E689174043DF008537EE /* Orgo@2x.png */,
+				01B3E68717404399008537EE /* Orgo.png */,
 				01B5AD5616879EE5009216E0 /* Frameworks */,
 				01B5AD6116879EE5009216E0 /* Orgo */,
 				01B5AD5416879EE5009216E0 /* Products */,
@@ -238,6 +244,8 @@
 				01B5AD7F16879EE5009216E0 /* SWMViewController_iPad.xib in Resources */,
 				01F03AC916E3EE5A0045C13C /* Art in Resources */,
 				017ECEC61711669F0086E0E4 /* Shaders in Resources */,
+				01B3E68817404399008537EE /* Orgo.png in Resources */,
+				01B3E68A174043DF008537EE /* Orgo@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
