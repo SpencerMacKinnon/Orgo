@@ -17,7 +17,7 @@ typedef enum {
 typedef enum {
     SINGLE,
     DOUBLE,
-    TRIBLE,
+    TRIPLE,
     RESONANCE
 } SWM_BOND_TYPE;
 

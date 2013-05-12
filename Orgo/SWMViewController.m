@@ -10,7 +10,8 @@
 
 const float MAX_ZOOM_IN = 3.5;
 const float MAX_ZOOM_OUT = -9.0;
-
+// Hack for now to prevent crashes.
+BOOL beginUpdating = NO;
 @interface SWMViewController () {
 }
 @property (strong, nonatomic) EAGLContext *context;
@@ -81,8 +82,8 @@ const float MAX_ZOOM_OUT = -9.0;
     SWMShader *_shader = [[SWMShader alloc] init];
     
     SWMAtomFactory *_atomFactory = [[SWMAtomFactory alloc] init];
-    SWMVertexData *sphere = [_atomFactory createSphereVerticesWithRecursionLevel:2];
-    SWMVertexData *cylinder = [_atomFactory createCylinderVerticesWithSlices:2];
+    SWMVertexData *sphere = [_atomFactory createSphereVerticesWithRecursionLevel:3];
+    SWMVertexData *cylinder = [_atomFactory createCylinderVerticesWithSlices:3];
     
     SWMMaterialCollection *_materialCollection = [[SWMMaterialCollection alloc] initWithShader:_shader];
     [_materialCollection addVertexData:sphere];
@@ -90,24 +91,13 @@ const float MAX_ZOOM_OUT = -9.0;
     
     _modelGraph = [[SWMModelGraph alloc] initWithMaterialCollection:_materialCollection];
     
-    SWMModel *bond1 = [_atomFactory createSingleBond];
-    SWMModel *bond2 = [_atomFactory createSingleBond2];
-    SWMModel *oxygen = [_atomFactory createOxygen];
-    SWMModel *hydrogen1 = [_atomFactory createHydrogen];
-    SWMModel *hydrogen2 = [_atomFactory createHydrogen];
+    [_atomFactory setModelGraph:_modelGraph];
     
-    [_modelGraph addModel:oxygen];
-    [_modelGraph addModel:bond1];
-    [_modelGraph addModel:bond2];
-    [_modelGraph addModel:hydrogen1];
-    [_modelGraph addModel:hydrogen2];
-    
-    [_modelGraph createEdgeBetweenFirstVertex:0 andSecondVertex:1];
-    [_modelGraph createEdgeBetweenFirstVertex:0 andSecondVertex:2];
-    [_modelGraph createEdgeBetweenFirstVertex:1 andSecondVertex:3];
-    [_modelGraph createEdgeBetweenFirstVertex:2 andSecondVertex:4];
+    [_atomFactory createAmericanCompound];
     
     [_materialCollection setupGL];
+    
+    beginUpdating = true;
 }
 
 - (void)tearDownGL
@@ -121,6 +111,10 @@ const float MAX_ZOOM_OUT = -9.0;
 
 - (void)update
 {
+    if (!beginUpdating) {
+        return;
+    }
+    
     _aspect = fabsf(self.view.bounds.size.width / self.view.bounds.size.height);
     _projectionMatrix = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(65.0f), _aspect, 0.1f, 100.0f);
     [_modelGraph updateWithProjectionMatrix:_projectionMatrix andTimeSinceLastUpdate:self.timeSinceLastUpdate];
@@ -128,6 +122,10 @@ const float MAX_ZOOM_OUT = -9.0;
 
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect
 {
+    if (!beginUpdating) {
+        return;
+    }
+    
     glClearColor(0.65f, 0.65f, 0.65f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     

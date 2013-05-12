@@ -136,6 +136,7 @@
 
 - (void)updateWithProjectionMatrix:(GLKMatrix4)projectionMatrix andTimeSinceLastUpdate:(NSTimeInterval)timeSinceLastUpdate{
     GLKMatrix4 rootModelMatrix = [[_models objectAtIndex:0] slerpWithTimeSinceLastUpdate:timeSinceLastUpdate];
+    rootModelMatrix = GLKMatrix4Multiply(GLKMatrix4MakeTranslation(0.0f, -1.5f, -6.0f), rootModelMatrix);
     [[_models objectAtIndex:0] setModelViewMatrix:rootModelMatrix];
     modelsWithHierarchy = [[NSMutableArray alloc] initWithArray:_models];
     [self modelsWithHierarchicalTransformationForLevel:0 withModels:modelsWithHierarchy];
@@ -162,6 +163,10 @@
 - (void)addModel:(SWMModel *)model{
     numVertices++;
     [_models addObject:model];
+}
+
+- (unsigned short)vertexCount {
+    return numVertices;
 }
 
 @end

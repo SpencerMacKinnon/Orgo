@@ -38,4 +38,6 @@
 
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect;
 
+- (unsigned short)vertexCount;
+
 @end
