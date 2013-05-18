@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "SWMAtomFactory.h"
 #import "SWMModel.h"
 #import "SWMShader.h"
 #import "SWMVertexData.h"
@@ -24,10 +25,10 @@
     float spec;
 }
 
-@property SWMShader *shader;
-@property GLKVector3 lightColour;
+@property (nonatomic, strong) SWMShader *shader;
+@property (nonatomic) GLKVector3 lightColour;
 
-- (id)initWithShader:(SWMShader *)shader;
+- (id)init;
 - (void)addVertexData:(SWMVertexData *)vertexData;
 
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect withModels:(NSArray *)models;

@@ -10,9 +10,7 @@
 
 @implementation SWMModelGraph
 
-@synthesize materialCollection;
-
-- (id)initWithMaterialCollection:(SWMMaterialCollection *)matCollection {
+- (id)init{
     self = [super init];
     if (self) {
         numVertices = 0;
@@ -23,7 +21,7 @@
         edges = [[NSMutableDictionary alloc] init];
         _models = [[NSMutableArray alloc] init];
         modelsWithHierarchy = [[NSMutableArray alloc] init];
-        materialCollection = matCollection;
+        materialCollection = [[SWMMaterialCollection alloc] init];
     }
     
     return self;
@@ -95,7 +93,8 @@
     if (![self vertexWithinRange:vertex]) {
         return NO;
     }
-    return [_models objectAtIndex:vertex] != nil;
+    return YES;
+    //return [_models objectAtIndex:vertex] != nil;
 }
 
 - (BOOL)vertexPairExistsInGraph:(unsigned int)firstVertex secondVertex:(unsigned int)secondVertex {
@@ -136,7 +135,7 @@
 
 - (void)updateWithProjectionMatrix:(GLKMatrix4)projectionMatrix andTimeSinceLastUpdate:(NSTimeInterval)timeSinceLastUpdate{
     GLKMatrix4 rootModelMatrix = [[_models objectAtIndex:0] slerpWithTimeSinceLastUpdate:timeSinceLastUpdate];
-    rootModelMatrix = GLKMatrix4Multiply(GLKMatrix4MakeTranslation(0.0f, -1.5f, -6.0f), rootModelMatrix);
+    rootModelMatrix = GLKMatrix4Multiply(GLKMatrix4MakeTranslation(0.0f, -2.5f, -6.0f), rootModelMatrix);
     [[_models objectAtIndex:0] setModelViewMatrix:rootModelMatrix];
     modelsWithHierarchy = [[NSMutableArray alloc] initWithArray:_models];
     [self modelsWithHierarchicalTransformationForLevel:0 withModels:modelsWithHierarchy];
@@ -167,6 +166,14 @@
 
 - (unsigned short)vertexCount {
     return numVertices;
+}
+
+- (void) setupGL {
+    [materialCollection setupGL];
+}
+
+- (void) tearDownGL {
+    [materialCollection tearDownGL];
 }
 
 @end

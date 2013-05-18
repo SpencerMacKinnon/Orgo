@@ -14,7 +14,7 @@
     NSString *_vertShaderPathname, *_fragShaderPathname;
 }
 
-@property NSString *vertShaderPathname, *fragShaderPathname;
+@property (nonatomic, strong) NSString *vertShaderPathname, *fragShaderPathname;
 @property GLuint program;
 
 - (BOOL)compileShader:(GLuint *)shader type:(GLenum)type file:(NSString *)file;

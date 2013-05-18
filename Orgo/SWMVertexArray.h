@@ -17,8 +17,8 @@
 
 @property (readwrite) GLuint offset;
 @property (readwrite) unsigned int  numberOfIndices, numberOfVertices;
-@property (readwrite) NSMutableData *indexData, *vertexData;
-@property (readwrite) NSString *vertexSetName;
+@property (nonatomic, strong, readwrite) NSMutableData *indexData, *vertexData;
+@property (nonatomic, strong, readwrite) NSString *vertexSetName;
 
 -(GLU_INDEX_TYPE)getIndexType;
 -(SWM_VERTEX_TYPE)getVertexType;

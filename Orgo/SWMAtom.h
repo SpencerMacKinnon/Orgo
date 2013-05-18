@@ -21,6 +21,17 @@ typedef enum {
     RESONANCE
 } SWM_BOND_TYPE;
 
+typedef enum {
+    NORTH,
+    NORTHEAST,
+    EAST,
+    SOUTHEAST,
+    SOUTH,
+    SOUTHWEST,
+    WEST,
+    NORTHWEST
+} SWM_BOND_ORIENTATION;
+
 typedef struct  {
     SWM_ATOM_NAME _atomNAME;
 } SWM_ATOM;

@@ -27,7 +27,7 @@
 @property GLKMatrix3 normalMatrix;
 @property GLKVector3 rotationVector, translationVector;
 @property GLKVector4 diffuseLightColour;
-@property NSString *vertexSetName;
+@property (nonatomic, strong) NSString *vertexSetName;
 
 - (id)initWithTransformation:(SWMObjectTransformation *)transformation;
 - (GLKMatrix4)slerpWithTimeSinceLastUpdate:(NSTimeInterval)timeSinceLastUpdate;

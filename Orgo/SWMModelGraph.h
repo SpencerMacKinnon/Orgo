@@ -11,6 +11,7 @@
 #import "SWMModel.h"
 
 @interface SWMModelGraph : NSObject {
+    SWMMaterialCollection *materialCollection;
     BOOL *adjacencyMatrix;
     NSMutableData *adjacencyMatrixData;
     NSMutableArray *vertices;
@@ -21,9 +22,7 @@
     unsigned short numEdges;
 }
 
-@property SWMMaterialCollection *materialCollection;
-
-- (id)initWithMaterialCollection:(SWMMaterialCollection *)matCollection;
+- (id)init;
 
 - (void)replaceVertex:(SWMModel *)vertex atIndex:(unsigned short)index;
 - (void)addModel:(SWMModel *)model;
@@ -39,5 +38,8 @@
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect;
 
 - (unsigned short)vertexCount;
+
+- (void) setupGL;
+- (void) tearDownGL;
 
 @end

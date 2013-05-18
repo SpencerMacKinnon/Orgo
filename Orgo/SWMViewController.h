@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import <GLKit/GLKit.h>
+
+#import "SWMAtom.h"
 #import "SWMAtomFactory.h"
 #import "SWMModelGraph.h"
 #import "SWMMaterialCollection.h"
@@ -18,6 +20,7 @@
     float _aspect;
     
     SWMModelGraph *_modelGraph;
+    SWMAtomFactory *_atomFactory;
 }
 
 @end

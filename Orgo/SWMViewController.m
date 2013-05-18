@@ -79,23 +79,49 @@ BOOL beginUpdating = NO;
     
     glEnable(GL_DEPTH_TEST);
     
-    SWMShader *_shader = [[SWMShader alloc] init];
+    _modelGraph = [[SWMModelGraph alloc] init];
     
-    SWMAtomFactory *_atomFactory = [[SWMAtomFactory alloc] init];
-    SWMVertexData *sphere = [_atomFactory createSphereVerticesWithRecursionLevel:3];
-    SWMVertexData *cylinder = [_atomFactory createCylinderVerticesWithSlices:3];
+    _atomFactory = [[SWMAtomFactory alloc] init];
+    SWMModel *oxygen = [_atomFactory createAtomWithType:OXYGEN];
     
-    SWMMaterialCollection *_materialCollection = [[SWMMaterialCollection alloc] initWithShader:_shader];
-    [_materialCollection addVertexData:sphere];
-    [_materialCollection addVertexData:cylinder];
+    [_modelGraph addModel:oxygen];
     
-    _modelGraph = [[SWMModelGraph alloc] initWithMaterialCollection:_materialCollection];
+    [_modelGraph addModel:[_atomFactory createBondWithOrientaiton:NORTHWEST]];
+    [_modelGraph addModel:[_atomFactory createAtomWithType:NITROGEN]];
     
-    [_atomFactory setModelGraph:_modelGraph];
+    [_modelGraph addModel:[_atomFactory createBondWithOrientaiton:NORTHEAST]];
+    [_modelGraph addModel:[_atomFactory createAtomWithType:HYDROGEN]];
     
-    [_atomFactory createAmericanCompound];
+    [_modelGraph addModel:[_atomFactory createBondWithOrientaiton:NORTHEAST]];
+    [_modelGraph addModel:[_atomFactory createAtomWithType:OXYGEN]];
     
-    [_materialCollection setupGL];
+    [_modelGraph addModel:[_atomFactory createBondWithOrientaiton:EAST]];
+    [_modelGraph addModel:[_atomFactory createAtomWithType:NITROGEN]];
+    
+    [_modelGraph addModel:[_atomFactory createBondWithOrientaiton:NORTHEAST]];
+    [_modelGraph addModel:[_atomFactory createAtomWithType:HYDROGEN]];
+    
+    [_modelGraph addModel:[_atomFactory createBondWithOrientaiton:NORTHEAST]];
+    
+    [_modelGraph createEdgeBetweenFirstVertex:0 andSecondVertex:1];
+    [_modelGraph createEdgeBetweenFirstVertex:0 andSecondVertex:11];
+    
+    [_modelGraph createEdgeBetweenFirstVertex:2 andSecondVertex:1];
+    [_modelGraph createEdgeBetweenFirstVertex:2 andSecondVertex:3];
+    
+    [_modelGraph createEdgeBetweenFirstVertex:4 andSecondVertex:3];
+    [_modelGraph createEdgeBetweenFirstVertex:4 andSecondVertex:5];
+    
+    [_modelGraph createEdgeBetweenFirstVertex:6 andSecondVertex:5];
+    [_modelGraph createEdgeBetweenFirstVertex:6 andSecondVertex:7];
+    
+    [_modelGraph createEdgeBetweenFirstVertex:8 andSecondVertex:7];
+    [_modelGraph createEdgeBetweenFirstVertex:8 andSecondVertex:9];
+    
+    [_modelGraph createEdgeBetweenFirstVertex:10 andSecondVertex:9];
+    [_modelGraph createEdgeBetweenFirstVertex:10 andSecondVertex:11];
+    
+    [_modelGraph setupGL];
     
     beginUpdating = true;
 }
@@ -103,7 +129,7 @@ BOOL beginUpdating = NO;
 - (void)tearDownGL
 {
     [EAGLContext setCurrentContext:self.context];
-    [[_modelGraph materialCollection] tearDownGL];
+    [_modelGraph tearDownGL];
     self.effect = nil;
 }
 

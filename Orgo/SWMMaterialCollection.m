@@ -35,13 +35,20 @@ const char* uniformNames[NumUniforms] = {
 
 @synthesize lightColour;
 
-- (id)initWithShader:(SWMShader *)shader{
+- (id)init{
     self = [super init];
     if (self) {
-        _shader = shader;
+        _shader = [[SWMShader alloc] init];
         [self loadShaders];
         
         _vertexSets = [[NSMutableDictionary alloc] init];
+        
+        SWMAtomFactory * _atomFactory = [[SWMAtomFactory alloc] init];
+        SWMVertexData *sphere = [_atomFactory createSphereVerticesWithRecursionLevel:3];
+        SWMVertexData *cylinder = [_atomFactory createCylinderVerticesWithSlices:3];
+        [self addVertexData:sphere];
+        [self addVertexData:cylinder];
+        
         [self setLightPosition:GLKVector3Make(0.0f, 0.5f, 7.0f)];
         [self setLightColour:GLKVector3Make(1.0f, 1.0f, 1.0f)];
         spec = 64.0f;
@@ -90,11 +97,11 @@ const char* uniformNames[NumUniforms] = {
     return YES;
 }
 
-- (BOOL)releaseShaders{
+- (BOOL) releaseShaders{
     return [_shader releaseShaders];
 }
 
-- (void)setupGL{
+- (void) setupGL{
     NSMutableData *vertexSetData = [[NSMutableData alloc] init];
     NSMutableData *indexSetData = [[NSMutableData alloc] init];
     
