@@ -10,15 +10,15 @@
 
 @implementation SWMShader
 
-@synthesize vertShaderPathname = _vertShaderPathname;
-@synthesize fragShaderPathname = _fragShaderPathname;
+@synthesize vertShaderPathname;
+@synthesize fragShaderPathname;
 @synthesize program = _program;
 
 - (id)init{
     self = [super init];
     if (self) {
         
-        _program = 0;
+        self.program = 0;
         
         // Create reference vertex shader path
         [self setVertShaderPathname:[[NSBundle mainBundle] pathForResource:@"BlinnPhong" ofType:@"vsh" inDirectory:@"Shaders"]];
@@ -38,22 +38,22 @@
     _program = glCreateProgram();
     
     // Compile vertex shader.
-    if (![self compileShader:&(_vertShader) type:GL_VERTEX_SHADER file:_vertShaderPathname]) {
+    if (![self compileShader:&(_vertShader) type:GL_VERTEX_SHADER file:vertShaderPathname]) {
         NSLog(@"Failed to compile vertex shader");
         return NO;
     }
     
     // Compile fragment shader.
-    if (![self compileShader:&(_fragShader) type:GL_FRAGMENT_SHADER file:_fragShaderPathname]) {
+    if (![self compileShader:&(_fragShader) type:GL_FRAGMENT_SHADER file:fragShaderPathname]) {
         NSLog(@"Failed to compile fragment shader");
         return NO;
     }
     
     // Attach vertex shader to program.
-    glAttachShader(_program, _vertShader);
+    glAttachShader(self.program, _vertShader);
     
     // Attach fragment shader to program.
-    glAttachShader(_program, _fragShader);
+    glAttachShader(self.program, _fragShader);
     
     // Bind attribute locations.
     // This needs to be done prior to linking.
@@ -63,8 +63,8 @@
     //glBindAttribLocation(_program, GLKVertexAttribTexCoord0, "vertexUV");
     
     // Link program.
-    if (![self linkProgram:_program]) {
-        NSLog(@"Failed to link program: %d", _program);
+    if (![self linkProgram:self.program]) {
+        NSLog(@"Failed to link program: %d", self.program);
         
         if (_vertShader) {
             glDeleteShader(_vertShader);
@@ -74,9 +74,9 @@
             glDeleteShader(_fragShader);
             _fragShader = 0;
         }
-        if (_program) {
-            glDeleteProgram(_program);
-            _program = 0;
+        if (self.program) {
+            glDeleteProgram(self.program);
+            self.program = 0;
         }
         
         return NO;
@@ -88,11 +88,11 @@
 - (BOOL)releaseShaders{
     // Release vertex and fragment shaders.
     if (_vertShader) {
-        glDetachShader(_program, _vertShader);
+        glDetachShader(self.program, _vertShader);
         glDeleteShader(_vertShader);
     }
     if (_fragShader) {
-        glDetachShader(_program, _fragShader);
+        glDetachShader(self.program, _fragShader);
         glDeleteShader(_fragShader);
     }
     

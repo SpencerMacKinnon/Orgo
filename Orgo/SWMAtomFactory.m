@@ -94,7 +94,7 @@
     switch (bondOrientation) {
         case NORTH:
             bond = [self createBondUsingRotation:GLKQuaternionMakeWithAngleAndAxis(DEGREES_TO_RADIANS(0), 0.0f, 0.0f, 1.0f)
-                                 withTranslation:GLKVector3Make(0.0f, 0.5f, 0.0f)
+                                 withTranslation:GLKVector3Make(0.0f, 0.75f, 0.0f)
                                      withScaling:GLKVector3Make(0.2f, 1.0f, 0.2f)
                                        andColour:GLKVector4Make(0.56f, 0.31f, 0.14f, 1.0f)];
             break;
@@ -105,10 +105,10 @@
                                        andColour:GLKVector4Make(0.56f, 0.31f, 0.14f, 1.0f)];
             break;
         case EAST:
-            bond = [self createBondUsingRotation:GLKQuaternionMakeWithAngleAndAxis(DEGREES_TO_RADIANS(270), 0.0f, 0.0f, 1.0f)
-                                        withTranslation:GLKVector3Make(0.5f, 0.0f, 0.0f)
-                                            withScaling:GLKVector3Make(0.2f, 1.0f, 0.2f)
-                                              andColour:GLKVector4Make(0.56f, 0.31f, 0.14f, 1.0f)];
+            bond = [self createBondUsingRotation: GLKQuaternionMakeWithAngleAndAxis(DEGREES_TO_RADIANS(270), 0.0f, 0.0f, 1.0f)
+                                        withTranslation: GLKVector3Make(0.75f, 0.0f, 0.0f)
+                                            withScaling: GLKVector3Make(0.2f, 1.0f, 0.2f)
+                                              andColour: GLKVector4Make(0.56f, 0.31f, 0.14f, 1.0f)];
             break;
         case SOUTHEAST:
             bond = [self createBondUsingRotation:GLKQuaternionMakeWithAngleAndAxis(DEGREES_TO_RADIANS(225), 0.0f, 0.0f, 1.0f)
@@ -118,7 +118,7 @@
             break;
         case SOUTH:
             bond = [self createBondUsingRotation:GLKQuaternionMakeWithAngleAndAxis(DEGREES_TO_RADIANS(180), 0.0f, 0.0f, 1.0f)
-                                 withTranslation:GLKVector3Make(0.0f, -0.5f, 0.0f)
+                                 withTranslation:GLKVector3Make(0.0f, -0.75f, 0.0f)
                                      withScaling:GLKVector3Make(0.2f, 1.0f, 0.2f)
                                        andColour:GLKVector4Make(0.56f, 0.31f, 0.14f, 1.0f)];
             break;
@@ -130,7 +130,7 @@
             break;
         case WEST:
             bond = [self createBondUsingRotation:GLKQuaternionMakeWithAngleAndAxis(DEGREES_TO_RADIANS(90), 0.0f, 0.0f, 1.0f)
-                                 withTranslation:GLKVector3Make(-0.5f, 0.0f, 0.0f)
+                                 withTranslation:GLKVector3Make(-0.75f, 0.0f, 0.0f)
                                      withScaling:GLKVector3Make(0.2f, 1.0f, 0.2f)
                                        andColour:GLKVector4Make(0.56f, 0.31f, 0.14f, 1.0f)];
             break;
@@ -187,61 +187,5 @@
     
     return bond;
 }
-
-/*Fix bad code */
-
-//- (void)addCarbonWithBondOne:(unsigned short)bondOne withBondTwo:(unsigned short)bondTwo withBondThree:(unsigned short)bondThree andBondFour:(unsigned short)bondFour {
-//    [_modelGraph addModel:[self createAtomWithType:CARBON]];
-//    [_modelGraph createEdgeBetweenFirstVertex:bondOne andSecondVertex:[_modelGraph vertexCount]];
-//    [_modelGraph createEdgeBetweenFirstVertex:bondTwo andSecondVertex:[_modelGraph vertexCount]];
-//    [_modelGraph createEdgeBetweenFirstVertex:bondThree andSecondVertex:[_modelGraph vertexCount]];
-//    [_modelGraph createEdgeBetweenFirstVertex:bondFour andSecondVertex:[_modelGraph vertexCount]];
-//}
-//
-//- (void)addHydrogenWithBond:(unsigned short)bond {
-//    [_modelGraph addModel:[self createAtomWithType:HYDROGEN]];
-//    [_modelGraph createEdgeBetweenFirstVertex:bond andSecondVertex:[_modelGraph vertexCount]];
-//}
-//
-//- (void)addNitrogenWithBondOne:(unsigned short)bondOne withBondTwo:(unsigned short)bondTwo andBondThree:(unsigned short)bondThree {
-//    [_modelGraph addModel:[self createAtomWithType:NITROGEN]];
-//    [_modelGraph createEdgeBetweenFirstVertex:bondOne andSecondVertex:[_modelGraph vertexCount]];
-//    [_modelGraph createEdgeBetweenFirstVertex:bondTwo andSecondVertex:[_modelGraph vertexCount]];
-//    [_modelGraph createEdgeBetweenFirstVertex:bondThree andSecondVertex:[_modelGraph vertexCount]];
-//}
-//
-//- (void)addOxygenWithBondOne:(unsigned short)bondOne andBondTwo:(unsigned short)bondTwo {
-//    [_modelGraph addModel:[self createAtomWithType:NITROGEN]];
-//    [_modelGraph createEdgeBetweenFirstVertex:bondOne andSecondVertex:[_modelGraph vertexCount]];
-//    [_modelGraph createEdgeBetweenFirstVertex:bondTwo andSecondVertex:[_modelGraph vertexCount]];
-//}
-//
-//- (void)addPhosphorusWithBondOne:(unsigned short)bondOne withBondTwo:(unsigned short)bondTwo withBondThree:(unsigned short)bondThree withBondFour:(unsigned short)bondFour andBondFive:(unsigned short)bondFive{
-//    [_modelGraph addModel:[self createAtomWithType:PHOSPHORUS]];
-//    [_modelGraph createEdgeBetweenFirstVertex:bondOne andSecondVertex:[_modelGraph vertexCount]];
-//    [_modelGraph createEdgeBetweenFirstVertex:bondTwo andSecondVertex:[_modelGraph vertexCount]];
-//    [_modelGraph createEdgeBetweenFirstVertex:bondThree andSecondVertex:[_modelGraph vertexCount]];
-//    [_modelGraph createEdgeBetweenFirstVertex:bondFour andSecondVertex:[_modelGraph vertexCount]];
-//    [_modelGraph createEdgeBetweenFirstVertex:bondFive andSecondVertex:[_modelGraph vertexCount]];
-//}
-//
-//- (void)createWater {
-//    SWMModel *bond1 = [self createSingleBond];
-//    SWMModel *bond2 = [self createSingleBond2];
-//    SWMModel *oxygen = [self createOxygen];
-//    SWMModel *hydrogen1 = [self createHydrogen];
-//    SWMModel *hydrogen2 = [self createHydrogen];
-//    
-//    [_modelGraph addModel:oxygen];
-//    [_modelGraph addModel:bond1];
-//    [_modelGraph addModel:bond2];
-//    [_modelGraph addModel:hydrogen1];
-//    [_modelGraph addModel:hydrogen2];
-//    
-//    [_modelGraph createEdgeBetweenFirstVertex:0 andSecondVertex:1];
-//    [_modelGraph createEdgeBetweenFirstVertex:0 andSecondVertex:2];
-//    [_modelGraph createEdgeBetweenFirstVertex:1 andSecondVertex:3];
-//    [_modelGraph createEdgeBetweenFirstVertex:2 andSecondVertex:4];
-//}
 
 @end

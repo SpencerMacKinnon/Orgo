@@ -17,7 +17,6 @@
 @interface SWMMaterialCollection : NSObject {
     
     GLuint _indexBuffer, _vertexArray, _vertexBuffer;
-    
     SWMShader *_shader;
     NSMutableDictionary *_vertexSets;
     
@@ -25,7 +24,6 @@
     float spec;
 }
 
-@property (nonatomic, strong) SWMShader *shader;
 @property (nonatomic) GLKVector3 lightColour;
 
 - (id)init;

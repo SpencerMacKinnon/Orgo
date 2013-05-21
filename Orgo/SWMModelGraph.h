@@ -12,10 +12,9 @@
 
 @interface SWMModelGraph : NSObject {
     SWMMaterialCollection *materialCollection;
-    BOOL *adjacencyMatrix;
-    NSMutableData *adjacencyMatrixData;
+    NSMutableArray *adjacencyList;
     NSMutableArray *vertices;
-    NSMutableArray *_models;
+    NSMutableArray *models;
     NSMutableArray *modelsWithHierarchy;
     NSMutableDictionary *edges;
     unsigned short numVertices;

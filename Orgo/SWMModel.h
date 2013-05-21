@@ -14,11 +14,6 @@
 
 @interface SWMModel : NSObject
 {
-    GLKMatrix3 _normalMatrix;
-    GLKMatrix4 _modelViewMatrix;
-    GLKMatrix4 _modelViewProjectionMatrix;
-    GLKVector4 _diffuseLightColour;
-    
     SWMObjectTransformation *_matrix;
 }
 

@@ -10,8 +10,7 @@
 #import <GLKit/GLKit.h>
 
 @interface SWMShader : NSObject {
-    GLuint _program, _vertShader, _fragShader;
-    NSString *_vertShaderPathname, *_fragShaderPathname;
+    GLuint _vertShader, _fragShader;
 }
 
 @property (nonatomic, strong) NSString *vertShaderPathname, *fragShaderPathname;

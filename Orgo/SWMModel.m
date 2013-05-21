@@ -10,11 +10,11 @@
 
 @implementation SWMModel
 
-@synthesize modelViewMatrix = _modelViewMatrix;
-@synthesize modelViewProjectionMatrix = _modelViewProjectionMatrix;
-@synthesize normalMatrix = _normalMatrix;
-@synthesize rotationVector = _rotationVector;
-@synthesize translationVector = _translationVector;
+@synthesize modelViewMatrix;
+@synthesize modelViewProjectionMatrix;
+@synthesize normalMatrix;
+@synthesize rotationVector;
+@synthesize translationVector;
 
 - (id)initWithTransformation:(SWMObjectTransformation *)transformation{
     self = [super init];

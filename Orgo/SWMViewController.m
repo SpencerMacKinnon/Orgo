@@ -10,8 +10,7 @@
 
 const float MAX_ZOOM_IN = 3.5;
 const float MAX_ZOOM_OUT = -9.0;
-// Hack for now to prevent crashes.
-BOOL beginUpdating = NO;
+
 @interface SWMViewController () {
 }
 @property (strong, nonatomic) EAGLContext *context;
@@ -82,6 +81,26 @@ BOOL beginUpdating = NO;
     _modelGraph = [[SWMModelGraph alloc] init];
     
     _atomFactory = [[SWMAtomFactory alloc] init];
+    
+    /*                        WATER
+    SWMModel *oxygen = [_atomFactory createAtomWithType:OXYGEN];
+    
+    [_modelGraph addModel:oxygen];
+    
+    [_modelGraph addModel:[_atomFactory createBondWithOrientaiton:SOUTHWEST]];
+    [_modelGraph addModel:[_atomFactory createAtomWithType:HYDROGEN]];
+    
+    [_modelGraph addModel:[_atomFactory createBondWithOrientaiton:SOUTHEAST]];
+    [_modelGraph addModel:[_atomFactory createAtomWithType:HYDROGEN]];
+    
+    [_modelGraph createEdgeBetweenFirstVertex:0 andSecondVertex:1];
+    [_modelGraph createEdgeBetweenFirstVertex:1 andSecondVertex:2];
+    
+    [_modelGraph createEdgeBetweenFirstVertex:0 andSecondVertex:3];
+    [_modelGraph createEdgeBetweenFirstVertex:3 andSecondVertex:4]; */
+    
+    /*                        FUN                                   */
+    
     SWMModel *oxygen = [_atomFactory createAtomWithType:OXYGEN];
     
     [_modelGraph addModel:oxygen];
@@ -122,8 +141,6 @@ BOOL beginUpdating = NO;
     [_modelGraph createEdgeBetweenFirstVertex:10 andSecondVertex:11];
     
     [_modelGraph setupGL];
-    
-    beginUpdating = true;
 }
 
 - (void)tearDownGL
@@ -137,10 +154,6 @@ BOOL beginUpdating = NO;
 
 - (void)update
 {
-    if (!beginUpdating) {
-        return;
-    }
-    
     _aspect = fabsf(self.view.bounds.size.width / self.view.bounds.size.height);
     _projectionMatrix = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(65.0f), _aspect, 0.1f, 100.0f);
     [_modelGraph updateWithProjectionMatrix:_projectionMatrix andTimeSinceLastUpdate:self.timeSinceLastUpdate];
@@ -148,10 +161,6 @@ BOOL beginUpdating = NO;
 
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect
 {
-    if (!beginUpdating) {
-        return;
-    }
-    
     glClearColor(0.65f, 0.65f, 0.65f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     

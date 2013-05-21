@@ -15,10 +15,10 @@
     SWM_VERTEX_TYPE _vertexType;
 }
 
-@property (readwrite) GLuint offset;
-@property (readwrite) unsigned int  numberOfIndices, numberOfVertices;
-@property (nonatomic, strong, readwrite) NSMutableData *indexData, *vertexData;
-@property (nonatomic, strong, readwrite) NSString *vertexSetName;
+@property GLuint offset;
+@property unsigned int  numberOfIndices, numberOfVertices;
+@property (nonatomic, strong) NSMutableData *indexData, *vertexData;
+@property (nonatomic, strong) NSString *vertexSetName;
 
 -(GLU_INDEX_TYPE)getIndexType;
 -(SWM_VERTEX_TYPE)getVertexType;

@@ -15,11 +15,10 @@
     if (self) {
         numVertices = 0;
         numEdges = 0;
-        adjacencyMatrixData = [[NSMutableData alloc] init];
-        adjacencyMatrix = [adjacencyMatrixData mutableBytes];
+        adjacencyList = [[NSMutableArray alloc] init];
         vertices = [[NSMutableArray alloc] init];
         edges = [[NSMutableDictionary alloc] init];
-        _models = [[NSMutableArray alloc] init];
+        models = [[NSMutableArray alloc] init];
         modelsWithHierarchy = [[NSMutableArray alloc] init];
         materialCollection = [[SWMMaterialCollection alloc] init];
     }
@@ -32,24 +31,28 @@
         return;
     }
     
-    [_models replaceObjectAtIndex:index withObject:vertex];
+    [models replaceObjectAtIndex:index withObject:vertex];
 }
 
 - (void)createDirectionalEdgeFromFirstVertex:(unsigned short)firstVertex toSecondVertex:(unsigned short)secondVertex {
-    if (![self vertexPairExistsInGraph:firstVertex secondVertex:secondVertex]) {
-        return;
+    
+    NSMutableArray *arrayListForFirstVertex = [adjacencyList objectAtIndex:firstVertex];
+    
+    if (![arrayListForFirstVertex containsObject:[NSNumber numberWithUnsignedShort:secondVertex]]) {
+        [[adjacencyList objectAtIndex:firstVertex] addObject:[NSNumber numberWithUnsignedShort:secondVertex]];
     }
     
-    adjacencyMatrix[(firstVertex * numVertices) + secondVertex] = YES;
     numEdges++;
 }
 
 - (void)removeDirectionalEdgeFromFirstVertex:(unsigned short)firstVertex toSecondVertex:(unsigned short)secondVertex {
-    if (![self vertexPairExistsInGraph:firstVertex secondVertex:secondVertex]) {
-        return;
+    
+    NSMutableArray *arrayListForFirstVertex = [adjacencyList objectAtIndex:firstVertex];
+    
+    if ([arrayListForFirstVertex containsObject:[NSNumber numberWithUnsignedShort:secondVertex]]) {
+        [[adjacencyList objectAtIndex:firstVertex] removeObject:[NSNumber numberWithUnsignedShort:secondVertex]];
     }
     
-    adjacencyMatrix[(firstVertex * numVertices) + secondVertex] = NO;
     numEdges--;
 }
 
@@ -58,8 +61,9 @@
         return;
     }
     
-    adjacencyMatrix[(firstVertex * numVertices) + secondVertex] = YES;
-    adjacencyMatrix[(secondVertex * numVertices) + firstVertex] = YES;
+    [self createDirectionalEdgeFromFirstVertex:firstVertex toSecondVertex:secondVertex];
+    [self createDirectionalEdgeFromFirstVertex:secondVertex toSecondVertex:firstVertex];
+    
     numEdges += 2;
 }
 
@@ -68,20 +72,21 @@
         return;
     }
     
-    adjacencyMatrix[(firstVertex * numVertices) + secondVertex] = NO;
-    adjacencyMatrix[(secondVertex * numVertices) + firstVertex] = NO;
+    [self removeDirectionalEdgeFromFirstVertex:firstVertex toSecondVertex:secondVertex];
+    [self removeDirectionalEdgeFromFirstVertex:secondVertex toSecondVertex:firstVertex];
+    
     numEdges -= 2;
 }
 
 - (void)resetAdjacencyMatrix {
-    for (int i = 0; i < numVertices * numVertices; i++) {
-        adjacencyMatrix[i] = NO;
+    for (int i = 0; i < numVertices; i++) {
+        [[adjacencyList objectAtIndex:i] removeAllObjects];
     }
 }
 
 - (void)resetVertices {
     for (int i = 0; i < numVertices; i++) {
-        [_models addObject:[NSNull null]];
+        [models addObject:[NSNull null]];
     }
 }
 
@@ -102,42 +107,43 @@
 }
 
 - (void)resetModelsOrientation {
-    [[_models objectAtIndex:0] resetOrientation];
+    [[models objectAtIndex:0] resetOrientation];
 }
 
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect {
     [materialCollection glkView:view drawInRect:rect withModels:modelsWithHierarchy];
 }
 
-- (void)modelsWithHierarchicalTransformationForLevel:(unsigned short)level withModels:(NSMutableArray *)models{
+- (void)modelsWithHierarchicalTransformationForLevel:(unsigned short)level withModels:(NSMutableArray *)m{
     
     if (level == numVertices) {
         return;
     }
     
-    SWMModel *parentModel = [models objectAtIndex:level];
+    SWMModel *parentModel = [m objectAtIndex:level];
     
     GLKMatrix4 parentModelViewMatrix = [parentModel modelViewMatrix];
     
     for (int i = level; i < numVertices; i++) {
-        if (adjacencyMatrix[(level * numVertices) + i] == YES)
+        if ([[adjacencyList objectAtIndex:level] containsObject:[NSNumber numberWithUnsignedShort:i]])
         {
-            SWMModel *childModel = [models objectAtIndex:i];
+            SWMModel *childModel = [m objectAtIndex:i];
             GLKMatrix4 childModelViewMatrix = [childModel objectTransform];
             childModelViewMatrix = GLKMatrix4Multiply(parentModelViewMatrix, childModelViewMatrix);
             [childModel setModelViewMatrix:childModelViewMatrix];
-            [models replaceObjectAtIndex:i withObject:childModel];
+            [m replaceObjectAtIndex:i withObject:childModel];
         }
     }
     
-    [self modelsWithHierarchicalTransformationForLevel:level+1 withModels:models];
+    [self modelsWithHierarchicalTransformationForLevel:level+1 withModels:m];
 }
 
 - (void)updateWithProjectionMatrix:(GLKMatrix4)projectionMatrix andTimeSinceLastUpdate:(NSTimeInterval)timeSinceLastUpdate{
-    GLKMatrix4 rootModelMatrix = [[_models objectAtIndex:0] slerpWithTimeSinceLastUpdate:timeSinceLastUpdate];
+    GLKMatrix4 rootModelMatrix = [[models objectAtIndex:0] slerpWithTimeSinceLastUpdate:timeSinceLastUpdate];
     rootModelMatrix = GLKMatrix4Multiply(GLKMatrix4MakeTranslation(0.0f, -2.5f, -6.0f), rootModelMatrix);
-    [[_models objectAtIndex:0] setModelViewMatrix:rootModelMatrix];
-    modelsWithHierarchy = [[NSMutableArray alloc] initWithArray:_models];
+    [[models objectAtIndex:0] setModelViewMatrix:rootModelMatrix];
+    
+    modelsWithHierarchy = [[NSMutableArray alloc] initWithArray:models];
     [self modelsWithHierarchicalTransformationForLevel:0 withModels:modelsWithHierarchy];
     
     for (SWMModel *model in modelsWithHierarchy) {
@@ -152,16 +158,17 @@
 }
 
 - (void)touchAtPoint:(CGPoint)location withViewBounds:(CGRect)viewBounds {    
-    [[_models objectAtIndex:0] touchAtPoint:location withViewBounds:viewBounds];
+    [[models objectAtIndex:0] touchAtPoint:location withViewBounds:viewBounds];
 }
 
 - (void)touchesMoved:(CGPoint)location withViewBounds:(CGRect)viewBounds {
-    [[_models objectAtIndex:0] touchesMoved:location withViewBounds:viewBounds];
+    [[models objectAtIndex:0] touchesMoved:location withViewBounds:viewBounds];
 }
 
 - (void)addModel:(SWMModel *)model{
     numVertices++;
-    [_models addObject:model];
+    [adjacencyList addObject:[[NSMutableArray alloc] init]];
+    [models addObject:model];
 }
 
 - (unsigned short)vertexCount {
